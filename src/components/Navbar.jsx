@@ -9,7 +9,7 @@ const Navbar = () => {
     setIsDashboardOpen(!isDashboardOpen);
   };
     return (
-      <div className="text-center flex  items-center bg-[#004E5B] h-16 fixed w-full">
+      <div className="text-center flex  items-center bg-[#004E5B] top-1 h-16 fixed z-10 w-full">
 
 <div className="flex  items-center ml-4">
               <button
@@ -23,7 +23,7 @@ const Navbar = () => {
                 )}
               </button>
             </div>
-      <a className="btn btn-ghost text-xl text-white font-bold font-sans flex-1">Islampur Jame Masjid</a>
+      <a className="btn btn-ghost text-2xl text-white font-bold font-sans flex-1">Islampur Jame Masjid</a>
 
       {/* dashboard */}
       <div
