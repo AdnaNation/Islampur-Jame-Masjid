@@ -1,10 +1,12 @@
+import photo from "../../public/mosque.jpg"
 const Home = () => {
+
   return (
     <div>
       <div className="  mt-16 border rounded-lg">
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-neutral-content text-center">
-          <img className="shadow-xl" src="src/assets/mosque.jpg" alt="mosque" />
+          <img className="shadow-xl" src={photo} alt="mosque" />
         </div>
       </div>
 
