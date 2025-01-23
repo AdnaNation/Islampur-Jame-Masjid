@@ -5,7 +5,7 @@ const Home = () => {
     <div>
       <div className="  mt-16 border rounded-lg">
         <div className="hero-overlay bg-opacity-60"></div>
-        <div className="hero-content text-neutral-content text-center">
+        <div className="hero-content  text-neutral-content">
           <img className="shadow-xl" src={photo} alt="mosque" />
         </div>
       </div>
