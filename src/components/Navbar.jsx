@@ -8,8 +8,8 @@ const Navbar = () => {
     setIsDashboardOpen(!isDashboardOpen);
   };
   return (
-    <div className="text-center flex  items-center bg-blue-100 top-1 h-14 fixed z-10 w-full drop-shadow-lg rounded-full">
-      <div className="flex  items-center ml-4">
+    <div className="text-center flex  items-center bg-blue-100 top-1 h-14 fixed z-20 w-full drop-shadow-lg rounded-full">
+      <div className="flex items-center ml-4">
         <button
           onClick={toggleDashboard}
           className="text-black hover:text-gray-500 focus:outline-none"
@@ -21,7 +21,7 @@ const Navbar = () => {
           )}
         </button>
       </div>
-      <a className="btn btn-ghost text-2xl text-black font-bold font-sans flex-1">
+      <a className=" text-2xl text-black font-bold font-sans flex-1">
         Islampur Jame Masjid
       </a>
 

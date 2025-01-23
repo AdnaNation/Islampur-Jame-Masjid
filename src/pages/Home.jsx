@@ -5,8 +5,8 @@ const Home = () => {
     <div>
       <div className="  mt-16 border rounded-lg">
         <div className="hero-overlay bg-opacity-60"></div>
-        <div className="hero-content  text-neutral-content">
-          <img className="shadow-xl" src={photo} alt="mosque" />
+        <div className="hero-content w-full mx-auto text-neutral-content">
+          <img className="shadow-xl md:max-h-96" src={photo} alt="mosque" />
         </div>
       </div>
 
