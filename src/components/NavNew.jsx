@@ -31,6 +31,7 @@ const Navbar = () => {
                             </ul> */}
                         </li>
                         <li><a>চাঁদা</a></li>
+                        <NavLink to="/fee">চাঁদা </NavLink>
                     </ul>
                 </div>
                 <a href="/profile" className="btn btn-ghost text-xl">Islampur Jame Masjid</a>
