@@ -18,7 +18,7 @@ const Footer = () => {
           <p>
             Islampur Jame Masjid.
             <br />
-            Providing reliable tech since 1992
+            Since 1940
           </p>
         </aside>
         <nav>
