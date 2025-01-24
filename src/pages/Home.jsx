@@ -1,10 +1,8 @@
-import photo from "../../public/mosque.jpg";
-import Notification from "../components/Notification";
+import photo from "../../public/mosque.jpg"
 const Home = () => {
 
   return (
     <div>
-      <Notification />
       <div className="  mt-16 border rounded-lg">
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content w-full mx-auto text-neutral-content">
