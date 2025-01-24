@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import profileSvg from "/Icons/profile.svg";
 const Navbar = () => {
     return (
@@ -48,6 +49,8 @@ const Navbar = () => {
                         </details> */}
                     </li>
                     <li><a>চাঁদা</a></li>
+                    
+                    <NavLink to="/fee">চাঁদা </NavLink>
                 </ul>
             </div>
             <div className="navbar-end">
