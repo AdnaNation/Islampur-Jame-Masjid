@@ -3,6 +3,7 @@ import Profile from "../components/Profile";
 import Main from "../Layout/Main";
 import FeePage from "../pages/FeePage";
 import Home from "../pages/Home";
+import SignIn from "../pages/SignIn";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <Profile />
+            },
+            {
+                path: '/signin',
+                element: <SignIn />
             }
         ]
     }
