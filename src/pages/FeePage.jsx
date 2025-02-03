@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
 
+import useUsers from "../hooks/useUsers";
 const FeePage = () => {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    fetch("/data.json")
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
-  console.log(data);
+  const [users]= useUsers();
+
   return (
     <div className="mt-16">
       <div className="flex max-w-xl">
@@ -52,7 +47,7 @@ const FeePage = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {data.map((user) => (
+            {users.map((user) => (
               <tr key={user.number}>
                 <th>{user.homeName}</th>
                 <td>{user.Name}</td>
