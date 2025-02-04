@@ -5,6 +5,7 @@ import FeePage from "../pages/FeePage";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import AdminSignIn from "../pages/AdminSignIn";
+import AddUser from "../pages/AddUser";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: '/adminSignin',
                 element: <AdminSignIn />
+            },
+            {
+                path: '/addUser',
+                element: <AddUser />
             }
         ]
     }
