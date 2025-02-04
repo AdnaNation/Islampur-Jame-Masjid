@@ -1,5 +1,9 @@
 import { NavLink } from "react-router-dom";
 import profileSvg from "/Icons/profile.svg";
+import { ImHome } from "react-icons/im";
+import { TbCoinTakaFilled } from "react-icons/tb";
+import { IoLogIn } from "react-icons/io5";
+import { MdGroupAdd } from "react-icons/md";
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
@@ -25,9 +29,10 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow space-y-1"
           >
-            <NavLink to="/">হোম </NavLink>
-            <NavLink to="/fee">চাঁদা </NavLink>
-            <NavLink to="/signin">প্রবেশ</NavLink>
+            <NavLink to="/" className='md:text-2xl text-xl'><ImHome /></NavLink>
+            <NavLink to="/fee" className='md:text-2xl text-xl'><TbCoinTakaFilled /> </NavLink>
+            <NavLink to="/addUser" className='md:text-2xl text-xl'><MdGroupAdd /> </NavLink>
+            <NavLink to="/signin" className='md:text-2xl text-xl'><IoLogIn /></NavLink>
           </ul>
         </div>
         <a href="/profile" className="btn btn-ghost text-xl">
@@ -36,11 +41,14 @@ const Navbar = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <NavLink className="mr-1" to="/">
-            হোম{" "}
+          <NavLink className="mr-1 text-2xl" to="/">
+          <ImHome />
           </NavLink>
-          <NavLink className="mr-1" to="/fee">
-            চাঁদা{" "}
+          <NavLink className="mr-1 text-2xl" to="/fee">
+          <TbCoinTakaFilled />
+          </NavLink>
+          <NavLink className="mr-1 text-2xl" to="/addUser">
+          <MdGroupAdd />
           </NavLink>
         </ul>
       </div>
