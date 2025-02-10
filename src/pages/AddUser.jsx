@@ -1,139 +1,109 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const AddUser = () => {
     const [newHome, setNewHome] = useState(false);
+    const [unpaidMonthsCount, setUnpaidMonthsCount] = useState(0);
     const toggleNewHome = () => {
         setNewHome(!newHome);
     };
-  const [text, setText] = useState("");
-  const [translatedText, setTranslatedText] = useState("");
-  const [number, setNumber] = useState("");
-  const [convertedText, setConvertedText] = useState("");
 
-  const numberMap = {
-    0: "০",
-    1: "১",
-    2: "২",
-    3: "৩",
-    4: "৪",
-    5: "৫",
-    6: "৬",
-    7: "৭",
-    8: "৮",
-    9: "৯",
-  };
 
-  const convertToBengaliNumbers = (input) => {
-    return input.replace(/\d/g, (digit) => numberMap[digit]);
-  };
+    /......................./ 
+    
+    const payMonth = {
+      January: 'unpaid',
+      February: 'unpaid', 
+      March: 'unpaid',
+      April: 'unpaid',
+    };
 
-  const translateText = async (inputText) => {
-    if (!inputText) {
-      setTranslatedText("");
-      return;
+  // Get the current month index
+const currentMonthIndex = new Date().getMonth(); 
+// Get all months in order
+const monthNames = Object.keys(payMonth);
+
+const countUnpaidMonths = ()=>{
+   let unpaidCount = 0;
+  for (let i = 0; i <= currentMonthIndex; i++){
+    if(payMonth[monthNames[i]] === "unpaid"){
+      unpaidCount++;
     }
+  }
+  return unpaidCount;
+}
 
-    try {
-      const response = await fetch(
-        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-          inputText
-        )}&langpair=en|bn`
-      );
-      const data = await response.json();
-      setTranslatedText(data.responseData.translatedText);
-    } catch (error) {
-      console.error("Translation error:", error);
-    }
-  };
+useEffect(() => {
+  setUnpaidMonthsCount(countUnpaidMonths());
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setText(value);
-    translateText(value);
-  };
+//  console.log(unpaidMonthsCount);
 
-  const handleChangeNum = (e) => {
-    const value = e.target.value;
-    setNumber(value);
-    setConvertedText(convertToBengaliNumbers(value));
-  };
+
+ const handleSubmit = (e)=>{
+  e.preventDefault();
+  const form = e.target;
+  const Name = form.NameEn.value;
+  const NameBn = form.NameBn.value;
+  const Number = form.Number.value;
+  const HomeName = form.HomeName.value;
+  console.log(Name, NameBn, Number, HomeName);
+}
 
   return (
-    <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
-      <h3>English to Bengali Translator</h3>
+    <div className=" mx-auto md:max-w-80 space-y-2 mt-14">
+   <form onSubmit={handleSubmit}>
+   <div className="form-control md:w-96 w-72 px-1 mx-auto space-y-1">
       <input
         type="text"
-        placeholder="Type in English..."
-        value={text}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+        name="NameEn"
+        placeholder="নাম ইংরেজীতে "
+        required
+        className="input input-bordered w-full"
       />
-      <p>
-        <strong>Translated:</strong> {translatedText}
+
+      <input
+        type="text"
+        name="NameBn"
+        placeholder="নাম বাংলায়"
+        required
+        className="input input-bordered w-full"
+      />
+      <input
+        type="text"
+        name="Number"
+        placeholder="নাম্বার ইংরেজীতে"
+        required
+        className="input input-bordered w-full"
+      />
+     
+      <p className="text-right">
+        <p onClick={toggleNewHome}><small className="underline">{newHome? "পুরাতন বাড়ি?": "নতুন বাড়ি?"}</small></p>
       </p>
-
-      {/* numberMap */}
-
-      <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
-        <h3>English to Bengali Number Converter</h3>
-        <input
-          type="text"
-          placeholder="Type numbers..."
-          value={number}
-          onChange={handleChangeNum}
-          style={{ width: "100%", padding: "10px", fontSize: "16px" }}
-        />
-        <p>
-          <strong>Converted:</strong> {convertedText}
-        </p>
-      </div>
-
-      {/* ............... */}
-      <div className=" mx-auto md:max-w-80 space-y-2 mt-14">
-        <label className="form-control md:w-96 w-72 px-1 mx-auto space-y-1">
-          <input
-            type="text"
-            placeholder="নাম ইংরেজীতে "
-            className="input input-bordered w-full"
-          />
-
-          <input
-            type="text"
-            placeholder="নাম বাংলায়"
-            className="input input-bordered w-full"
-          />
-          <input
-            type="text"
-            placeholder="নাম্বার ইংরেজীতে"
-            className="input input-bordered w-full"
-          />
-         
-          <p className="text-right">
-            <button onClick={toggleNewHome}><small className="underline">{newHome? "পুরাতন বাড়ি?": "নতুন বাড়ি?"}</small></button>
-          </p>
-         
-        {
-            newHome?  <input
-            type="text"
-            placeholder="বাড়ির নাম বাংলায়"
-            className="input input-bordered w-full"
-          /> :  <select className="select select-bordered w-full ">
-          <option disabled selected>
-          বাড়ির নাম
-          </option>
-          <option>Han Solo</option>
-          <option>Greedo</option>
-        </select>
-        }
-          
-        </label>
-        <div className="text-center">
-          <button className="btn btn-outline btn-info" type="button">
-            প্রবেশ করুন
-          </button>
-        </div>
-      </div>
+     
+    {
+        newHome?  <input
+        type="text"
+        name="HomeName"
+        placeholder="বাড়ির নাম বাংলায়"
+        required
+        className="input input-bordered w-full"
+      /> :  <select className="select select-bordered w-full " name="HomeName" >
+      <option disabled selected>
+      বাড়ির নাম
+      </option>
+      <option>Han Solo</option>
+      <option>Greedo</option>
+    </select>
+    }
+      
     </div>
+    <div className="text-center">
+     
+      <input type="submit" value="অ্যাড করুন" className="btn btn-outline" />
+    </div>
+   </form>
+  </div>
   );
 };
 
