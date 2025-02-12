@@ -2,7 +2,7 @@ import { useState } from "react";
 import useHomeName from "../hooks/useHomeName";
 import useUsers from "../hooks/useUsers";
 const FeePage = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
   const [users] = useUsers();
   const [homeName] = useHomeName();
   const handleUserDetails = (user)=>{
@@ -90,7 +90,7 @@ const FeePage = () => {
              {userData?.HomeName}
             </p>
             <p className="py-4">
-            {Object.entries(userData?.PayMonths).map(([month, status], index) => (
+            {userData?.PayMonths &&  Object.entries(userData.PayMonths).map(([month, status], index) => (
   <tr key={index}>
     <td>{month}  : </td>
         <td>  {status}</td>
