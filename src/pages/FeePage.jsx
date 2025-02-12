@@ -5,11 +5,10 @@ const FeePage = () => {
   const [userData, setUserData] = useState({});
   const [users] = useUsers();
   const [homeName] = useHomeName();
-  const handleUserDetails = (user)=>{
+  const handleUserDetails = (user) => {
     document.getElementById("my_modal_1").showModal();
-    setUserData(user)
-  }
-  console.log(userData)
+    setUserData(user);
+  };
 
   return (
     <div className="mt-16">
@@ -64,9 +63,7 @@ const FeePage = () => {
             {users.map((user) => (
               <tr
                 className="btn-ghost"
-                onClick={() =>
-                 handleUserDetails(user)
-                }
+                onClick={() => handleUserDetails(user)}
                 key={user._id}
               >
                 <td className="text-[12px]">
@@ -86,18 +83,19 @@ const FeePage = () => {
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
             <h3 className="font-bold text-lg">{userData?.NameBn}</h3>
-            <p className="py-4">
-             {userData?.HomeName}
+            <p className="py-4">{userData?.HomeName}</p>
+            <p className=" border">
+              {userData?.PayMonths &&
+                Object.entries(userData.PayMonths).map(
+                  ([month, status], index) => (
+                    <tr className="flex flex-row justify-center" key={index}>
+                      <td className="font-bold ">{month} : </td>
+                      <td className=" text-right px-4"> {status}</td>
+                    </tr>
+                  )
+                )}
             </p>
-            <p className="py-4">
-            {userData?.PayMonths &&  Object.entries(userData.PayMonths).map(([month, status], index) => (
-  <tr key={index}>
-    <td>{month}  : </td>
-        <td>  {status}</td>
-  </tr>
-))}
 
-            </p>
             <div className="modal-action">
               <form method="dialog">
                 {/* if there is a button in form, it will close the modal */}
