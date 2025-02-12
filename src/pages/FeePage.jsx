@@ -1,8 +1,15 @@
+import { useState } from "react";
 import useHomeName from "../hooks/useHomeName";
 import useUsers from "../hooks/useUsers";
 const FeePage = () => {
+  const [userData, setUserData] = useState(null);
   const [users] = useUsers();
   const [homeName] = useHomeName();
+  const handleUserDetails = (user)=>{
+    document.getElementById("my_modal_1").showModal();
+    setUserData(user)
+  }
+  console.log(userData)
 
   return (
     <div className="mt-16">
@@ -45,7 +52,9 @@ const FeePage = () => {
           {/* head */}
           <thead>
             <tr>
-              <th><p className="text-center">নাম ও নাম্বার</p></th>
+              <th>
+                <p className="text-center">নাম ও নাম্বার</p>
+              </th>
               <th className="text-center">বাড়ির নাম</th>
               <th className="text-center">চাঁদার হার</th>
             </tr>
@@ -53,16 +62,50 @@ const FeePage = () => {
           <tbody>
             {/* row 1 */}
             {users.map((user) => (
-              <tr key={user._id}>
+              <tr
+                className="btn-ghost"
+                onClick={() =>
+                 handleUserDetails(user)
+                }
+                key={user._id}
+              >
                 <td className="text-[12px]">
-                  <p className="text-center">{user.NameBn} <br /> {user.Number}</p>
+                  <p className="text-center">
+                    {user.NameBn} <br /> {user.Number}
+                  </p>
                 </td>
                 <th className="text-[12px] text-center">{user.HomeName}</th>
-                <td><p className="text-center">{user.FeeRate}</p></td>
+                <td>
+                  <p className="text-center">{user.FeeRate}</p>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">{userData?.NameBn}</h3>
+            <p className="py-4">
+             {userData?.HomeName}
+            </p>
+            <p className="py-4">
+            {Object.entries(userData?.PayMonths).map(([month, status], index) => (
+  <tr key={index}>
+    <td>{month}  : </td>
+        <td>  {status}</td>
+  </tr>
+))}
+
+            </p>
+            <div className="modal-action">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
     </div>
   );
