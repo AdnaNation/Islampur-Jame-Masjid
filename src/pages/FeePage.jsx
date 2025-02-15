@@ -82,19 +82,68 @@ const FeePage = () => {
 
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">{userData?.NameBn}</h3>
-            <p className="py-4">{userData?.HomeName}</p>
-            <p className=" border">
-              {userData?.PayMonths &&
-                Object.entries(userData.PayMonths).map(
-                  ([month, status], index) => (
-                    <tr className="flex flex-row justify-center" key={index}>
-                      <td className="font-bold ">{month} : </td>
-                      <td className=" text-right px-4"> {status}</td>
-                    </tr>
-                  )
-                )}
-            </p>
+            {/* ............ */}
+
+            <div className="max-w-2xl mx-auto bg-gray-100 min-h-screen flex flex-col items-center">
+              <div className="w-full bg-white p-2 shadow-md rounded-lg">
+                <div className="flex justify-between border-b pb-4">
+                  <div>
+                    <h2 className="text-xl font-bold">ইসলামপুর জামে মসজিদ</h2>
+                    <p className="text-gray-600">দক্ষিণ চন্ডিপুর, ইসলামপুর</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gray-600">Date: 15 Feb 2025</p>
+                  </div>
+                </div>
+
+                <div className="mt-4 border-b pb-4">
+                  <h3 className="text-lg font-semibold">Bill To:</h3>
+                  <p className="text-gray-700">Abul Kalam Liton</p>
+                  <p className="text-gray-600">মজিদ হাজী বাড়ি</p>
+                </div>
+
+                <div className="mt-4">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="py-2">মাসের নাম</th>
+                        <th className="py-2">স্ট্যাটাস</th>
+                        <th className="py-2">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userData?.PayMonths &&
+                        Object.entries(userData.PayMonths).map(
+                          ([month, status], index) => (
+                            <tr className="border-b" key={index}>
+                              <td className="font-bold ">{month} </td>
+                              <td className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
+                                {status}
+                              </td>
+                              <td className="py-2">$0</td>
+                            </tr>
+                          )
+                        )}
+                      {/* <tr className="border-b">
+                <td className="py-2">January Fee</td>
+                <td className="py-2">1</td>
+                <td className="py-2">$0</td>
+              </tr> */}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-4 text-right">
+                  <h3 className="text-lg font-semibold">Total: $0</h3>
+                </div>
+
+                <div className="mt-6 text-center">
+                  <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
+                    Download PDF
+                  </button>
+                </div>
+              </div>
+            </div>
 
             <div className="modal-action">
               <form method="dialog">
