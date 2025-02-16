@@ -52,20 +52,57 @@ const AddUser = () => {
     const Due = 0;
     const Tarabi = 0;
     const FeeRate = 0;
-    const PayMonths = {
-      January: "unpaid",
-      February: "unpaid",
-      March: "unpaid",
-      April: "unpaid",
-      May: "unpaid",
-      June: "unpaid",
-      July: "unpaid",
-      August: "unpaid",
-      September: "unpaid",
-      October: "unpaid",
-      November: "unpaid",
-      December: "unpaid",
-    };
+    const PayMonths = [
+      {
+        monthName: "January",
+        status: "unpaid"
+      },
+      {
+        monthName: "February",
+        status: "unpaid"
+      },
+      {
+        monthName: "March",
+        status: "unpaid"
+      },
+      {
+        monthName: "April",
+        status: "unpaid"
+      },
+      {
+        monthName: "May",
+        status: "unpaid"
+      },
+      {
+        monthName: "June",
+        status: "unpaid"
+      },
+      {
+        monthName: "July",
+        status: "unpaid"
+      },
+      {
+        monthName: "August",
+        status: "unpaid"
+      },
+      {
+        monthName: "September",
+        status: "unpaid"
+      },
+      {
+        monthName: "October",
+        status: "unpaid"
+      },
+      {
+        monthName: "November",
+        status: "unpaid"
+      },
+      {
+        monthName: "December",
+        status: "unpaid"
+      }
+    ];
+    
     const user = {
       Name,
       NameBn,

@@ -5,6 +5,12 @@ const FeePage = () => {
   const [userData, setUserData] = useState({});
   const [users] = useUsers();
   const [homeName] = useHomeName();
+  const date = new Date().toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+ 
   const handleUserDetails = (user) => {
     document.getElementById("my_modal_1").showModal();
     setUserData(user);
@@ -84,64 +90,70 @@ const FeePage = () => {
           <div className="modal-box">
             {/* ............ */}
 
-            <div className="max-w-2xl mx-auto bg-gray-100 min-h-screen flex flex-col items-center">
+            <div className="max-w-2xl mx-auto bg-gray-100 flex flex-col items-center">
               <div className="w-full bg-white p-2 shadow-md rounded-lg">
                 <div className="flex justify-between border-b pb-4">
                   <div>
-                    <h2 className="text-xl font-bold">ইসলামপুর জামে মসজিদ</h2>
-                    <p className="text-gray-600">দক্ষিণ চন্ডিপুর, ইসলামপুর</p>
+                    <h2 className="md:text-xl text-sm font-bold">ইসলামপুর জামে মসজিদ</h2>
+                    <p className="text-gray-600 md:text-xl text-sm">দক্ষিণ চন্ডিপুর, ইসলামপুর</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-gray-600">Date: 15 Feb 2025</p>
+                    <p className="text-gray-600">Date: {date}</p>
                   </div>
                 </div>
 
-                <div className="mt-4 border-b pb-4">
+                <div className="mt-4 border-b pb-2">
                   <h3 className="text-lg font-semibold">Bill To:</h3>
-                  <p className="text-gray-700">Abul Kalam Liton</p>
-                  <p className="text-gray-600">মজিদ হাজী বাড়ি</p>
+                  <p className="text-sm">{userData.NameBn}</p>
+                  <p className="text-sm">{userData.HomeName}</p>
                 </div>
 
-                <div className="mt-4">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="py-2">মাসের নাম</th>
-                        <th className="py-2">স্ট্যাটাস</th>
-                        <th className="py-2">Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {userData?.PayMonths &&
-                        Object.entries(userData.PayMonths).map(
-                          ([month, status], index) => (
-                            <tr className="border-b" key={index}>
-                              <td className="font-bold ">{month} </td>
-                              <td className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
-                                {status}
-                              </td>
-                              <td className="py-2">$0</td>
-                            </tr>
-                          )
-                        )}
-                      {/* <tr className="border-b">
-                <td className="py-2">January Fee</td>
-                <td className="py-2">1</td>
-                <td className="py-2">$0</td>
-              </tr> */}
-                    </tbody>
-                  </table>
+                <div className="mt-1">
+                  <h1 className="text-center font-bold font-mono text-sm">পেমেন্ট ডিটেইলস</h1>
+                  {userData?.PayMonths && (
+                    <div className="grid grid-cols-2  border w-full ">
+                      <div className="border-r-2 p-1">
+                        {/* First 6 months */}
+                        {userData.PayMonths.slice(0, 6).map((user, index) => (
+                          <div
+                            key={index}
+                            className="border-b py-2 flex justify-between gap-1"
+                          >
+                            <div className="font-bold text-sm">{user.monthName}</div>
+                            <div className=" inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
+                              {user.status}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="border-l-2 p-1">
+                        {/* Last 6 months */}
+                        {userData.PayMonths.slice(6).map((user, index) => (
+                          <div
+                            key={index}
+                            className="border-b py-2 flex justify-between"
+                          >
+                            <div className="font-bold text-sm">{user.monthName}</div>
+                            <div className="inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
+                              {user.status}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-4 text-right">
                   <h3 className="text-lg font-semibold">Total: $0</h3>
                 </div>
 
-                <div className="mt-6 text-center">
+                {/* <div className="mt-6 text-center">
                   <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
                     Download PDF
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
 
