@@ -119,7 +119,7 @@ const FeePage = () => {
                             key={index}
                             className="border-b py-2 flex justify-between gap-1"
                           >
-                            <div className="font-bold text-sm">{user.monthName}</div>
+                            <div className="font-bold text-md">{(user.monthName).slice(0, 3)}</div>
                             <div className=" inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
                               {user.status}
                             </div>
@@ -134,7 +134,7 @@ const FeePage = () => {
                             key={index}
                             className="border-b py-2 flex justify-between"
                           >
-                            <div className="font-bold text-sm">{user.monthName}</div>
+                            <div className="font-bold text-md">{(user.monthName).slice(0, 3)}</div>
                             <div className="inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
                               {user.status}
                             </div>
