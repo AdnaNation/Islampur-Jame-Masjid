@@ -3,7 +3,7 @@ import useHomeName from "../hooks/useHomeName";
 import useUsers from "../hooks/useUsers";
 const FeePage = () => {
   const [userData, setUserData] = useState({});
-  const [users] = useUsers();
+  const [users, isUsersLoading] = useUsers();
   const [homeName] = useHomeName();
   const date = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -49,10 +49,21 @@ const FeePage = () => {
           </div>
         </div>
       </div>
-
-      {/* table data */}
-
-      <div className="overflow-x-auto">
+      {isUsersLoading?  <div className="animate-pulse flex flex-col items-center gap-4 w-full h-full">
+      <div className="space-y-8">
+        <div className="w-48 h-6 bg-slate-400 rounded-md" />
+        <div className="w-28 h-4 bg-slate-400 mx-auto mt-3 rounded-md" />
+      </div>
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+    </div>:<div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead>
@@ -85,6 +96,8 @@ const FeePage = () => {
             ))}
           </tbody>
         </table>
+
+        
 
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
@@ -165,7 +178,8 @@ const FeePage = () => {
             </div>
           </div>
         </dialog>
-      </div>
+      </div>}
+      
     </div>
   );
 };
