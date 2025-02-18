@@ -50,7 +50,11 @@ const AddUser = () => {
     const Number = form.Number.value;
     const HomeName = form.HomeName.value;
     const Due = 0;
-    const Tarabi = 0;
+    const Tarabi = {
+      fee: 0,
+      status: "unpaid",
+      active: false
+  };
     const FeeRate = 0;
     const PayMonths = [
       {
