@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useHomeName from "../hooks/useHomeName";
 import useUsers from "../hooks/useUsers";
 import { TiTick } from "react-icons/ti";
 import { FaTimes } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
 const FeePage = () => {
   const [userData, setUserData] = useState({});
-  const [users, isUsersLoading] = useUsers();
+  const [feeRate, setFeeRate]= useState(userData.FeeRate)
+  const [tarabiFee, setTarabiFee]= useState(userData?.Tarabi?.fee)
+  const [users, isUsersLoading, refetch] = useUsers();
   const [homeName] = useHomeName();
   const date = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -24,13 +27,26 @@ const FeePage = () => {
     September: "সেপ্টেম্বর",
     October: "অক্টোবর",
     November: "নভেম্বর",
-    December: "ডিসেম্বর"
+    December: "ডিসেম্বর",
   };
 
   const handleUserDetails = (user) => {
+    refetch()
     document.getElementById("my_modal_1").showModal();
     setUserData(user);
   };
+  useEffect(()=>{
+    setFeeRate(userData.FeeRate)
+    setTarabiFee(userData?.Tarabi?.fee)
+  },[userData])
+  const handleFeeRate =(e,id)=>{
+    e.preventDefault()
+    refetch()
+    const form = e.target;
+    const FeeRate = form.FeeRate.value;
+    const TarabiFee = form.Tarabi.value;
+console.log(id, FeeRate, TarabiFee);
+  }
 
   return (
     <div className="mt-16">
@@ -141,16 +157,73 @@ const FeePage = () => {
                       <p className="text-sm">{userData.NameBn},</p>
                       <p className="text-sm">{userData.HomeName}</p>
                     </div>
-                    <div className="mt-2 pb-2">
-                      <p className="text-sm font-semibold">
-                        চাঁদার হার: {userData.FeeRate} <small>টাকা</small>
-                      </p>
-                      <p className="text-sm font-semibold">
-                        তারাবীর চাঁদা: {userData?.Tarabi?.fee}{" "}
-                        <small>টাকা</small>
-                      </p>
+
+                    <div className="group relative">
+                      <div className="mt-2 pb-2">
+                        <p className="text-sm font-semibold">
+                          চাঁদার হার: {userData.FeeRate} <small>টাকা</small>
+                        </p>
+                        <p className="text-sm font-semibold">
+                          তারাবীর চাঁদা: {userData?.Tarabi?.fee}{" "}
+                          <small>টাকা</small>
+                        </p>
+                      </div>
+                      <button
+                        className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
+                        onClick={() =>
+                          document.getElementById("my_modal_2").showModal()
+                        }
+                      >
+                        <CiEdit />
+                      </button>
                     </div>
                   </div>
+                  <dialog id="my_modal_2" className="modal">
+                    <div className="bg-white p-8 w-96">
+                      <form onSubmit={(e)=>handleFeeRate(e,userData._id)}>
+                        <div className="flex flex-col items-center justify-center gap-6">
+                          <div className="relative">
+                            <input
+                              name="FeeRate"
+                              type="text"
+                              value={feeRate}
+                              onChange={(e)=>setFeeRate(e.target.value)}
+                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
+                            />
+                            <label
+                              htmlFor="FeeRate"
+                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                            >
+                              চাঁদার হার
+                            </label>
+                          </div>
+                          <div className="relative">
+                            <input
+                              name="Tarabi"
+                              type="text"
+                              value={tarabiFee}
+                              onChange={(e)=>setTarabiFee(e.target.value)}
+                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
+                            />
+                            <label
+                              htmlFor="Tarabi"
+                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                            >
+                              তারাবীর চাঁদা
+                            </label>
+                          </div>
+                          <input type="submit" value="save" />
+                        </div>
+                        
+                      </form>
+                      <div className="modal-action">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>
 
                   <div className="mt-1">
                     <h1 className="text-center font-bold font-mono text-sm">
@@ -166,14 +239,15 @@ const FeePage = () => {
                               className="border-b py-2 flex justify-between items-center gap-1"
                             >
                               <div className="font-bold text-md">
-                              {monthTranslation[user.monthName] || user.monthName}
+                                {monthTranslation[user.monthName] ||
+                                  user.monthName}
                               </div>
                               <div className=" inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
-                              {user.status === "paid" ? (
-                          <TiTick />
-                        ) : (
-                          <FaTimes />
-                        )}
+                                {user.status === "paid" ? (
+                                  <TiTick />
+                                ) : (
+                                  <FaTimes />
+                                )}
                               </div>
                             </div>
                           ))}
@@ -187,14 +261,15 @@ const FeePage = () => {
                               className="border-b py-2 flex justify-between items-center"
                             >
                               <div className="font-bold text-md">
-                                {monthTranslation[user.monthName] || user.monthName}
+                                {monthTranslation[user.monthName] ||
+                                  user.monthName}
                               </div>
                               <div className="inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
-                              {user.status === "paid" ? (
-                          <TiTick />
-                        ) : (
-                          <FaTimes />
-                        )}
+                                {user.status === "paid" ? (
+                                  <TiTick />
+                                ) : (
+                                  <FaTimes />
+                                )}
                               </div>
                             </div>
                           ))}
