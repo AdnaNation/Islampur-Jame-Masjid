@@ -18,7 +18,7 @@ const Footer = () => {
               className="w-24 h-24 rounded-full mb-4"
             />
             <div className="flex flex-col space-x-5">
-              <h3 className="text-lg font-semibold mb-2">Muhammed Mehedi Hasan</h3>
+              <h3 className="text-lg font-semibold mb-2 ml-5">Muhammed Mehedi Hasan</h3>
               <div className="flex space-x-4 mb-2">
                 <a href="#" className="text-blue-500 hover:text-blue-400">
                   <i className="fab fa-facebook-f"></i>
@@ -45,7 +45,7 @@ const Footer = () => {
               className="w-24 h-24 rounded-full mb-4"
             />
             <div className="flex flex-col space-x-5">
-              <h3 className="text-lg font-semibold mb-2">Azizul Islam Adnan</h3>
+              <h3 className="text-lg font-semibold mb-2 ml-5">Azizul Islam Adnan</h3>
               <div className="flex space-x-4 mb-2">
                 <a href="#" className="text-blue-500 hover:text-blue-400">
                   <i className="fab fa-facebook-f"></i>
@@ -57,7 +57,7 @@ const Footer = () => {
                   <i className="fab fa-instagram"></i>
                 </a>
               </div>
-              <p className="text-sm">azizulislamadnan0@gmail.com</p>
+              <p className="text-sm">azizulislamadnan@gmail.com</p>
             </div>
           </div>
         </div>
