@@ -4,12 +4,16 @@ import useUsers from "../hooks/useUsers";
 import { TiTick } from "react-icons/ti";
 import { FaTimes } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 const FeePage = () => {
   const [userData, setUserData] = useState({});
   const [feeRate, setFeeRate]= useState(userData.FeeRate)
+  const [dueFee, setDueFee]= useState(userData.Due)
   const [tarabiFee, setTarabiFee]= useState(userData?.Tarabi?.fee)
   const [users, isUsersLoading, refetch] = useUsers();
   const [homeName] = useHomeName();
+  const axiosPublic = useAxiosPublic()
   const date = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -37,15 +41,34 @@ const FeePage = () => {
   };
   useEffect(()=>{
     setFeeRate(userData.FeeRate)
-    setTarabiFee(userData?.Tarabi?.fee)
-  },[userData])
+    setDueFee(userData.Due)
+    setTarabiFee(userData?.Tarabi?.fee);
+    refetch()
+  },[userData, refetch])
   const handleFeeRate =(e,id)=>{
     e.preventDefault()
     refetch()
     const form = e.target;
     const FeeRate = form.FeeRate.value;
     const TarabiFee = form.Tarabi.value;
-console.log(id, FeeRate, TarabiFee);
+    const DueFee = form.Due.value;
+    const fees ={
+      FeeRate,
+      TarabiFee,
+      DueFee
+    }
+axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
+  if (res.data.modifiedCount > 0) {
+    refetch();
+    Swal.fire({
+      position: "top-end",
+      title: "চাঁদা সেইভ করা হয়েছে",
+      showConfirmButton: false,
+      timer: 800,
+    });
+  }
+})
+
   }
 
   return (
@@ -167,6 +190,10 @@ console.log(id, FeeRate, TarabiFee);
                           তারাবীর চাঁদা: {userData?.Tarabi?.fee}{" "}
                           <small>টাকা</small>
                         </p>
+                        <p className="text-sm font-semibold">
+                          বকেয়া চাঁদা: {userData.Due}{" "}
+                          <small>টাকা</small>
+                        </p>
                       </div>
                       <button
                         className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
@@ -179,9 +206,9 @@ console.log(id, FeeRate, TarabiFee);
                     </div>
                   </div>
                   <dialog id="my_modal_2" className="modal">
-                    <div className="bg-white p-8 w-96">
+                    <div className="bg-white pt-8 px-2 w-96 rounded">
                       <form onSubmit={(e)=>handleFeeRate(e,userData._id)}>
-                        <div className="flex flex-col items-center justify-center gap-6">
+                        <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
                           <div className="relative">
                             <input
                               name="FeeRate"
@@ -212,14 +239,29 @@ console.log(id, FeeRate, TarabiFee);
                               তারাবীর চাঁদা
                             </label>
                           </div>
-                          <input type="submit" value="save" />
+                          <div className="relative">
+                            <input
+                              name="Due"
+                              type="text"
+                              value={dueFee}
+                              onChange={(e)=>setDueFee(e.target.value)}
+                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
+                            />
+                            <label
+                              htmlFor="Due"
+                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                            >
+                              বকেয়া চাঁদা
+                            </label>
+                          </div>
+                          <input type="submit" value="সেইভ" className="btn btn-primary px-6 text-white" />
                         </div>
                         
                       </form>
                       <div className="modal-action">
                         <form method="dialog">
                           {/* if there is a button in form, it will close the modal */}
-                          <button className="btn">Close</button>
+                          <button className="btn-outline btn">Close</button>
                         </form>
                       </div>
                     </div>
