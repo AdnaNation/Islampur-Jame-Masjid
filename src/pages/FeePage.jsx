@@ -47,7 +47,6 @@ const FeePage = () => {
   },[userData, refetch])
   const handleFeeRate =(e,id)=>{
     e.preventDefault()
-    refetch()
     const form = e.target;
     const FeeRate = form.FeeRate.value;
     const TarabiFee = form.Tarabi.value;
