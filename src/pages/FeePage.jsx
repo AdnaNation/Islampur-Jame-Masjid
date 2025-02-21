@@ -6,7 +6,9 @@ import { FaTimes } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
 const FeePage = () => {
+  const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
   const [userData, setUserData] = useState({});
   const [feeRate, setFeeRate]= useState(userData.FeeRate)
   const [dueFee, setDueFee]= useState(userData.Due)
@@ -34,10 +36,17 @@ const FeePage = () => {
     December: "ডিসেম্বর",
   };
 
+  const { data = {}, refetch: reload } = useQuery({
+    queryKey: ["dataById", selectedId],
+    queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
+  });
+
   const handleUserDetails = (user) => {
-    refetch()
     document.getElementById("my_modal_1").showModal();
+    setSelectedId(user._id)
+    reload()
     setUserData(user);
+    refetch()
   };
   useEffect(()=>{
     setFeeRate(userData.FeeRate)
@@ -58,6 +67,7 @@ const FeePage = () => {
     }
 axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
   if (res.data.modifiedCount > 0) {
+    reload()
     refetch();
     Swal.fire({
       position: "top-end",
@@ -183,14 +193,14 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                     <div className="group relative">
                       <div className="mt-2 pb-2">
                         <p className="text-sm font-semibold">
-                          চাঁদার হার: {userData.FeeRate} <small>টাকা</small>
+                          চাঁদার হার: {data?.data?.FeeRate} <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold">
-                          তারাবীর চাঁদা: {userData?.Tarabi?.fee}{" "}
+                          তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
                           <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold">
-                          বকেয়া চাঁদা: {userData.Due}{" "}
+                          বকেয়া চাঁদা: {data?.data?.Due}{" "}
                           <small>টাকা</small>
                         </p>
                       </div>
