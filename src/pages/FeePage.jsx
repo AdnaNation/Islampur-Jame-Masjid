@@ -312,7 +312,11 @@ const FeePage = () => {
                                       selectedId
                                     )
                                   }
-                                className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${user.status === "paid" ? 'hover:bg-blue-700 bg-blue-600': 'hover:bg-red-700 bg-red-600'}`}
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${
+                                    user.status === "paid"
+                                      ? "hover:bg-blue-700 bg-blue-600"
+                                      : "hover:bg-red-700 bg-red-600"
+                                  }`}
                                 >
                                   {user.status === "paid" ? (
                                     <TiTick />
