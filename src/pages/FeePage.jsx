@@ -312,7 +312,11 @@ const FeePage = () => {
                                       selectedId
                                     )
                                   }
-                                className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${user.status === "paid" ? 'hover:bg-blue-700 bg-blue-600': 'hover:bg-red-700 bg-red-600'}`}
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${
+                                    user.status === "paid"
+                                      ? "hover:bg-blue-700 bg-blue-600"
+                                      : "hover:bg-red-700 bg-red-600"
+                                  }`}
                                 >
                                   {user.status === "paid" ? (
                                     <TiTick />
@@ -327,7 +331,7 @@ const FeePage = () => {
 
                         <div className="border-l-2 p-1">
                           {/* Last 6 months */}
-                          {userData.PayMonths.slice(6).map((user, index) => (
+                          {data?.data?.PayMonths.slice(6).map((user, index) => (
                             <div
                               key={index}
                               className="border-b py-2 flex justify-between items-center"
@@ -336,7 +340,11 @@ const FeePage = () => {
                                 {monthTranslation[user.monthName] ||
                                   user.monthName}
                               </div>
-                              <div className="inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
+                              <div  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${
+                                    user.status === "paid"
+                                      ? "hover:bg-blue-700 bg-blue-600"
+                                      : "hover:bg-red-700 bg-red-600"
+                                  }`}>
                                 {user.status === "paid" ? (
                                   <TiTick />
                                 ) : (
