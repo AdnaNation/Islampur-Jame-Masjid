@@ -10,12 +10,12 @@ import { useQuery } from "@tanstack/react-query";
 const FeePage = () => {
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
   const [userData, setUserData] = useState({});
-  const [feeRate, setFeeRate]= useState(userData.FeeRate)
-  const [dueFee, setDueFee]= useState(userData.Due)
-  const [tarabiFee, setTarabiFee]= useState(userData?.Tarabi?.fee)
+  const [feeRate, setFeeRate] = useState(userData.FeeRate);
+  const [dueFee, setDueFee] = useState(userData.Due);
+  const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
   const [users, isUsersLoading, refetch] = useUsers();
   const [homeName] = useHomeName();
-  const axiosPublic = useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
   const date = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -43,43 +43,51 @@ const FeePage = () => {
 
   const handleUserDetails = (user) => {
     document.getElementById("my_modal_1").showModal();
-    setSelectedId(user._id)
-    reload()
+    setSelectedId(user._id);
+    reload();
     setUserData(user);
-    refetch()
+    refetch();
   };
-  useEffect(()=>{
-    setFeeRate(userData.FeeRate)
-    setDueFee(userData.Due)
+  useEffect(() => {
+    setFeeRate(userData.FeeRate);
+    setDueFee(userData.Due);
     setTarabiFee(userData?.Tarabi?.fee);
-    refetch()
-  },[userData, refetch])
-  const handleFeeRate =(e,id)=>{
-    e.preventDefault()
-    refetch()
+    refetch();
+  }, [userData, refetch]);
+  const handleFeeRate = (e, id) => {
+    e.preventDefault();
+    refetch();
     const form = e.target;
     const FeeRate = form.FeeRate.value;
     const TarabiFee = form.Tarabi.value;
     const DueFee = form.Due.value;
-    const fees ={
+    const fees = {
       FeeRate,
       TarabiFee,
-      DueFee
-    }
-axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
-  if (res.data.modifiedCount > 0) {
-    reload()
-    refetch();
-    Swal.fire({
-      position: "top-end",
-      title: "চাঁদা সেইভ করা হয়েছে",
-      showConfirmButton: false,
-      timer: 800,
+      DueFee,
+    };
+    axiosPublic.patch(`/editFee/${id}`, fees).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        reload();
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          title: "চাঁদা সেইভ করা হয়েছে",
+          showConfirmButton: false,
+          timer: 800,
+        });
+      }
     });
-  }
-})
+  };
 
-  }
+  const handleMonthStatus = async (monthName, id) => {
+    console.log(monthName, id);
+    await axiosPublic.patch("/monthStatus", { id, monthName }).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        reload();
+      }
+    });
+  };
 
   return (
     <div className="mt-16">
@@ -201,8 +209,7 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                           <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold">
-                          বকেয়া চাঁদা: {data?.data?.Due}{" "}
-                          <small>টাকা</small>
+                          বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
                         </p>
                       </div>
                       <button
@@ -217,14 +224,14 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                   </div>
                   <dialog id="my_modal_2" className="modal">
                     <div className="bg-white pt-8 px-2 w-96 rounded">
-                      <form onSubmit={(e)=>handleFeeRate(e,userData._id)}>
+                      <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
                         <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
                           <div className="relative">
                             <input
                               name="FeeRate"
                               type="text"
                               value={feeRate}
-                              onChange={(e)=>setFeeRate(e.target.value)}
+                              onChange={(e) => setFeeRate(e.target.value)}
                               className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
                             />
                             <label
@@ -239,7 +246,7 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                               name="Tarabi"
                               type="text"
                               value={tarabiFee}
-                              onChange={(e)=>setTarabiFee(e.target.value)}
+                              onChange={(e) => setTarabiFee(e.target.value)}
                               className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
                             />
                             <label
@@ -254,7 +261,7 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                               name="Due"
                               type="text"
                               value={dueFee}
-                              onChange={(e)=>setDueFee(e.target.value)}
+                              onChange={(e) => setDueFee(e.target.value)}
                               className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
                             />
                             <label
@@ -264,9 +271,12 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                               বকেয়া চাঁদা
                             </label>
                           </div>
-                          <input type="submit" value="সেইভ" className="btn btn-primary px-6 text-white" />
+                          <input
+                            type="submit"
+                            value="সেইভ"
+                            className="btn btn-primary px-6 text-white"
+                          />
                         </div>
-                        
                       </form>
                       <div className="modal-action">
                         <form method="dialog">
@@ -285,24 +295,34 @@ axiosPublic.patch(`/editFee/${id}`, fees).then(res =>{
                       <div className="grid grid-cols-2  border w-full ">
                         <div className="border-r-2 p-1">
                           {/* First 6 months */}
-                          {userData.PayMonths.slice(0, 6).map((user, index) => (
-                            <div
-                              key={index}
-                              className="border-b py-2 flex justify-between items-center gap-1"
-                            >
-                              <div className="font-bold text-md">
-                                {monthTranslation[user.monthName] ||
-                                  user.monthName}
+                          {data?.data?.PayMonths.slice(0, 6).map(
+                            (user, index) => (
+                              <div
+                                key={index}
+                                className="border-b py-2 flex justify-between items-center gap-1"
+                              >
+                                <div className="font-bold text-md">
+                                  {monthTranslation[user.monthName] ||
+                                    user.monthName}
+                                </div>
+                                <button
+                                  onClick={() =>
+                                    handleMonthStatus(
+                                      user.monthName,
+                                      selectedId
+                                    )
+                                  }
+                                className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${user.status === "paid" ? 'hover:bg-blue-700 bg-blue-600': 'hover:bg-red-700 bg-red-600'}`}
+                                >
+                                  {user.status === "paid" ? (
+                                    <TiTick />
+                                  ) : (
+                                    <FaTimes />
+                                  )}
+                                </button>
                               </div>
-                              <div className=" inline-flex items-center justify-center px-2 py-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
-                                {user.status === "paid" ? (
-                                  <TiTick />
-                                ) : (
-                                  <FaTimes />
-                                )}
-                              </div>
-                            </div>
-                          ))}
+                            )
+                          )}
                         </div>
 
                         <div className="border-l-2 p-1">
