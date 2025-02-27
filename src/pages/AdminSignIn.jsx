@@ -20,7 +20,7 @@ const AdminSignIn = () => {
         navigate('/fee')
       }
       else{
-        setAlert("কিছু একটা ভুল আছে")
+        setAlert("কিছু একটা ভুল আছে");
       }
     }
     else{
