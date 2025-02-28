@@ -16,6 +16,7 @@ const AdminSignIn = () => {
     const signedData = await axiosPublic(`admin/${number}`)
     if (signedData.data.number){
       if(signedData.data.number === number && signedData.data.password === password){
+        localStorage.setItem('Number', number)
         setAlert(" ")
         navigate('/fee')
       }

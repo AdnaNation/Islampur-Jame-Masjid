@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import AdminSignIn from "../pages/AdminSignIn";
 import AddUser from "../pages/AddUser";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/fee',
-                element: <FeePage></FeePage>
+                element: <AdminRoute><FeePage></FeePage> </AdminRoute>
             },
             {
                 path: '/profile',
