@@ -7,6 +7,7 @@ const AdminRoute = ({ children }) => {
     const [isAdmin, isAdminLoading] = useAdmin();
     const number = localStorage.getItem('Number');
    const location = useLocation();
+   console.log(location);
   if ( isAdminLoading) {
     return (
       <div>
@@ -18,7 +19,7 @@ const AdminRoute = ({ children }) => {
   if (number && isAdmin) {
     return children;
   }
-  return <Navigate to="/adminSignin" state={location.pathname} replace="true" />;
+  return <Navigate to="/adminSignin" state={{ from: location.pathname }} />;
 };
 
 export default AdminRoute;
