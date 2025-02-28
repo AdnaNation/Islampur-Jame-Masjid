@@ -3,15 +3,12 @@ import useAxiosPublic from "./useAxiosPublic";
 
 const useAdmin = () => {
     const axiosPublic = useAxiosPublic();
-    const user = {
-        number: "015454544546"
-    }
+   const number = localStorage.getItem("Number")
   const { data: isAdmin, isPending: isAdminLoading } = useQuery({
-    queryKey: [user?.number, "isAdmin"],
+    queryKey: [number, "isAdmin"],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/verifyAdmin/${user?.number}`);
-      console.log(res.data);
-      return res.data?.admin;
+      const res = await axiosPublic.get(`/verifyAdmin/${number}`);
+      return res.data;
     },
   });
   return [isAdmin, isAdminLoading];
