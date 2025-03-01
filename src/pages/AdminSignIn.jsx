@@ -17,10 +17,17 @@ const AdminSignIn = () => {
     if (signedData.data.number){
       if(signedData.data.number === number && signedData.data.password === password){
         localStorage.setItem('Number', number)
+        const userInfo = {number: number};
+        axiosPublic.post('/jwt', userInfo).then(res =>{
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+          }
+        })
         setAlert(" ")
         navigate('/fee')
       }
       else{
+        localStorage.removeItem("access-token")
         setAlert("কিছু একটা ভুল আছে");
       }
     }
