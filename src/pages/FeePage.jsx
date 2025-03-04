@@ -214,14 +214,14 @@ const FeePage = () => {
                           বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
                         </p>
                       </div>
-                      <button
+                      {isAdmin&& <button
                         className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
                         onClick={() =>
                           document.getElementById("my_modal_2").showModal()
                         }
                       >
                         <CiEdit />
-                      </button>
+                      </button>}
                     </div>
                   </div>
                   <dialog id="my_modal_2" className="modal">
