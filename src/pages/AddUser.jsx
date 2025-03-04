@@ -153,7 +153,6 @@ const AddUser = () => {
             type="text"
             name="Number"
             placeholder="নাম্বার 01**"
-            required
             className="input input-bordered w-full"
           />
           <p className="text-right">

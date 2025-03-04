@@ -19,7 +19,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/fee',
-                element: <AdminRoute><FeePage></FeePage> </AdminRoute>
+                element: <FeePage></FeePage>
             },
             {
                 path: '/profile',

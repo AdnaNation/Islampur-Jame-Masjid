@@ -7,7 +7,9 @@ import { CiEdit } from "react-icons/ci";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
+import useAdmin from "../hooks/useAdmin";
 const FeePage = () => {
+  const [isAdmin] = useAdmin()
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
   const [userData, setUserData] = useState({});
   const [feeRate, setFeeRate] = useState(userData.FeeRate);
@@ -161,7 +163,7 @@ const FeePage = () => {
                 >
                   <td className="text-[12px]">
                     <p className="text-center">
-                      {user.NameBn} <br /> {user.Number}
+                      {user.NameBn} <br /> {isAdmin && user.Number}
                     </p>
                   </td>
                   <th className="text-[12px] text-center">{user.HomeName}</th>
