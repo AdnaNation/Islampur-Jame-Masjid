@@ -7,7 +7,7 @@ const useUsers = () => {
     const {data: users = [], isPending: isUsersLoading, refetch} = useQuery({
          queryKey: ['users'],
          queryFn: async ()=>{
-            const res = await axiosPublic.get('/users');
+            const res = await axiosPublic.get('/users?search=&HomeName=&searchBn=');
             return res.data
          }
     })

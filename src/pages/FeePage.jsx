@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import useAdmin from "../hooks/useAdmin";
 const FeePage = () => {
-  const [isAdmin] = useAdmin()
+  const [isAdmin] = useAdmin();
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
   const [userData, setUserData] = useState({});
   const [feeRate, setFeeRate] = useState(userData.FeeRate);
@@ -214,14 +214,16 @@ const FeePage = () => {
                           বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
                         </p>
                       </div>
-                      {isAdmin&& <button
-                        className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
-                        onClick={() =>
-                          document.getElementById("my_modal_2").showModal()
-                        }
-                      >
-                        <CiEdit />
-                      </button>}
+                      {isAdmin && (
+                        <button
+                          className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
+                          onClick={() =>
+                            document.getElementById("my_modal_2").showModal()
+                          }
+                        >
+                          <CiEdit />
+                        </button>
+                      )}
                     </div>
                   </div>
                   <dialog id="my_modal_2" className="modal">
@@ -309,15 +311,16 @@ const FeePage = () => {
                                 </div>
                                 <button
                                   onClick={() =>
+                                    isAdmin &&
                                     handleMonthStatus(
                                       user.monthName,
                                       selectedId
                                     )
                                   }
-                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
                                     user.status === "paid"
-                                      ? "hover:bg-blue-700 bg-blue-600"
-                                      : "hover:bg-red-700 bg-red-600"
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "bg-red-600 hover:bg-red-700"
                                   }`}
                                 >
                                   {user.status === "paid" ? (
@@ -342,17 +345,26 @@ const FeePage = () => {
                                 {monthTranslation[user.monthName] ||
                                   user.monthName}
                               </div>
-                              <div  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90 ${
+                              <button
+                                  onClick={() =>
+                                    isAdmin &&
+                                    handleMonthStatus(
+                                      user.monthName,
+                                      selectedId
+                                    )
+                                  }
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
                                     user.status === "paid"
-                                      ? "hover:bg-blue-700 bg-blue-600"
-                                      : "hover:bg-red-700 bg-red-600"
-                                  }`}>
-                                {user.status === "paid" ? (
-                                  <TiTick />
-                                ) : (
-                                  <FaTimes />
-                                )}
-                              </div>
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "bg-red-600 hover:bg-red-700"
+                                  }`}
+                                >
+                                  {user.status === "paid" ? (
+                                    <TiTick />
+                                  ) : (
+                                    <FaTimes />
+                                  )}
+                                </button>
                             </div>
                           ))}
                         </div>

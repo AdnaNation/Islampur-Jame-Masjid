@@ -127,6 +127,13 @@ const AddUser = () => {
         icon: "success",
         confirmButtonText: "Ok",
       });
+    } else {
+      Swal.fire({
+        icon: "error",
+        text:`${user.NameBn} আগে থেকে অ্যাড আছেন`,
+        showConfirmButton: false,
+        timer: 800
+      });
     }
   };
 
