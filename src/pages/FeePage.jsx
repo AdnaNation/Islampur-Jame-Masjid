@@ -16,6 +16,7 @@ const FeePage = () => {
   const [dueFee, setDueFee] = useState(userData.Due);
   const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
   const [users, isUsersLoading, refetch] = useUsers();
+  const [search, setSearch] = useState('')
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
   const date = new Date().toLocaleDateString("en-GB", {
@@ -50,6 +51,9 @@ const FeePage = () => {
     setUserData(user);
     refetch();
   };
+  useEffect(()=>{
+    localStorage.setItem('search', search)
+  }, [search])
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
@@ -115,6 +119,7 @@ const FeePage = () => {
           </div>
           <div className="border rounded-lg flex-1">
             <input
+            onChange={(e) => setSearch(e.target.value)}
               type="search"
               name="search"
               placeholder="Search"
