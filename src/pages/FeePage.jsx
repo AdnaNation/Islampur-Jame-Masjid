@@ -53,15 +53,16 @@ const FeePage = () => {
     refetch();
   };
 
-  const handleHome = async (home) => {
-    await setSelectedHome(home);
-    await localStorage.setItem("homeName", selectedHome);
+  const handleHome = (e) => {
+    refetch()
+    setSelectedHome(e.target.value);
+     refetch();
   };
   useEffect(() => {
     localStorage.setItem("search", search);
     localStorage.setItem("homeName", selectedHome);
     refetch();
-  }, [search, refetch, selectedHome]);
+  }, [search, selectedHome, refetch]);
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
@@ -109,7 +110,7 @@ const FeePage = () => {
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
             <select
-              onChange={(e) => setSelectedHome(e.target.value)}
+              onChange={handleHome}
               className="p-2 border rounded"
             >
               <option value="" className="font-bold bg-red-50">
@@ -120,7 +121,7 @@ const FeePage = () => {
               ))}
             </select>
 
-            <ul className="menu menu-horizontal px-1">
+            {/* <ul className="menu menu-horizontal px-1">
               <li>
                 <details>
                   <summary className="border p-2 text-black font-bold">
@@ -135,7 +136,7 @@ const FeePage = () => {
                   </ul>
                 </details>
               </li>
-            </ul>
+            </ul> */}
           </div>
           <div className="border rounded-lg flex-1">
             <input

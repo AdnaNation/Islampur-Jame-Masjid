@@ -7,7 +7,7 @@ const useUsers = () => {
     const search = localStorage.getItem('search');
     const home = localStorage.getItem('homeName');
     const {data: users = [], isPending: isUsersLoading, refetch} = useQuery({
-         queryKey: ['users', search],
+         queryKey: ['users', search, home],
          queryFn: async ()=>{
             const res = await axiosPublic.get(`/users?search=${search}&HomeName=${home}&searchBn=`);
             return res.data
