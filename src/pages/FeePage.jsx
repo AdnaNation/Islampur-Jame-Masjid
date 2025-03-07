@@ -16,7 +16,8 @@ const FeePage = () => {
   const [dueFee, setDueFee] = useState(userData.Due);
   const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
   const [users, isUsersLoading, refetch] = useUsers();
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
+  const [selectedHome, setSelectedHome] = useState(" ");
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
   const date = new Date().toLocaleDateString("en-GB", {
@@ -51,9 +52,16 @@ const FeePage = () => {
     setUserData(user);
     refetch();
   };
-  useEffect(()=>{
-    localStorage.setItem('search', search)
-  }, [search])
+
+  const handleHome = async (home) => {
+    await setSelectedHome(home);
+    await localStorage.setItem("homeName", selectedHome);
+  };
+  useEffect(() => {
+    localStorage.setItem("search", search);
+    localStorage.setItem("homeName", selectedHome);
+    refetch();
+  }, [search, refetch, selectedHome]);
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
@@ -100,6 +108,18 @@ const FeePage = () => {
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
+            <select
+              onChange={(e) => setSelectedHome(e.target.value)}
+              className="p-2 border rounded"
+            >
+              <option value="" className="font-bold bg-red-50">
+                বাড়ির নাম
+              </option>
+              {homeName.map((home) => (
+                <option key={home}> {home}</option>
+              ))}
+            </select>
+
             <ul className="menu menu-horizontal px-1">
               <li>
                 <details>
@@ -109,7 +129,7 @@ const FeePage = () => {
                   <ul className="p-2 w-40 z-10">
                     {homeName.map((home) => (
                       <li key={home}>
-                        <a>{home}</a>
+                        <button onClick={() => handleHome(home)}>{home}</button>
                       </li>
                     ))}
                   </ul>
@@ -119,7 +139,7 @@ const FeePage = () => {
           </div>
           <div className="border rounded-lg flex-1">
             <input
-            onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               type="search"
               name="search"
               placeholder="Search"
@@ -351,25 +371,22 @@ const FeePage = () => {
                                   user.monthName}
                               </div>
                               <button
-                                  onClick={() =>
-                                    isAdmin &&
-                                    handleMonthStatus(
-                                      user.monthName,
-                                      selectedId
-                                    )
-                                  }
-                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
-                                    user.status === "paid"
-                                      ? "bg-blue-600 hover:bg-blue-700"
-                                      : "bg-red-600 hover:bg-red-700"
-                                  }`}
-                                >
-                                  {user.status === "paid" ? (
-                                    <TiTick />
-                                  ) : (
-                                    <FaTimes />
-                                  )}
-                                </button>
+                                onClick={() =>
+                                  isAdmin &&
+                                  handleMonthStatus(user.monthName, selectedId)
+                                }
+                                className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                                  user.status === "paid"
+                                    ? "bg-blue-600 hover:bg-blue-700"
+                                    : "bg-red-600 hover:bg-red-700"
+                                }`}
+                              >
+                                {user.status === "paid" ? (
+                                  <TiTick />
+                                ) : (
+                                  <FaTimes />
+                                )}
+                              </button>
                             </div>
                           ))}
                         </div>

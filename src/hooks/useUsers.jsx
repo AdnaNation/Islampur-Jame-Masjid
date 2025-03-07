@@ -5,10 +5,11 @@ import useAxiosPublic from "./useAxiosPublic";
 const useUsers = () => {
     const axiosPublic = useAxiosPublic();
     const search = localStorage.getItem('search');
+    const home = localStorage.getItem('homeName');
     const {data: users = [], isPending: isUsersLoading, refetch} = useQuery({
          queryKey: ['users', search],
          queryFn: async ()=>{
-            const res = await axiosPublic.get(`/users?search=${search}&HomeName=&searchBn=`);
+            const res = await axiosPublic.get(`/users?search=${search}&HomeName=${home}&searchBn=`);
             return res.data
          }
     })
