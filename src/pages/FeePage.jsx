@@ -17,6 +17,7 @@ const FeePage = () => {
   const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
   const [users, isUsersLoading, refetch] = useUsers();
   const [search, setSearch] = useState("");
+  const [banglaText, setBanglaText] = useState(" ");
   const [selectedHome, setSelectedHome] = useState(" ");
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
@@ -54,21 +55,34 @@ const FeePage = () => {
   };
 
   const handleHome = (e) => {
-    refetch()
     setSelectedHome(e.target.value);
-     refetch();
   };
+  const handleSearch = (e)=>{
+    if (/[\u0980-\u09FF]/.test(e.target.value)) {
+      setBanglaText(e.target.value);
+    } 
+    else{
+      setSearch(e.target.value)
+      setBanglaText(' ')
+    }
+  }
   useEffect(() => {
     localStorage.setItem("search", search);
-    localStorage.setItem("homeName", selectedHome);
-    refetch();
-  }, [search, selectedHome, refetch]);
+    localStorage.setItem("Bangla", banglaText)
+    if (selectedHome) {
+      localStorage.setItem("homeName", selectedHome);
+    }else{
+      localStorage.setItem("homeName", ' ');
+    }
+  }, [search, selectedHome, refetch, banglaText]);
+
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
     setTarabiFee(userData?.Tarabi?.fee);
     refetch();
   }, [userData, refetch]);
+
   const handleFeeRate = (e, id) => {
     e.preventDefault();
     refetch();
@@ -120,27 +134,10 @@ const FeePage = () => {
                 <option key={home}> {home}</option>
               ))}
             </select>
-
-            {/* <ul className="menu menu-horizontal px-1">
-              <li>
-                <details>
-                  <summary className="border p-2 text-black font-bold">
-                    বাড়ির নাম
-                  </summary>
-                  <ul className="p-2 w-40 z-10">
-                    {homeName.map((home) => (
-                      <li key={home}>
-                        <button onClick={() => handleHome(home)}>{home}</button>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
-            </ul> */}
           </div>
           <div className="border rounded-lg flex-1">
             <input
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleSearch}
               type="search"
               name="search"
               placeholder="Search"

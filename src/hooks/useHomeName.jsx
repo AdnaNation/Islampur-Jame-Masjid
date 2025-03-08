@@ -1,11 +1,19 @@
 
-import useUsers from "./useUsers";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "./useAxiosPublic";
 
 
 const useHomeName = () => {
-    
-  const [users]= useUsers();
-  const homeName = [...new Set(users.map(user => user.HomeName))]
+  const axiosPublic = useAxiosPublic();
+  const {data: usersHome = []} = useQuery({
+       queryKey: ['usersHome'],
+       queryFn: async ()=>{
+          const res = await axiosPublic.get('/usersHome');
+          return res.data
+       }
+  })
+  
+  const homeName = [...new Set(usersHome.map(user => user.HomeName))]
     return [homeName];
 };
 

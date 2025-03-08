@@ -6,10 +6,11 @@ const useUsers = () => {
     const axiosPublic = useAxiosPublic();
     const search = localStorage.getItem('search');
     const home = localStorage.getItem('homeName');
+    const banglaText = localStorage.getItem('Bangla');
     const {data: users = [], isPending: isUsersLoading, refetch} = useQuery({
-         queryKey: ['users', search, home],
+         queryKey: ['users', search, home, banglaText],
          queryFn: async ()=>{
-            const res = await axiosPublic.get(`/users?search=${search}&HomeName=${home}&searchBn=`);
+            const res = await axiosPublic.get(`/users?search=${search}&HomeName=${home}&searchBn=${banglaText}`);
             return res.data
          }
     })
