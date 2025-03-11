@@ -21,6 +21,10 @@ const FeePage = () => {
   const [selectedHome, setSelectedHome] = useState(" ");
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [id, setId] = useState("");
+  const [loading, setLoading]= useState(false)
   const date = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -57,22 +61,21 @@ const FeePage = () => {
   const handleHome = (e) => {
     setSelectedHome(e.target.value);
   };
-  const handleSearch = (e)=>{
+  const handleSearch = (e) => {
     if (/[\u0980-\u09FF]/.test(e.target.value)) {
       setBanglaText(e.target.value);
-    } 
-    else{
-      setSearch(e.target.value)
-      setBanglaText(' ')
+    } else {
+      setSearch(e.target.value);
+      setBanglaText(" ");
     }
-  }
+  };
   useEffect(() => {
     localStorage.setItem("search", search);
-    localStorage.setItem("Bangla", banglaText)
+    localStorage.setItem("Bangla", banglaText);
     if (selectedHome) {
       localStorage.setItem("homeName", selectedHome);
-    }else{
-      localStorage.setItem("homeName", ' ');
+    } else {
+      localStorage.setItem("homeName", " ");
     }
   }, [search, selectedHome, refetch, banglaText]);
 
@@ -109,13 +112,23 @@ const FeePage = () => {
     });
   };
 
-  const handleMonthStatus = async (monthName, id) => {
-    console.log(monthName, id);
-    await axiosPublic.patch("/monthStatus", { id, monthName }).then((res) => {
-      if (res.data.modifiedCount > 0) {
-        reload();
-      }
-    });
+  const handleModal = (monthName, id) => {
+    setSelectedMonth(monthName);
+    setId(id);
+    setIsOpen(true);
+  };
+
+  const handleMonthStatus = async () => {
+    setLoading(true)
+    await axiosPublic
+      .patch("/monthStatus", { id, selectedMonth })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          reload();
+          setLoading(false)
+          setIsOpen(false)
+        }
+      });
   };
 
   return (
@@ -123,10 +136,7 @@ const FeePage = () => {
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
-            <select
-              onChange={handleHome}
-              className="p-2 border rounded"
-            >
+            <select onChange={handleHome} className="p-2 border rounded">
               <option value="" className="font-bold bg-red-50">
                 বাড়ির নাম
               </option>
@@ -335,10 +345,7 @@ const FeePage = () => {
                                 <button
                                   onClick={() =>
                                     isAdmin &&
-                                    handleMonthStatus(
-                                      user.monthName,
-                                      selectedId
-                                    )
+                                    handleModal(user.monthName, selectedId)
                                   }
                                   className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
                                     user.status === "paid"
@@ -371,7 +378,7 @@ const FeePage = () => {
                               <button
                                 onClick={() =>
                                   isAdmin &&
-                                  handleMonthStatus(user.monthName, selectedId)
+                                  handleModal(user.monthName, selectedId)
                                 }
                                 className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
                                   user.status === "paid"
@@ -415,9 +422,34 @@ const FeePage = () => {
 
               <div className="modal-action">
                 <form method="dialog">
-                  {/* if there is a button in form, it will close the modal */}
                   <button className="btn">Close</button>
                 </form>
+                <div>
+                  {/* Modal */}
+                  {isOpen && (
+                    <div className="modal modal-middle modal-open">
+                      <div className="modal-box">
+                        <p className="py-2 text-center">
+                          চাঁদা দেয়ার ব্যাপারটা আপনি কি নিশ্চিত?
+                        </p>
+                        <div className="flex justify-evenly">
+                          <button
+                            onClick={() => setIsOpen(false)}
+                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            না
+                          </button>
+                          <button
+                            onClick={handleMonthStatus}
+                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            হ্যাঁ {loading&& <span className="loading loading-spinner w-3"></span>}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </dialog>
