@@ -22,6 +22,7 @@ const FeePage = () => {
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading]= useState(false)
@@ -101,6 +102,7 @@ const FeePage = () => {
     axiosPublic.patch(`/editFee/${id}`, fees).then((res) => {
       if (res.data.modifiedCount > 0) {
         reload();
+        setIsOpen2(false)
         refetch();
         Swal.fire({
           position: "top-end",
@@ -130,6 +132,12 @@ const FeePage = () => {
         }
       });
   };
+
+  // calculation.........
+  const currentMonthIndex = new Date().getMonth();
+  const userFeeRate = Number(data?.data?.FeeRate)
+  const totalDue = data?.data?.PayMonths?.slice(0, currentMonthIndex + 1)
+  .filter((m) => m.status === "unpaid").length * userFeeRate;
 
   return (
     <div className="mt-16">
@@ -246,12 +254,15 @@ const FeePage = () => {
                         <p className="text-sm font-semibold">
                           বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
                         </p>
+                        <p className="text-sm font-semibold">
+                         <small>এই বছরের বকেয়া চাঁদা</small>: {totalDue} <small>টাকা</small>
+                        </p>
                       </div>
                       {isAdmin && (
                         <button
                           className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
                           onClick={() =>
-                            document.getElementById("my_modal_2").showModal()
+                            setIsOpen2(true)
                           }
                         >
                           <CiEdit />
@@ -259,70 +270,74 @@ const FeePage = () => {
                       )}
                     </div>
                   </div>
-                  <dialog id="my_modal_2" className="modal">
-                    <div className="bg-white pt-8 px-2 w-96 rounded">
-                      <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
-                        <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
-                          <div className="relative">
-                            <input
-                              name="FeeRate"
-                              type="text"
-                              value={feeRate}
-                              onChange={(e) => setFeeRate(e.target.value)}
-                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
-                            />
-                            <label
-                              htmlFor="FeeRate"
-                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                            >
-                              চাঁদার হার
-                            </label>
-                          </div>
-                          <div className="relative">
-                            <input
-                              name="Tarabi"
-                              type="text"
-                              value={tarabiFee}
-                              onChange={(e) => setTarabiFee(e.target.value)}
-                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
-                            />
-                            <label
-                              htmlFor="Tarabi"
-                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                            >
-                              তারাবীর চাঁদা
-                            </label>
-                          </div>
-                          <div className="relative">
-                            <input
-                              name="Due"
-                              type="text"
-                              value={dueFee}
-                              onChange={(e) => setDueFee(e.target.value)}
-                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer bg-inherit"
-                            />
-                            <label
-                              htmlFor="Due"
-                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                            >
-                              বকেয়া চাঁদা
-                            </label>
-                          </div>
-                          <input
-                            type="submit"
-                            value="সেইভ"
-                            className="btn btn-primary px-6 text-white"
-                          />
-                        </div>
-                      </form>
-                      <div className="modal-action">
-                        <form method="dialog">
-                          {/* if there is a button in form, it will close the modal */}
-                          <button className="btn-outline btn">Close</button>
-                        </form>
-                      </div>
-                    </div>
-                  </dialog>
+                  {isOpen2 && (
+        <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
+          <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+            <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
+              <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
+                {/* Fee Rate Input */}
+                <div className="relative w-full px-4">
+                  <input
+                    name="FeeRate"
+                    type="text"
+                    value={feeRate}
+                    onChange={(e) => setFeeRate(e.target.value)}
+                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                  />
+                  <label
+                    htmlFor="FeeRate"
+                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                  >
+                    চাঁদার হার
+                  </label>
+                </div>
+
+                {/* Tarabi Fee Input */}
+                <div className="relative w-full px-4">
+                  <input
+                    name="Tarabi"
+                    type="text"
+                    value={tarabiFee}
+                    onChange={(e) => setTarabiFee(e.target.value)}
+                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                  />
+                  <label
+                    htmlFor="Tarabi"
+                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                  >
+                    তারাবীর চাঁদা
+                  </label>
+                </div>
+
+                {/* Due Fee Input */}
+                <div className="relative w-full px-4">
+                  <input
+                    name="Due"
+                    type="text"
+                    value={dueFee}
+                    onChange={(e) => setDueFee(e.target.value)}
+                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                  />
+                  <label
+                    htmlFor="Due"
+                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                  >
+                    বকেয়া চাঁদা
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <input
+                  type="submit"
+                  value="সেইভ"
+                  className="btn btn-primary px-6 text-white"
+                />
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
 
                   <div className="mt-1">
                     <h1 className="text-center font-bold font-mono text-sm">
