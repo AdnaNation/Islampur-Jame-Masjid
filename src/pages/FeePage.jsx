@@ -23,6 +23,7 @@ const FeePage = () => {
   const axiosPublic = useAxiosPublic();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+  const [isOpen3, setIsOpen3] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -145,7 +146,6 @@ const FeePage = () => {
 
 // checkbox for multiple months
   const handleCheckboxChange = (monthName, id) => {
-    console.log(id);
     if(data?.data?._id === id){
       setSelectedMonths(
         (prevSelected) =>
@@ -157,9 +157,18 @@ const FeePage = () => {
    
   };
 
-  const handleMultiMonthsPay = () =>{
+  const handleMultiMonthsPay = async () =>{
+    await axiosPublic.patch('/multiple-months', {
+      id: selectedId,
+      months: selectedMonths
+    })
+    .then((res) => {
+      console.log(res);
+      if (res.data.modifiedCount > 0) {
+        reload();
+      }
+    });
 
-    console.log(selectedMonths, selectedId);
   }
 
   return (
@@ -295,6 +304,7 @@ const FeePage = () => {
                   {isOpen2 && (
                     <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
                       <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                      <button onClick={()=> setIsOpen2(false)} className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1">✕</button>
                         <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
                           <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
                             {/* Fee Rate Input */}
@@ -352,7 +362,7 @@ const FeePage = () => {
                             <input
                               type="submit"
                               value="সেইভ"
-                              className="btn btn-primary px-6 text-white"
+                              className="bg-blue-800 rounded-lg btn-outline px-6 mb-1 text-white"
                             />
                           </div>
                         </form>
@@ -375,7 +385,7 @@ const FeePage = () => {
                                 className="border-b py-2 flex justify-between items-center gap-1"
                               >
                                {
-                                user.status === 'unpaid' && 
+                                user.status === 'unpaid' && isAdmin &&
                                 <input
                                 type="checkbox"
                                 checked={selectedMonths.includes(
@@ -422,7 +432,7 @@ const FeePage = () => {
                               className="border-b py-2 flex justify-between items-center"
                             >
                               {
-                                user.status === 'unpaid' && 
+                                user.status === 'unpaid' &&  isAdmin &&
                                 <input
                                 type="checkbox"
                                 checked={selectedMonths.includes(
@@ -476,7 +486,7 @@ const FeePage = () => {
                     </div>
 
                    {selectedMonths.length > 1 &&  <div>
-                      <button onClick={handleMultiMonthsPay} className="btn btn-xs bg-red-500 text-white">সব পেইড?</button>
+                      <button onClick={() => setIsOpen3(true)} className="btn btn-xs bg-red-500 text-white">সব পেইড?</button>
                     </div>}
                   </div>
 
@@ -509,6 +519,34 @@ const FeePage = () => {
                           </button>
                           <button
                             onClick={handleMonthStatus}
+                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            হ্যাঁ{" "}
+                            {loading && (
+                              <span className="loading loading-spinner w-3"></span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {isOpen3 && (
+                    <div className="modal modal-middle modal-open">
+                      <div className="modal-box">
+                        <p className="py-2 text-center">
+                          {selectedMonths.length} মাসের {selectedMonths.length * userFeeRate} টাকা চাঁদা দেয়ার ব্যাপারটা <br /> আপনি কি নিশ্চিত?
+                          
+                        </p>
+                        <div className="flex justify-evenly">
+                          <button
+                            onClick={() => setIsOpen3(false)}
+                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            না
+                          </button>
+                          <button
+                            // onClick={handleMonthStatus}
                             className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
                           >
                             হ্যাঁ{" "}
