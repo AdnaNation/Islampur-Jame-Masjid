@@ -25,7 +25,8 @@ const FeePage = () => {
   const [isOpen2, setIsOpen2] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
-  const [loading, setLoading]= useState(false)
+  const [loading, setLoading] = useState(false);
+  const [selectedMonths, setSelectedMonths] = useState([]);
   const date = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -52,6 +53,7 @@ const FeePage = () => {
   });
 
   const handleUserDetails = (user) => {
+    setSelectedMonths([ ])
     document.getElementById("my_modal_1").showModal();
     setSelectedId(user._id);
     reload();
@@ -102,7 +104,7 @@ const FeePage = () => {
     axiosPublic.patch(`/editFee/${id}`, fees).then((res) => {
       if (res.data.modifiedCount > 0) {
         reload();
-        setIsOpen2(false)
+        setIsOpen2(false);
         refetch();
         Swal.fire({
           position: "top-end",
@@ -121,23 +123,44 @@ const FeePage = () => {
   };
 
   const handleMonthStatus = async () => {
-    setLoading(true)
+    setLoading(true);
     await axiosPublic
       .patch("/monthStatus", { id, selectedMonth })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           reload();
-          setLoading(false)
-          setIsOpen(false)
+          setLoading(false);
+          setIsOpen(false);
         }
       });
   };
 
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
-  const userFeeRate = Number(data?.data?.FeeRate)
-  const totalDue = data?.data?.PayMonths?.slice(0, currentMonthIndex + 1)
-  .filter((m) => m.status === "unpaid").length * userFeeRate;
+  const userFeeRate = Number(data?.data?.FeeRate);
+  const totalDue =
+    data?.data?.PayMonths?.slice(0, currentMonthIndex + 1).filter(
+      (m) => m.status === "unpaid"
+    ).length * userFeeRate;
+
+// checkbox for multiple months
+  const handleCheckboxChange = (monthName, id) => {
+    console.log(id);
+    if(data?.data?._id === id){
+      setSelectedMonths(
+        (prevSelected) =>
+          prevSelected.includes(monthName)
+            ? prevSelected.filter((m) => m !== monthName) 
+            : [...prevSelected, monthName] 
+      );
+    }
+   
+  };
+
+  const handleMultiMonthsPay = () =>{
+
+    console.log(selectedMonths, selectedId);
+  }
 
   return (
     <div className="mt-16">
@@ -255,15 +278,14 @@ const FeePage = () => {
                           বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold">
-                         <small>এই বছরের বকেয়া চাঁদা</small>: {totalDue} <small>টাকা</small>
+                          <small>এই বছরের বকেয়া চাঁদা</small>: {totalDue}{" "}
+                          <small>টাকা</small>
                         </p>
                       </div>
                       {isAdmin && (
                         <button
                           className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
-                          onClick={() =>
-                            setIsOpen2(true)
-                          }
+                          onClick={() => setIsOpen2(true)}
                         >
                           <CiEdit />
                         </button>
@@ -271,73 +293,72 @@ const FeePage = () => {
                     </div>
                   </div>
                   {isOpen2 && (
-        <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
-          <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
-            <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
-              <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
-                {/* Fee Rate Input */}
-                <div className="relative w-full px-4">
-                  <input
-                    name="FeeRate"
-                    type="text"
-                    value={feeRate}
-                    onChange={(e) => setFeeRate(e.target.value)}
-                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
-                  />
-                  <label
-                    htmlFor="FeeRate"
-                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                  >
-                    চাঁদার হার
-                  </label>
-                </div>
+                    <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
+                      <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                        <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
+                          <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
+                            {/* Fee Rate Input */}
+                            <div className="relative w-full px-4">
+                              <input
+                                name="FeeRate"
+                                type="text"
+                                value={feeRate}
+                                onChange={(e) => setFeeRate(e.target.value)}
+                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                              />
+                              <label
+                                htmlFor="FeeRate"
+                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                চাঁদার হার
+                              </label>
+                            </div>
 
-                {/* Tarabi Fee Input */}
-                <div className="relative w-full px-4">
-                  <input
-                    name="Tarabi"
-                    type="text"
-                    value={tarabiFee}
-                    onChange={(e) => setTarabiFee(e.target.value)}
-                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
-                  />
-                  <label
-                    htmlFor="Tarabi"
-                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                  >
-                    তারাবীর চাঁদা
-                  </label>
-                </div>
+                            {/* Tarabi Fee Input */}
+                            <div className="relative w-full px-4">
+                              <input
+                                name="Tarabi"
+                                type="text"
+                                value={tarabiFee}
+                                onChange={(e) => setTarabiFee(e.target.value)}
+                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                              />
+                              <label
+                                htmlFor="Tarabi"
+                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                তারাবীর চাঁদা
+                              </label>
+                            </div>
 
-                {/* Due Fee Input */}
-                <div className="relative w-full px-4">
-                  <input
-                    name="Due"
-                    type="text"
-                    value={dueFee}
-                    onChange={(e) => setDueFee(e.target.value)}
-                    className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
-                  />
-                  <label
-                    htmlFor="Due"
-                    className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                  >
-                    বকেয়া চাঁদা
-                  </label>
-                </div>
+                            {/* Due Fee Input */}
+                            <div className="relative w-full px-4">
+                              <input
+                                name="Due"
+                                type="text"
+                                value={dueFee}
+                                onChange={(e) => setDueFee(e.target.value)}
+                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                              />
+                              <label
+                                htmlFor="Due"
+                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                বকেয়া চাঁদা
+                              </label>
+                            </div>
 
-                {/* Submit Button */}
-                <input
-                  type="submit"
-                  value="সেইভ"
-                  className="btn btn-primary px-6 text-white"
-                />
-              </div>
-            </form>
-
-          </div>
-        </div>
-      )}
+                            {/* Submit Button */}
+                            <input
+                              type="submit"
+                              value="সেইভ"
+                              className="btn btn-primary px-6 text-white"
+                            />
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-1">
                     <h1 className="text-center font-bold font-mono text-sm">
@@ -353,6 +374,20 @@ const FeePage = () => {
                                 key={index}
                                 className="border-b py-2 flex justify-between items-center gap-1"
                               >
+                               {
+                                user.status === 'unpaid' && 
+                                <input
+                                type="checkbox"
+                                checked={selectedMonths.includes(
+                                  user.monthName
+                                )}
+                                onChange={() =>
+                                  handleCheckboxChange(user.monthName, selectedId)
+                                }
+                                className="w-3 h-3"
+                              />
+                               }
+
                                 <div className="font-bold text-md">
                                   {monthTranslation[user.monthName] ||
                                     user.monthName}
@@ -386,6 +421,20 @@ const FeePage = () => {
                               key={index}
                               className="border-b py-2 flex justify-between items-center"
                             >
+                              {
+                                user.status === 'unpaid' && 
+                                <input
+                                type="checkbox"
+                                checked={selectedMonths.includes(
+                                  user.monthName
+                                )}
+                                onChange={() =>
+                                  handleCheckboxChange(user.monthName, selectedId)
+                                }
+                                className="w-3 h-3"
+                              />
+                               }
+
                               <div className="font-bold text-md">
                                 {monthTranslation[user.monthName] ||
                                   user.monthName}
@@ -414,7 +463,7 @@ const FeePage = () => {
                     )}
                   </div>
 
-                  <div className="mt-4 text-left">
+                  <div className="mt-4 text-left flex justify-between">
                     <div className="font-bold text-md">
                       তারাবীঃ{" "}
                       <span className="inline-flex items-center justify-center p-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
@@ -425,6 +474,10 @@ const FeePage = () => {
                         )}
                       </span>
                     </div>
+
+                   {selectedMonths.length > 1 &&  <div>
+                      <button onClick={handleMultiMonthsPay} className="btn btn-xs bg-red-500 text-white">সব পেইড?</button>
+                    </div>}
                   </div>
 
                   {/* <div className="mt-6 text-center">
@@ -458,7 +511,10 @@ const FeePage = () => {
                             onClick={handleMonthStatus}
                             className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
                           >
-                            হ্যাঁ {loading&& <span className="loading loading-spinner w-3"></span>}
+                            হ্যাঁ{" "}
+                            {loading && (
+                              <span className="loading loading-spinner w-3"></span>
+                            )}
                           </button>
                         </div>
                       </div>
