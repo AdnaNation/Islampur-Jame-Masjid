@@ -25,6 +25,7 @@ const FeePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [isOpen4, setIsOpen4] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,7 @@ const FeePage = () => {
   });
 
   const handleUserDetails = (user) => {
-    setSelectedMonths([ ])
+    setSelectedMonths([]);
     document.getElementById("my_modal_1").showModal();
     setSelectedId(user._id);
     reload();
@@ -140,45 +141,50 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = data?.data?.Tarabi?.active ?  Number(data?.data?.Tarabi?.fee) : 0;
-  
+  const TarabiFee = data?.data?.Tarabi?.active
+    ? Number(data?.data?.Tarabi?.fee)
+    : 0;
+
   const totalDue =
     data?.data?.PayMonths?.slice(0, currentMonthIndex + 1).filter(
       (m) => m.status === "unpaid"
-    ).length * userFeeRate + Number(data?.data?.Due) + TarabiFee;
+    ).length *
+      userFeeRate +
+    Number(data?.data?.Due) +
+    TarabiFee;
 
-// checkbox for multiple months
+  // checkbox for multiple months
   const handleCheckboxChange = (monthName, id) => {
-    if(data?.data?._id === id){
-      setSelectedMonths(
-        (prevSelected) =>
-          prevSelected.includes(monthName)
-            ? prevSelected.filter((m) => m !== monthName) 
-            : [...prevSelected, monthName] 
+    if (data?.data?._id === id) {
+      setSelectedMonths((prevSelected) =>
+        prevSelected.includes(monthName)
+          ? prevSelected.filter((m) => m !== monthName)
+          : [...prevSelected, monthName]
       );
     }
-   
   };
 
-  const handleMultiMonthsPay = async () =>{
-    await axiosPublic.patch('/multiple-months', {
-      id: selectedId,
-      months: selectedMonths
-    })
-    .then((res) => {
-      console.log(res);
-      if (res.data.modifiedCount > 0) {
-        reload();
-        setIsOpen3(false)
-      }
-    });
+  const handleMultiMonthsPay = async () => {
+    setLoading(true);
+    await axiosPublic
+      .patch("/multiple-months", {
+        id: selectedId,
+        months: selectedMonths,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.modifiedCount > 0) {
+          reload();
+          setLoading(false);
+          setIsOpen3(false);
+        }
+      });
+  };
 
-  }
-
-  const handleViewFee = ()=>{
-    console.log('clicked');
-    console.log(TarabiFee);
-  }
+  const handleViewFee = () => {
+    console.log("clicked");
+    setIsOpen4(true);
+  };
 
   return (
     <div className="mt-16">
@@ -293,9 +299,11 @@ const FeePage = () => {
                           <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold flex gap-1 items-center">
-                          বকেয়া চাঁদা: {totalDue} <small>টাকা</small> <button className="text-lg" onClick={handleViewFee}><MdAssistantDirection /></button>
+                          বকেয়া চাঁদা: {totalDue} <small>টাকা</small>{" "}
+                          <button className="text-lg" onClick={handleViewFee}>
+                            <MdAssistantDirection />
+                          </button>
                         </p>
-                      
                       </div>
                       {isAdmin && (
                         <button
@@ -310,7 +318,12 @@ const FeePage = () => {
                   {isOpen2 && (
                     <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
                       <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
-                      <button onClick={()=> setIsOpen2(false)} className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1">✕</button>
+                        <button
+                          onClick={() => setIsOpen2(false)}
+                          className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
+                        >
+                          ✕
+                        </button>
                         <form onSubmit={(e) => handleFeeRate(e, userData._id)}>
                           <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
                             {/* Fee Rate Input */}
@@ -390,19 +403,21 @@ const FeePage = () => {
                                 key={index}
                                 className="border-b py-2 flex justify-between items-center gap-1"
                               >
-                               {
-                                user.status === 'unpaid' && isAdmin &&
-                                <input
-                                type="checkbox"
-                                checked={selectedMonths.includes(
-                                  user.monthName
+                                {user.status === "unpaid" && isAdmin && (
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMonths.includes(
+                                      user.monthName
+                                    )}
+                                    onChange={() =>
+                                      handleCheckboxChange(
+                                        user.monthName,
+                                        selectedId
+                                      )
+                                    }
+                                    className="w-3 h-3"
+                                  />
                                 )}
-                                onChange={() =>
-                                  handleCheckboxChange(user.monthName, selectedId)
-                                }
-                                className="w-3 h-3"
-                              />
-                               }
 
                                 <div className="font-bold text-md">
                                   {monthTranslation[user.monthName] ||
@@ -437,19 +452,21 @@ const FeePage = () => {
                               key={index}
                               className="border-b py-2 flex justify-between items-center"
                             >
-                              {
-                                user.status === 'unpaid' &&  isAdmin &&
+                              {user.status === "unpaid" && isAdmin && (
                                 <input
-                                type="checkbox"
-                                checked={selectedMonths.includes(
-                                  user.monthName
-                                )}
-                                onChange={() =>
-                                  handleCheckboxChange(user.monthName, selectedId)
-                                }
-                                className="w-3 h-3"
-                              />
-                               }
+                                  type="checkbox"
+                                  checked={selectedMonths.includes(
+                                    user.monthName
+                                  )}
+                                  onChange={() =>
+                                    handleCheckboxChange(
+                                      user.monthName,
+                                      selectedId
+                                    )
+                                  }
+                                  className="w-3 h-3"
+                                />
+                              )}
 
                               <div className="font-bold text-md">
                                 {monthTranslation[user.monthName] ||
@@ -491,9 +508,16 @@ const FeePage = () => {
                       </span>
                     </div>
 
-                   {selectedMonths.length > 1 &&  <div>
-                      <button onClick={() => setIsOpen3(true)} className="btn btn-xs bg-red-500 text-white">সব পেইড?</button>
-                    </div>}
+                    {selectedMonths.length > 1 && (
+                      <div>
+                        <button
+                          onClick={() => setIsOpen3(true)}
+                          className="btn btn-xs bg-red-500 text-white"
+                        >
+                          সব পেইড?
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* <div className="mt-6 text-center">
@@ -541,8 +565,9 @@ const FeePage = () => {
                     <div className="modal modal-middle modal-open">
                       <div className="modal-box">
                         <p className="py-2 text-center">
-                          {selectedMonths.length} মাসের {selectedMonths.length * userFeeRate} টাকা চাঁদা দেয়ার ব্যাপারটা <br /> আপনি কি নিশ্চিত?
-                          
+                          {selectedMonths.length} মাসের{" "}
+                          {selectedMonths.length * userFeeRate} টাকা চাঁদা দেয়ার
+                          ব্যাপারটা <br /> আপনি কি নিশ্চিত?
                         </p>
                         <div className="flex justify-evenly">
                           <button
@@ -552,13 +577,41 @@ const FeePage = () => {
                             না
                           </button>
                           <button
-                             onClick={handleMultiMonthsPay}
+                            onClick={handleMultiMonthsPay}
                             className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
                           >
                             হ্যাঁ{" "}
                             {loading && (
                               <span className="loading loading-spinner w-3"></span>
                             )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {isOpen4 && (
+                    <div className="modal modal-top modal-open">
+                      <div className="modal-box">
+                        <p className="py-2 text-center">বকেয়ার বিবেরনী</p>
+                        <p className="font-semibold text-sm">
+                          তারাবীঃ {TarabiFee} টাকা , <br />
+                          আগের বছরেরঃ {data?.data?.Due} টাকা , <br />
+                          এই বছরেরঃ{" "}
+                          {data?.data?.PayMonths?.slice(
+                            0,
+                            currentMonthIndex + 1
+                          ).filter((m) => m.status === "unpaid").length *
+                            userFeeRate}{" "}
+                          টাকা, <br />
+                          টোটালঃ {totalDue} টাকা
+                        </p>
+                        <div className="flex justify-evenly">
+                          <button
+                            onClick={() => setIsOpen4(false)}
+                            className="btn btn-xs px-5"
+                          >
+                            ✕
                           </button>
                         </div>
                       </div>
