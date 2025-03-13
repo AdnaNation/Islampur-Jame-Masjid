@@ -8,6 +8,7 @@ import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import useAdmin from "../hooks/useAdmin";
+import { MdAssistantDirection } from "react-icons/md";
 const FeePage = () => {
   const [isAdmin] = useAdmin();
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
@@ -139,10 +140,12 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
+  const TarabiFee = data?.data?.Tarabi?.active ?  Number(data?.data?.Tarabi?.fee) : 0;
+  
   const totalDue =
     data?.data?.PayMonths?.slice(0, currentMonthIndex + 1).filter(
       (m) => m.status === "unpaid"
-    ).length * userFeeRate;
+    ).length * userFeeRate + Number(data?.data?.Due) + TarabiFee;
 
 // checkbox for multiple months
   const handleCheckboxChange = (monthName, id) => {
@@ -166,9 +169,15 @@ const FeePage = () => {
       console.log(res);
       if (res.data.modifiedCount > 0) {
         reload();
+        setIsOpen3(false)
       }
     });
 
+  }
+
+  const handleViewFee = ()=>{
+    console.log('clicked');
+    console.log(TarabiFee);
   }
 
   return (
@@ -283,13 +292,10 @@ const FeePage = () => {
                           তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
                           <small>টাকা</small>
                         </p>
-                        <p className="text-sm font-semibold">
-                          বকেয়া চাঁদা: {data?.data?.Due} <small>টাকা</small>
+                        <p className="text-sm font-semibold flex gap-1 items-center">
+                          বকেয়া চাঁদা: {totalDue} <small>টাকা</small> <button className="text-lg" onClick={handleViewFee}><MdAssistantDirection /></button>
                         </p>
-                        <p className="text-sm font-semibold">
-                          <small>এই বছরের বকেয়া চাঁদা</small>: {totalDue}{" "}
-                          <small>টাকা</small>
-                        </p>
+                      
                       </div>
                       {isAdmin && (
                         <button
@@ -354,7 +360,7 @@ const FeePage = () => {
                                 htmlFor="Due"
                                 className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                               >
-                                বকেয়া চাঁদা
+                                আগের বকেয়া চাঁদা
                               </label>
                             </div>
 
@@ -546,7 +552,7 @@ const FeePage = () => {
                             না
                           </button>
                           <button
-                            // onClick={handleMonthStatus}
+                             onClick={handleMultiMonthsPay}
                             className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
                           >
                             হ্যাঁ{" "}
