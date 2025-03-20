@@ -2,9 +2,10 @@ import { NavLink } from "react-router-dom";
 import profileSvg from "/Icons/profile.svg";
 import { ImHome } from "react-icons/im";
 import { TbCoinTakaFilled } from "react-icons/tb";
-import { IoLogIn } from "react-icons/io5";
+import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
 const Navbar = () => {
+  const userNumber = localStorage.getItem('Number');
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -32,7 +33,12 @@ const Navbar = () => {
             <NavLink to="/" className='md:text-2xl text-xl'><ImHome /></NavLink>
             <NavLink to="/fee" className='md:text-2xl text-xl'><TbCoinTakaFilled /> </NavLink>
             <NavLink to="/addUser" className='md:text-2xl text-xl'><MdGroupAdd /> </NavLink>
-            <NavLink to="/signin" className='md:text-2xl text-xl'><IoLogIn /></NavLink>
+            {
+              userNumber? 
+              <button onClick={()=> localStorage.removeItem('Number')}  className='md:text-2xl text-xl'><IoLogOut /></button> :
+              <NavLink to="/signin" className='md:text-2xl text-xl'><IoLogIn /></NavLink>
+            }
+            
           </ul>
         </div>
         <a href="/profile" className="btn btn-ghost text-xl">
