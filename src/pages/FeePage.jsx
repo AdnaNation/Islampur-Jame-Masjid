@@ -301,8 +301,8 @@ const FeePage = () => {
                           তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
                           <small>টাকা</small>
                         </p>
-                        <p className="text-sm font-semibold flex gap-1 items-center">
-                          বকেয়া চাঁদা: {totalDue} <small>টাকা</small>{" "}
+                        <p className="text-sm font-semibold flex flex-row gap-1 items-center">
+                          বকেয়া চাঁদা: <span>{totalDue}</span> <small>টাকা</small>
                           <button className="text-lg" onClick={handleViewFee}>
                             <MdAssistantDirection />
                           </button>
