@@ -50,7 +50,7 @@ const FeePage = () => {
     December: "ডিসেম্বর",
   };
 
-  const { data = {}, refetch: reload } = useQuery({
+  const { data = {}, refetch: reload, isPending: dataLoading } = useQuery({
     queryKey: ["dataById", selectedId],
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
@@ -80,8 +80,10 @@ const FeePage = () => {
     localStorage.setItem("Bangla", banglaText);
     if (selectedHome) {
       localStorage.setItem("homeName", selectedHome);
+      refetch()
     } else {
       localStorage.setItem("homeName", " ");
+      refetch()
     }
   }, [search, selectedHome, refetch, banglaText]);
 
@@ -182,7 +184,6 @@ const FeePage = () => {
   };
 
   const handleViewFee = () => {
-    console.log("clicked");
     setIsOpen4(true);
   };
 
@@ -191,12 +192,12 @@ const FeePage = () => {
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
-            <select onChange={handleHome} className="p-2 border rounded">
+            <select onClick={handleHome} className="p-2 border rounded">
               <option value="" className="font-bold bg-red-50">
                 বাড়ির নাম
               </option>
               {homeName.map((home) => (
-                <option key={home}> {home}</option>
+                <option value={home} key={home}> {home}</option>
               ))}
             </select>
           </div>
@@ -209,6 +210,8 @@ const FeePage = () => {
               className="p-2 w-full"
               id=""
             />
+          </div>
+          <div>
           </div>
         </div>
       </div>
@@ -393,6 +396,15 @@ const FeePage = () => {
                     <h1 className="text-center font-bold font-mono text-sm">
                       পেমেন্ট ডিটেইলস
                     </h1>
+                    {dataLoading &&  <div className="animate-pulse flex flex-col items-center gap-4">
+    
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+      <div className="h-7 bg-slate-400 w-full rounded-md" />
+    </div>}
                     {userData?.PayMonths && (
                       <div className="grid grid-cols-2  border w-full ">
                         <div className="border-r-2 p-1">
@@ -613,6 +625,14 @@ const FeePage = () => {
                           >
                             ✕
                           </button>
+                          {isAdmin && (
+                        <button
+                        className="btn btn-xs px-5"
+                          onClick={() => { setIsOpen4(false), setIsOpen2(true)}}
+                        >
+                          <CiEdit />
+                        </button>
+                      )}
                         </div>
                       </div>
                     </div>
