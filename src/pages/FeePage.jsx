@@ -26,6 +26,7 @@ const FeePage = () => {
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
+  const [isOpen5, setIsOpen5] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,11 @@ const FeePage = () => {
     December: "ডিসেম্বর",
   };
 
-  const { data = {}, refetch: reload, isPending: dataLoading } = useQuery({
+  const {
+    data = {},
+    refetch: reload,
+    isPending: dataLoading,
+  } = useQuery({
     queryKey: ["dataById", selectedId],
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
@@ -80,10 +85,10 @@ const FeePage = () => {
     localStorage.setItem("Bangla", banglaText);
     if (selectedHome) {
       localStorage.setItem("homeName", selectedHome);
-      refetch()
+      refetch();
     } else {
       localStorage.setItem("homeName", " ");
-      refetch()
+      refetch();
     }
   }, [search, selectedHome, refetch, banglaText]);
 
@@ -187,6 +192,13 @@ const FeePage = () => {
     setIsOpen4(true);
   };
 
+  const handleTarabeeModal = () => {
+    setIsOpen5(true);
+  };
+  const handleTarabeeFee = () => {
+    console.log(data?.data?.Name);
+  };
+
   return (
     <div className="mt-16">
       <div className="flex max-w-xl">
@@ -197,7 +209,10 @@ const FeePage = () => {
                 বাড়ির নাম
               </option>
               {homeName.map((home) => (
-                <option value={home} key={home}> {home}</option>
+                <option value={home} key={home}>
+                  {" "}
+                  {home}
+                </option>
               ))}
             </select>
           </div>
@@ -211,8 +226,7 @@ const FeePage = () => {
               id=""
             />
           </div>
-          <div>
-          </div>
+          <div></div>
         </div>
       </div>
       {isUsersLoading ? (
@@ -302,7 +316,8 @@ const FeePage = () => {
                           <small>টাকা</small>
                         </p>
                         <p className="text-sm font-semibold flex flex-row gap-1 items-center">
-                          বকেয়া চাঁদা: <span>{totalDue}</span> <small>টাকা</small>
+                          বকেয়া চাঁদা: <span>{totalDue}</span>{" "}
+                          <small>টাকা</small>
                           <button className="text-lg" onClick={handleViewFee}>
                             <MdAssistantDirection />
                           </button>
@@ -396,15 +411,16 @@ const FeePage = () => {
                     <h1 className="text-center font-bold font-mono text-sm">
                       পেমেন্ট ডিটেইলস
                     </h1>
-                    {dataLoading &&  <div className="animate-pulse flex flex-col items-center gap-4">
-    
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-      <div className="h-7 bg-slate-400 w-full rounded-md" />
-    </div>}
+                    {dataLoading && (
+                      <div className="animate-pulse flex flex-col items-center gap-4">
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                      </div>
+                    )}
                     {userData?.PayMonths && (
                       <div className="grid grid-cols-2  border w-full ">
                         <div className="border-r-2 p-1">
@@ -511,13 +527,20 @@ const FeePage = () => {
                   <div className="mt-4 text-left flex justify-between">
                     <div className="font-bold text-md">
                       তারাবীঃ{" "}
-                      <span className="inline-flex items-center justify-center p-2 bg-blue-600 transition ease-in-out delay-75 hover:bg-blue-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-90">
+                      <button
+                        onClick={isAdmin && handleTarabeeModal}
+                        className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                          userData?.Tarabi?.status === "paid"
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-red-600 hover:bg-red-700"
+                        }`}
+                      >
                         {userData?.Tarabi?.status === "paid" ? (
                           <TiTick />
                         ) : (
                           <FaTimes />
                         )}
-                      </span>
+                      </button>
                     </div>
 
                     {selectedMonths.length > 1 && (
@@ -626,13 +649,43 @@ const FeePage = () => {
                             ✕
                           </button>
                           {isAdmin && (
-                        <button
-                        className="btn btn-xs px-5"
-                          onClick={() => { setIsOpen4(false), setIsOpen2(true)}}
-                        >
-                          <CiEdit />
-                        </button>
-                      )}
+                            <button
+                              className="btn btn-xs px-5"
+                              onClick={() => {
+                                setIsOpen4(false), setIsOpen2(true);
+                              }}
+                            >
+                              <CiEdit />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {isOpen5 && (
+                    <div className="modal modal-bottom modal-open">
+                      <div className="modal-box">
+                        <p className="py-2 text-center">
+                          তারাবীর {data?.data?.Tarabi?.fee} টাকা চাঁদা দেয়ার
+                          ব্যাপারটা আপনি কি নিশ্চিত?
+                        </p>
+                        <div className="flex justify-evenly">
+                          <button
+                            onClick={() => setIsOpen5(false)}
+                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            না
+                          </button>
+                          <button
+                            onClick={handleTarabeeFee}
+                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            হ্যাঁ{" "}
+                            {loading && (
+                              <span className="loading loading-spinner w-3"></span>
+                            )}
+                          </button>
                         </div>
                       </div>
                     </div>
