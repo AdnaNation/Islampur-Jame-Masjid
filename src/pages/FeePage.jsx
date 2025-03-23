@@ -251,6 +251,7 @@ const FeePage = () => {
             {/* head */}
             <thead>
               <tr>
+                <th></th>
                 <th>
                   <p className="text-center">নাম ও নাম্বার</p>
                 </th>
@@ -260,12 +261,12 @@ const FeePage = () => {
             </thead>
             <tbody>
               {/* row 1 */}
-              {users.map((user) => (
+              {users.map((user, index) => (
                 <tr
                   className="btn-ghost"
                   onClick={() => handleUserDetails(user)}
                   key={user._id}
-                >
+                > <th>{index + 1}</th>
                   <td className="text-[12px]">
                     <p className="text-center">
                       {user.NameBn} <br /> {isAdmin && user.Number}
