@@ -148,7 +148,7 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = data?.data?.Tarabi?.active
+  const TarabiFee = !data?.data?.Tarabi?.active
     ? Number(data?.data?.Tarabi?.fee)
     : 0;
 
@@ -195,8 +195,19 @@ const FeePage = () => {
   const handleTarabeeModal = () => {
     setIsOpen5(true);
   };
-  const handleTarabeeFee = () => {
-    console.log(data?.data?.Name);
+  const handleTarabeeFee =  async () => {
+    setLoading(true)
+    await axiosPublic.patch(`/tarabeePaid/${selectedId}`)
+    .then((res) => {
+      console.log(res);
+      if (res.data.modifiedCount > 0) {
+        reload();
+        refetch()
+        setLoading(false);
+        setIsOpen5(false);
+      }
+    });
+    console.log(selectedId);
   };
 
   return (
@@ -531,12 +542,12 @@ const FeePage = () => {
                       <button
                         onClick={isAdmin && handleTarabeeModal}
                         className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
-                          userData?.Tarabi?.status === "paid"
+                          data?.data?.Tarabi?.status === "paid"
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-red-600 hover:bg-red-700"
                         }`}
                       >
-                        {userData?.Tarabi?.status === "paid" ? (
+                        {data?.data?.Tarabi?.status === "paid" ? (
                           <TiTick />
                         ) : (
                           <FaTimes />

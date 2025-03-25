@@ -3,9 +3,11 @@ import profileSvg from "/Icons/profile.svg";
 import { ImHome } from "react-icons/im";
 import { TbCoinTakaFilled } from "react-icons/tb";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
-import { MdGroupAdd } from "react-icons/md";
+import { MdDashboard, MdGroupAdd } from "react-icons/md";
+import useAdmin from "../hooks/useAdmin";
 const Navbar = () => {
   const userNumber = localStorage.getItem('Number');
+  const [isAdmin]= useAdmin()
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -34,6 +36,10 @@ const Navbar = () => {
             <NavLink to="/fee" className='md:text-2xl text-xl'><TbCoinTakaFilled /> </NavLink>
             <NavLink to="/addUser" className='md:text-2xl text-xl'><MdGroupAdd /> </NavLink>
             {
+              isAdmin && 
+              <NavLink to="/adminDashboard" className='md:text-2xl text-xl'><MdDashboard /> </NavLink>
+            }
+            {
               userNumber? 
               <button onClick={()=> localStorage.removeItem('Number')}  className='md:text-2xl text-xl'><IoLogOut /></button> :
               <NavLink to="/signin" className='md:text-2xl text-xl'><IoLogIn /></NavLink>
@@ -56,6 +62,10 @@ const Navbar = () => {
           <NavLink className="mr-1 text-2xl" to="/addUser">
           <MdGroupAdd />
           </NavLink>
+          {
+              isAdmin && 
+              <NavLink to="/adminDashboard" className='mr-1 text-2xl'><MdDashboard /> </NavLink>
+            }
         </ul>
       </div>
       <div className="navbar-end">

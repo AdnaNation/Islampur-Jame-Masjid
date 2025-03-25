@@ -7,7 +7,6 @@ const AdminRoute = ({ children }) => {
     const [isAdmin, isAdminLoading] = useAdmin();
     const number = localStorage.getItem('Number');
    const location = useLocation();
-   console.log(location);
   if ( isAdminLoading) {
     return (
       <div>
