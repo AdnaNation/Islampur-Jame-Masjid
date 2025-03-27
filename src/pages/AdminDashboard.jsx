@@ -3,6 +3,10 @@ import useUsers from "../hooks/useUsers";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+
+
+
 const AdminDashboard = () => {
   const [users] = useUsers();
   const axiosPublic = useAxiosPublic();
@@ -34,6 +38,17 @@ const AdminDashboard = () => {
       });
     });
   };
+
+  const totalPaid = stats?.data?.paidStats?.totalAmount;
+  const totalUnpaid = stats?.data?.unpaidStats?.totalUnpaidAmount 
+  console.log(totalUnpaid);
+  
+  // Data for the Pie Chart
+  const pieData = [
+    { name: "Paid", value: totalPaid, color: "#4CAF50" },
+    { name: "Unpaid", value: totalUnpaid, color: "#F44336" },
+  ];
+  
   return (
     <div className="max-w-4xl min-h-screen mx-auto border p-2 ">
       <div className="flex items-center justify-center flex-col">
@@ -86,7 +101,29 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* <h1>সদস্যঃ {users.length}</h1> */}
+      {/* PieChart */}
+      <div className="w-full h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie 
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              innerRadius={50}
+              label
+            >
+              {pieData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
