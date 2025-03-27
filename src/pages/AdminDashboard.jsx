@@ -45,8 +45,8 @@ const AdminDashboard = () => {
   
   // Data for the Pie Chart
   const pieData = [
-    { name: "Paid", value: totalPaid, color: "#4CAF50" },
-    { name: "Unpaid", value: totalUnpaid, color: "#F44336" },
+    { name: "পেইড", value: totalPaid, color: "#4CAF50" },
+    { name: "আনপেইড", value: totalUnpaid, color: "#F44336" },
   ];
   
   return (
