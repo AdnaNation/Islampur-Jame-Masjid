@@ -5,6 +5,7 @@ import { TbCoinTakaFilled } from "react-icons/tb";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { MdDashboard, MdGroupAdd } from "react-icons/md";
 import useAdmin from "../hooks/useAdmin";
+import { FaHistory } from "react-icons/fa";
 const Navbar = () => {
   const userNumber = localStorage.getItem('Number');
   const [isAdmin]= useAdmin()
@@ -35,6 +36,7 @@ const Navbar = () => {
             <NavLink to="/" className='md:text-2xl text-xl'><ImHome /></NavLink>
             <NavLink to="/fee" className='md:text-2xl text-xl'><TbCoinTakaFilled /> </NavLink>
             <NavLink to="/addUser" className='md:text-2xl text-xl'><MdGroupAdd /> </NavLink>
+            <NavLink to="/payment" className='md:text-2xl text-xl'><FaHistory /> </NavLink>
             {
               isAdmin && 
               <NavLink to="/adminDashboard" className='md:text-2xl text-xl'><MdDashboard /> </NavLink>
@@ -53,14 +55,17 @@ const Navbar = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <NavLink className="mr-1 text-2xl" to="/">
+          <NavLink className="mr-3 text-2xl" to="/">
           <ImHome />
           </NavLink>
-          <NavLink className="mr-1 text-2xl" to="/fee">
+          <NavLink className="mr-3 text-2xl" to="/fee">
           <TbCoinTakaFilled />
           </NavLink>
-          <NavLink className="mr-1 text-2xl" to="/addUser">
+          <NavLink className="mr-3 text-2xl" to="/addUser">
           <MdGroupAdd />
+          </NavLink>
+          <NavLink className="mr-3 text-2xl" to="/payment">
+          <FaHistory />
           </NavLink>
           {
               isAdmin && 

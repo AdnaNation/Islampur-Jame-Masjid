@@ -50,7 +50,7 @@ const AdminDashboard = () => {
   ];
   
   return (
-    <div className="max-w-4xl min-h-screen mx-auto border p-2 ">
+    <div className="max-w-4xl min-h-screen mx-auto border p-2 bg-orange-50">
       <div className="flex items-center justify-center flex-col">
         <p className="font-semibold">তারাবীর হিসাব</p>
         <div className="flex items-center gap-1">
@@ -79,7 +79,8 @@ const AdminDashboard = () => {
           </p>
         </div>
       </div>
-      <div className=" max-w-xs  bg-white shadow-lg rounded-2xl p-4 mx-auto">
+     <div>
+     <div className=" max-w-xs  bg-white shadow-lg rounded-2xl p-4 mx-auto">
         <div className="flex items-center">
           <p className="ml-2 text-gray-700 text-md font-semibold">
             {" "}
@@ -104,7 +105,7 @@ const AdminDashboard = () => {
       {/* PieChart */}
       <div className="w-full h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
+          <PieChart >
             <Pie 
               data={pieData}
               dataKey="value"
@@ -124,6 +125,7 @@ const AdminDashboard = () => {
           </PieChart>
         </ResponsiveContainer>
       </div>
+     </div>
     </div>
   );
 };

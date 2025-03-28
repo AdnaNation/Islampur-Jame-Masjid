@@ -36,6 +36,7 @@ const FeePage = () => {
     month: "short",
     year: "numeric",
   });
+  const time = new Date().toLocaleString()
   const monthTranslation = {
     January: "জানুয়ারি",
     February: "ফেব্রুয়ারি",
@@ -205,6 +206,17 @@ const FeePage = () => {
         refetch()
         setLoading(false);
         setIsOpen5(false);
+        const paymentData = {
+          name: data?.data?.NameBn,
+          home: data?.data.HomeName,
+          fee: data?.data?.Tarabi?.fee,
+          type: 'Tarabi',
+          time,
+
+        }
+         axiosPublic.post('/payment', paymentData).then(res=>{
+          console.log(res);
+         })
       }
     });
     console.log(selectedId);
@@ -293,7 +305,7 @@ const FeePage = () => {
           </table>
 
           <dialog id="my_modal_1" className="modal">
-            <div className="modal-box">
+            <div className="modal-box bg-orange-50">
               {/* ............ */}
 
               <div className="max-w-2xl mx-auto bg-gray-100 flex flex-col items-center">

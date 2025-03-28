@@ -8,6 +8,7 @@ import AdminSignIn from "../pages/AdminSignIn";
 import AddUser from "../pages/AddUser";
 import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../pages/AdminDashboard";
+import PaymentHistory from "../pages/PaymentHistory";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/adminSignin',
                 element: <AdminSignIn />
+            },
+            {
+                path: '/payment',
+                element: <PaymentHistory />
             },
             {
                 path: '/addUser',
