@@ -1,15 +1,27 @@
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const PaymentHistory = () => {
-    return (
-        <div className="flex justify-center bg-orange-50">
-           <div className="card bg-base-100 w-96 shadow-sm">
-  <div className="card-body">
-    <h2 className="card-title">Card title!</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-  </div>
-</div>
-        </div>
-    );
+  const axiosPublic = useAxiosPublic();
+  const { data } = useQuery({
+    queryKey: ["paymentHistory"],
+    queryFn: async () => await axiosPublic.get("/paymentHistory"),
+  });
+  console.log(data);
+  return (
+    <div className="flex flex-col gap-2 justify-center bg-orange-50">
+   {
+    data?.data?.map(history =>  <div key={history._id} className="card bg-base-100 w-96 shadow-sm">
+      <div className="card-body">
+        <h2 className="card-title text-right text-sm">{history.time}</h2>
+        <p>
+         {history.name}  {history.type === "Tarabi" && "তারাবীর"} {history.fee} টাকা চাঁদা দিয়েছেন
+        </p>
+      </div>
+    </div>)
+   }
+    </div>
+  );
 };
 
 export default PaymentHistory;
