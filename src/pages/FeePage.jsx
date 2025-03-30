@@ -149,7 +149,7 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = data?.data?.Tarabi?.active
+  const TarabiFee = data?.data?.Tarabi?.active && data?.data?.Tarabi.status === "unpaid"
     ? Number(data?.data?.Tarabi?.fee)
     : 0;
 
@@ -654,7 +654,7 @@ const FeePage = () => {
                       <div className="modal-box">
                         <p className="py-2 text-center">বকেয়ার বিবেরনী</p>
                         <p className="font-semibold text-sm">
-                          তারাবীঃ {TarabiFee} টাকা , <br />
+                          তারাবীঃ {TarabiFee}<br />
                           আগের বছরেরঃ {data?.data?.Due} টাকা , <br />
                           এই বছরেরঃ{" "}
                           {data?.data?.PayMonths?.slice(
