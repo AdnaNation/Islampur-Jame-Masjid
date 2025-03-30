@@ -11,7 +11,7 @@ const PaymentHistory = () => {
   return (
     <div className="flex flex-col gap-2 justify-center bg-orange-50">
    {
-    data?.data?.map(history =>  <div key={history._id} className="card bg-base-100 w-96 shadow-sm">
+    data?.data?.slice().reverse().map(history =>  <div key={history._id} className="card bg-base-100 w-80 shadow-sm">
       <div className="card-body">
         <h2 className="card-title text-right text-sm">{history.time}</h2>
         <p>
