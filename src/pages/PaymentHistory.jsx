@@ -1,13 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useEffect } from "react";
 
 const PaymentHistory = () => {
   const axiosPublic = useAxiosPublic();
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["paymentHistory"],
     queryFn: async () => await axiosPublic.get("/paymentHistory"),
   });
-  console.log(data);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch(); 
+    }, 3000); 
+
+    return () => clearInterval(interval);
+  }, [refetch]); 
+
   return (
    <div className="flex justify-center">
      <div className="grid md:grid-cols-3 items-center max-w-5xl gap-2 justify-center bg-orange-50">

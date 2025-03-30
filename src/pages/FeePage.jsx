@@ -61,6 +61,15 @@ const FeePage = () => {
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      reload()
+      refetch(); 
+    }, 500); 
+
+    return () => clearInterval(interval);
+  }, [refetch, reload]);
+
   const handleUserDetails = (user) => {
     setSelectedMonths([]);
     document.getElementById("my_modal_1").showModal();

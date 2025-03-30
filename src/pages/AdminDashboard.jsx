@@ -1,16 +1,15 @@
 import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
-import useUsers from "../hooks/useUsers";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { useEffect } from "react";
 
 
 
 const AdminDashboard = () => {
-  const [users] = useUsers();
   const axiosPublic = useAxiosPublic();
-  const { data: stats } = useQuery({
+  const { data: stats, refetch: reload } = useQuery({
     queryKey: ["tarabi-stats"],
     queryFn: async () => await axiosPublic.get("/tarabi-stats"),
   });
@@ -38,6 +37,15 @@ const AdminDashboard = () => {
       });
     });
   };
+
+   useEffect(() => {
+      const interval = setInterval(() => {
+        reload()
+        refetch(); 
+      }, 3000); 
+  
+      return () => clearInterval(interval);
+    }, [refetch, reload]);
 
   const totalPaid = stats?.data?.paidStats?.totalAmount;
   const totalUnpaid = stats?.data?.unpaidStats?.totalUnpaidAmount 
