@@ -9,18 +9,19 @@ const PaymentHistory = () => {
   });
   console.log(data);
   return (
-    <div className="flex flex-col gap-2 justify-center bg-orange-50">
+   <div className="flex justify-center">
+     <div className="grid md:grid-cols-3 items-center max-w-5xl gap-2 justify-center bg-orange-50">
    {
-    data?.data?.slice().reverse().map(history =>  <div key={history._id} className="card bg-base-100 w-80 shadow-sm">
+    data?.data?.slice().reverse().map(history =>  <div key={history._id} className="card bg-base-100 h-36 md:w-80 md:mx-0 mx-2 shadow-sm mt-1 ">
       <div className="card-body">
-        <h2 className="card-title text-right text-sm">{history.time}</h2>
+        <h2 className=" text-right text-[12px]">{history.time}</h2>
         <p>
-         {history.name}  {history.type === "Tarabi" && "তারাবীর"} {history.fee} টাকা চাঁদা দিয়েছেন
-        </p>
+         {history.name} (<small className="mr-1">{history.home}</small>)  {history.type === "Tarabi" && "তারাবীর"} {history.fee} টাকা পরিশোধ করেছেন।        </p>
       </div>
     </div>)
    }
     </div>
+   </div>
   );
 };
 
