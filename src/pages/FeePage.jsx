@@ -218,7 +218,7 @@ const FeePage = () => {
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
-            <select onClick={handleHome} className="p-2 border rounded md:max-w-52 max-w-32">
+            <select onChange={handleHome} className="p-2 border rounded md:max-w-52 max-w-32">
               <option value="" className="font-bold bg-red-50">
                 বাড়ির নাম
               </option>
