@@ -73,9 +73,9 @@ const FeePage = () => {
     refetch();
   };
 
-  const handleHome = (e) => {
+  const handleHome = async (e) => {
     setSelectedHome(e.target.value);
-    refetch()
+  await refetch()
   };
   const handleSearch = (e) => {
     if (/[\u0980-\u09FF]/.test(e.target.value)) {
