@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useHomeName from "../hooks/useHomeName";
-import useUsers from "../hooks/useUsers";
 import { TiTick } from "react-icons/ti";
 import { FaTimes } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -16,7 +15,6 @@ const FeePage = () => {
   const [feeRate, setFeeRate] = useState(userData.FeeRate);
   const [dueFee, setDueFee] = useState(userData.Due);
   const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
-  const [users, isUsersLoading, refetch] = useUsers();
   const [search, setSearch] = useState("");
   const [banglaText, setBanglaText] = useState(" ");
   const [selectedHome, setSelectedHome] = useState(" ");
@@ -52,6 +50,11 @@ const FeePage = () => {
     December: "ডিসেম্বর",
   };
 
+    const { data: users = [], isPending: isUsersLoading, refetch} = useQuery({
+      queryKey: ['users', selectedHome, search, banglaText],
+      queryFn: async () => await axiosPublic.get(`/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`),
+    });
+console.log(users);
   const {
     data = {},
     refetch: reload,
@@ -61,14 +64,6 @@ const FeePage = () => {
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      reload()
-      refetch(); 
-    }, 500); 
-
-    return () => clearInterval(interval);
-  }, [refetch, reload]);
 
   const handleUserDetails = (user) => {
     setSelectedMonths([]);
@@ -90,18 +85,7 @@ const FeePage = () => {
       setBanglaText(" ");
     }
   };
-  useEffect(() => {
-    localStorage.setItem("search", search);
-    localStorage.setItem("Bangla", banglaText);
-    if (selectedHome) {
-      localStorage.setItem("homeName", selectedHome);
-      refetch();
-    } else {
-      localStorage.setItem("homeName", " ");
-      refetch();
-    }
-  }, [search, selectedHome, refetch, banglaText]);
-
+  
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
@@ -209,7 +193,6 @@ const FeePage = () => {
     setLoading(true)
     await axiosPublic.patch(`/tarabeePaid/${selectedId}`)
     .then((res) => {
-      console.log(res);
       if (res.data.modifiedCount > 0) {
         reload();
         refetch()
@@ -228,9 +211,8 @@ const FeePage = () => {
          })
       }
     });
-    console.log(selectedId);
   };
-
+  // const unpaidUsers = users.filter(user => user?.Tarabi?.status === "unpaid")
   return (
     <div className="mt-16">
       <div className="flex max-w-xl">
@@ -293,7 +275,7 @@ const FeePage = () => {
             </thead>
             <tbody>
               {/* row 1 */}
-              {users.map((user, index) => (
+              {users?.data.map((user, index) => (
                 <tr
                   className="btn-ghost"
                   onClick={() => handleUserDetails(user)}
