@@ -54,7 +54,6 @@ const FeePage = () => {
       queryKey: ['users', selectedHome, search, banglaText],
       queryFn: async () => await axiosPublic.get(`/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`),
     });
-console.log(users);
   const {
     data = {},
     refetch: reload,
@@ -76,6 +75,7 @@ console.log(users);
 
   const handleHome = (e) => {
     setSelectedHome(e.target.value);
+    refetch()
   };
   const handleSearch = (e) => {
     if (/[\u0980-\u09FF]/.test(e.target.value)) {
