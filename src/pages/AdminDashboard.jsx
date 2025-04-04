@@ -49,7 +49,6 @@ const AdminDashboard = () => {
 
   const totalPaid = stats?.data?.paidStats?.totalAmount;
   const totalUnpaid = stats?.data?.unpaidStats?.totalUnpaidAmount 
-  console.log(totalUnpaid);
   
   // Data for the Pie Chart
   const pieData = [

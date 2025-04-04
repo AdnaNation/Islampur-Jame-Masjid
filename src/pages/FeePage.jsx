@@ -126,18 +126,6 @@ const FeePage = () => {
     setIsOpen(true);
   };
 
-  const handleMonthStatus = async () => {
-    setLoading(true);
-    await axiosPublic
-      .patch("/monthStatus", { id, selectedMonth })
-      .then((res) => {
-        if (res.data.modifiedCount > 0) {
-          reload();
-          setLoading(false);
-          setIsOpen(false);
-        }
-      });
-  };
 
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
@@ -164,8 +152,41 @@ const FeePage = () => {
       );
     }
   };
+  
+  const handleMonthStatus = async () => {
+    const paymentData = {
+      name: data?.data?.NameBn,
+      home: data?.data.HomeName,
+      fee: data?.data?.FeeRate,
+      monthName: selectedMonth,
+      type: 'Monthly',
+      time,
+      
+    }
+    setLoading(true);
+    await axiosPublic
+      .patch("/monthStatus", { id, selectedMonth })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          reload();
+          setLoading(false);
+          setIsOpen(false);
+         axiosPublic.post('/payment', paymentData);
+        }
+      });
+  };
 
   const handleMultiMonthsPay = async () => {
+    const shortMonths = selectedMonths.map(m => m.slice(0, 3))
+    const paymentData = {
+      name: data?.data?.NameBn,
+      home: data?.data.HomeName,
+      fee:  data?.data?.FeeRate * selectedMonths.length,
+      monthName: shortMonths.join(' ,'),
+      type: 'Monthly',
+      time,
+      
+    }
     setLoading(true);
     await axiosPublic
       .patch("/multiple-months", {
@@ -173,11 +194,12 @@ const FeePage = () => {
         months: selectedMonths,
       })
       .then((res) => {
-        console.log(res);
         if (res.data.modifiedCount > 0) {
           reload();
+          setSelectedMonths("")
           setLoading(false);
           setIsOpen3(false);
+           axiosPublic.post('/payment', paymentData)
         }
       });
   };
