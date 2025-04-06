@@ -142,6 +142,8 @@ const AdminDashboard = () => {
      </div>
 
      <p>total monthly payment: {totalPayment?.data?.Monthly?.totalAmount || 0}</p>
+     <p>total Tarabi payment: {totalPayment?.data?.Tarabi?.totalAmount || 0}</p>
+     <p>total Due payment: {totalPayment?.data?.Due?.totalAmount || 0}</p>
     </div>
   );
 };
