@@ -13,6 +13,10 @@ const AdminDashboard = () => {
     queryKey: ["tarabi-stats"],
     queryFn: async () => await axiosPublic.get("/tarabi-stats"),
   });
+  const { data: totalPayment, refetch: refresh } = useQuery({
+    queryKey: ["total-payment"],
+    queryFn: async () => await axiosPublic.get("/total-payment"),
+  });
   const {
     data: active,
     refetch,
@@ -27,6 +31,7 @@ const AdminDashboard = () => {
   const widthPercentage = (stats?.data?.paidStats?.totalAmount * 100) / inTotal;
   const handleTrue = async () => {
     await axiosPublic.patch("/activity").then((res) => {
+     if(res.data.modifiedCount > 0){
       refetch();
       Swal.fire({
         title: `তারাবী হিসাব ${
@@ -35,17 +40,19 @@ const AdminDashboard = () => {
         showConfirmButton: false,
         timer: 600,
       });
+     }
     });
   };
 
    useEffect(() => {
       const interval = setInterval(() => {
         reload()
-        refetch(); 
+        refetch();
+        refresh() 
       }, 3000); 
   
       return () => clearInterval(interval);
-    }, [refetch, reload]);
+    }, [refetch, reload, refresh]);
 
   const totalPaid = stats?.data?.paidStats?.totalAmount;
   const totalUnpaid = stats?.data?.unpaidStats?.totalUnpaidAmount 
@@ -133,6 +140,8 @@ const AdminDashboard = () => {
         </ResponsiveContainer>
       </div>
      </div>
+
+     <p>total monthly payment: {totalPayment?.data?.Monthly?.totalAmount || 0}</p>
     </div>
   );
 };

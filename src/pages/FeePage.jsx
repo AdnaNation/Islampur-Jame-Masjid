@@ -25,6 +25,7 @@ const FeePage = () => {
   const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
   const [isOpen5, setIsOpen5] = useState(false);
+  const [isOpen6, setIsOpen6] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -207,6 +208,18 @@ const FeePage = () => {
   const handleViewFee = () => {
     setIsOpen4(true);
   };
+
+  const handleDue = (e, id) => {
+    e.preventDefault()
+    const payingDue = e.target.Due.value
+    const DueFee = Number(data?.data?.Due) - Number(payingDue)
+    console.log(id, typeof DueFee, DueFee );
+  }
+
+  const handleDueModal = () =>{
+    setIsOpen6(true)
+    setDueFee(data?.data?.Due)
+  }
 
   const handleTarabeeModal = () => {
     setIsOpen5(true);
@@ -579,7 +592,26 @@ const FeePage = () => {
                         )}
                       </button>
                     </div>
-
+                   {
+                    data?.data?.Due > 0 &&
+                    <div className="font-bold text-md">
+                    বকেয়াঃ {""}
+                    <button
+                      onClick={isAdmin && handleDueModal}
+                      className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                        data?.data?.Due < 0
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-red-600 hover:bg-red-700"
+                      }`}
+                    >
+                      {data?.data?.Due < 0 ? (
+                        <TiTick />
+                      ) : (
+                        <FaTimes />
+                      )}
+                    </button>
+                  </div>
+                   }
                     {selectedMonths.length > 1 && (
                       <div>
                         <button
@@ -726,6 +758,45 @@ const FeePage = () => {
                         </div>
                       </div>
                     </div>
+                  )}
+                  {isOpen6 && (
+                    <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
+                    <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                      <button
+                        onClick={() => setIsOpen6(false)}
+                        className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
+                      >
+                        ✕
+                      </button>
+                      <form onSubmit={(e) => handleDue(e, userData._id)}>
+                        <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
+                          {/* Due Fee Input */}
+                          <div className="relative w-full px-4">
+                          <input
+                          name="Due"
+                          type="text"
+                          value={dueFee}
+                          onChange={(e) => setDueFee(e.target.value)}
+                          className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                        />
+                            <label
+                              htmlFor="Due"
+                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                            >
+                              আগের বকেয়া চাঁদা
+                            </label>
+                          </div> 
+
+                          {/* Submit Button */}
+                          <input
+                            type="submit"
+                            value="পেইড"
+                            className="bg-blue-800 rounded-lg btn-outline px-6 mb-1 text-white"
+                          />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                   )}
                 </div>
               </div>
