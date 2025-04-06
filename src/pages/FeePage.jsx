@@ -209,11 +209,27 @@ const FeePage = () => {
     setIsOpen4(true);
   };
 
-  const handleDue = (e, id) => {
+  const handleDue = async (e, id) => {
     e.preventDefault()
     const payingDue = e.target.Due.value
     const DueFee = Number(data?.data?.Due) - Number(payingDue)
-    console.log(id, typeof DueFee, DueFee );
+    const PayingFee = {
+      DueFee
+    }
+    await axiosPublic.patch(`/payDue/${id}`, PayingFee).then(res =>{
+      if(res.data.modifiedCount > 0){
+        reload()
+        const paymentData = {
+          name: data?.data?.NameBn,
+          home: data?.data.HomeName,
+          fee: payingDue,
+          type: 'Due',
+          time,
+        }
+        axiosPublic.post('/payment', paymentData)
+        setIsOpen6(false)
+      }
+    })
   }
 
   const handleDueModal = () =>{

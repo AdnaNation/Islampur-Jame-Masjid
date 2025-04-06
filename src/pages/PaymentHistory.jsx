@@ -32,7 +32,7 @@ const PaymentHistory = () => {
                 <p>
                   {history.name} (<small className="mr-1">{history.home}</small>
                   ) <small>{history.monthName && history.monthName}</small> {history.type === "Monthly" && 'মাসের মাসিক চাঁদা'}
-                  {history.type === "Tarabi" && "তারাবীর"} {history.fee} টাকা
+                  {history.type === "Tarabi" && "তারাবীর"} {history.type === "Due" && "বকেয়ার"} {history.fee} টাকা
                   পরিশোধ করেছেন।{" "}
                 </p>
               </div>
