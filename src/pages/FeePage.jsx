@@ -138,7 +138,7 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = active.data && data?.data?.Tarabi.status === "unpaid"
+  const TarabiFee = active?.data && data?.data?.Tarabi.status === "unpaid"
     ? Number(data?.data?.Tarabi?.fee)
     : 0;
 
