@@ -63,7 +63,13 @@ const FeePage = () => {
     queryKey: ["dataById", selectedId],
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
-
+  const {
+    data: active, refetch: refresh
+  } = useQuery({
+    queryKey: ["activeStatus"],
+    queryFn: async () => await axiosPublic.get("/activeStatus"),
+  });
+  console.log(active);
 
   const handleUserDetails = (user) => {
     setSelectedMonths([]);
@@ -92,7 +98,8 @@ const FeePage = () => {
     setDueFee(userData.Due);
     setTarabiFee(userData?.Tarabi?.fee);
     refetch();
-  }, [userData, refetch]);
+    refresh()
+  }, [userData, refetch, refresh]);
 
   const handleFeeRate = (e, id) => {
     e.preventDefault();
@@ -131,7 +138,7 @@ const FeePage = () => {
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = data?.data?.Tarabi?.active && data?.data?.Tarabi.status === "unpaid"
+  const TarabiFee = active.data && data?.data?.Tarabi.status === "unpaid"
     ? Number(data?.data?.Tarabi?.fee)
     : 0;
 

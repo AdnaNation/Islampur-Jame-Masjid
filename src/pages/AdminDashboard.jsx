@@ -65,6 +65,27 @@ const AdminDashboard = () => {
   
   return (
     <div className="max-w-4xl min-h-screen mx-auto border p-2 bg-orange-50">
+   
+   <div className="flex items-center justify-center flex-col ">
+        <p className="font-semibold">মাসিক চাঁদার হিসাব</p>
+        <div className=" max-w-xs  bg-white shadow-lg rounded-2xl p-4 mx-auto">
+        <div className="flex items-center">
+          <p className="ml-2 text-gray-700 text-md font-semibold">
+            {" "}
+            সর্বমোট চাঁদা কালেকশান{" "}
+          </p>
+        </div>
+
+        <div className=" mt-4">
+          <p className="text-gray-900 text-4xl font-bold text-left">
+          {Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0} {" "}
+            <small className="text-xl">টাকা</small>
+          </p>
+         
+        </div>
+      </div>
+      </div>
+
       <div className="flex items-center justify-center flex-col">
         <p className="font-semibold">তারাবীর হিসাব</p>
         <div className="flex items-center gap-1">
@@ -140,10 +161,9 @@ const AdminDashboard = () => {
         </ResponsiveContainer>
       </div>
      </div>
-
-     <p>total monthly payment: {totalPayment?.data?.Monthly?.totalAmount || 0}</p>
-     <p>total Tarabi payment: {totalPayment?.data?.Tarabi?.totalAmount || 0}</p>
-     <p>total Due payment: {totalPayment?.data?.Due?.totalAmount || 0}</p>
+     <p>total monthly payment: {Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0}</p>
+     <p>total Tarabi payment: {Math.floor(totalPayment?.data?.Tarabi?.totalAmount) || 0}</p>
+     <p>total Due payment: {Math.floor(totalPayment?.data?.Due?.totalAmount) || 0}</p>
     </div>
   );
 };
