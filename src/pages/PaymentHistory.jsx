@@ -33,7 +33,7 @@ const PaymentHistory = () => {
   }
 
   return (
-   <div className="bg-orange-50">
+   <div className="bg-orange-50 min-h-screen">
        <div className="flex justify-center gap-1 my-1">
        <select onChange={handleHome} className="p-2 border rounded w-40">
               <option value="home" className="font-bold bg-red-50">
