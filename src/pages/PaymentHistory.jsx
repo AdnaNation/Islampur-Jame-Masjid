@@ -26,11 +26,13 @@ const PaymentHistory = () => {
   }, [refetch]);
 
   const handleHome = async (e)=>{
+    setName(' ')
     setHome(e.target.value)
    await reload()
   }
   const handleName = (e)=>{
     setName(e.target.value)
+    reload()
   }
 
   return (
