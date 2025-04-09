@@ -26,6 +26,7 @@ const FeePage = () => {
   const [isOpen4, setIsOpen4] = useState(false);
   const [isOpen5, setIsOpen5] = useState(false);
   const [isOpen6, setIsOpen6] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ const FeePage = () => {
     month: "short",
     year: "numeric",
   });
-  const time = new Date().toLocaleString()
+  const time = new Date().toLocaleString();
   const monthTranslation = {
     January: "জানুয়ারি",
     February: "ফেব্রুয়ারি",
@@ -51,10 +52,17 @@ const FeePage = () => {
     December: "ডিসেম্বর",
   };
 
-    const { data: users = [], isPending: isUsersLoading, refetch} = useQuery({
-      queryKey: ['users', selectedHome, search, banglaText],
-      queryFn: async () => await axiosPublic.get(`/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`),
-    });
+  const {
+    data: users = [],
+    isPending: isUsersLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["users", selectedHome, search, banglaText],
+    queryFn: async () =>
+      await axiosPublic.get(
+        `/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`
+      ),
+  });
   const {
     data = {},
     refetch: reload,
@@ -63,14 +71,10 @@ const FeePage = () => {
     queryKey: ["dataById", selectedId],
     queryFn: async () => await axiosPublic.get(`user/${selectedId}`),
   });
-  const {
-    data: active, refetch: refresh
-  } = useQuery({
+  const { data: active, refetch: refresh } = useQuery({
     queryKey: ["activeStatus"],
     queryFn: async () => await axiosPublic.get("/activeStatus"),
   });
-  console.log(active);
-
   const handleUserDetails = (user) => {
     setSelectedMonths([]);
     document.getElementById("my_modal_1").showModal();
@@ -82,7 +86,7 @@ const FeePage = () => {
 
   const handleHome = async (e) => {
     setSelectedHome(e.target.value);
-  await refetch()
+    await refetch();
   };
   const handleSearch = (e) => {
     if (/[\u0980-\u09FF]/.test(e.target.value)) {
@@ -92,13 +96,13 @@ const FeePage = () => {
       setBanglaText(" ");
     }
   };
-  
+
   useEffect(() => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
     setTarabiFee(userData?.Tarabi?.fee);
     refetch();
-    refresh()
+    refresh();
   }, [userData, refetch, refresh]);
 
   const handleFeeRate = (e, id) => {
@@ -134,13 +138,13 @@ const FeePage = () => {
     setIsOpen(true);
   };
 
-
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
   const userFeeRate = Number(data?.data?.FeeRate);
-  const TarabiFee = active?.data && data?.data?.Tarabi.status === "unpaid"
-    ? Number(data?.data?.Tarabi?.fee)
-    : 0;
+  const TarabiFee =
+    active?.data && data?.data?.Tarabi.status === "unpaid"
+      ? Number(data?.data?.Tarabi?.fee)
+      : 0;
 
   const totalDue =
     data?.data?.PayMonths?.slice(0, currentMonthIndex + 1).filter(
@@ -160,17 +164,16 @@ const FeePage = () => {
       );
     }
   };
-  
+
   const handleMonthStatus = async () => {
     const paymentData = {
       name: data?.data?.NameBn,
       home: data?.data.HomeName,
       fee: data?.data?.FeeRate,
       monthName: selectedMonth,
-      type: 'Monthly',
+      type: "Monthly",
       time,
-      
-    }
+    };
     setLoading(true);
     await axiosPublic
       .patch("/monthStatus", { id, selectedMonth })
@@ -179,22 +182,21 @@ const FeePage = () => {
           reload();
           setLoading(false);
           setIsOpen(false);
-         axiosPublic.post('/payment', paymentData);
+          axiosPublic.post("/payment", paymentData);
         }
       });
   };
 
   const handleMultiMonthsPay = async () => {
-    const shortMonths = selectedMonths.map(m => m.slice(0, 3))
+    const shortMonths = selectedMonths.map((m) => m.slice(0, 3));
     const paymentData = {
       name: data?.data?.NameBn,
       home: data?.data.HomeName,
-      fee:  data?.data?.FeeRate * selectedMonths.length,
-      monthName: shortMonths.join(' ,'),
-      type: 'Monthly',
+      fee: data?.data?.FeeRate * selectedMonths.length,
+      monthName: shortMonths.join(" ,"),
+      type: "Monthly",
       time,
-      
-    }
+    };
     setLoading(true);
     await axiosPublic
       .patch("/multiple-months", {
@@ -204,10 +206,10 @@ const FeePage = () => {
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           reload();
-          setSelectedMonths("")
+          setSelectedMonths("");
           setLoading(false);
           setIsOpen3(false);
-           axiosPublic.post('/payment', paymentData)
+          axiosPublic.post("/payment", paymentData);
         }
       });
   };
@@ -216,14 +218,19 @@ const FeePage = () => {
     setIsOpen4(true);
   };
 
-  const handleDue = async (e, id) => {
-    e.preventDefault()
-    const payingDue = e.target.Due.value
+  const handleDuePayModal = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true)
+  };
+
+  const handleDue = async ()=>{
+    setLoading(true);
+    const payingDue = dueFee;
     const DueFee = Number(data?.data?.Due) - Number(payingDue)
     const PayingFee = {
       DueFee
     }
-    await axiosPublic.patch(`/payDue/${id}`, PayingFee).then(res =>{
+    await axiosPublic.patch(`/payDue/${data?.data?._id}`, PayingFee).then(res =>{
       if(res.data.modifiedCount > 0){
         reload()
         const paymentData = {
@@ -234,39 +241,39 @@ const FeePage = () => {
           time,
         }
         axiosPublic.post('/payment', paymentData)
+        setLoading(false)
         setIsOpen6(false)
+
       }
     })
   }
 
-  const handleDueModal = () =>{
-    setIsOpen6(true)
-    setDueFee(data?.data?.Due)
-  }
+  const handleDueModal = () => {
+    setIsOpen6(true);
+    setDueFee(data?.data?.Due);
+  };
 
   const handleTarabeeModal = () => {
     setIsOpen5(true);
   };
-  const handleTarabeeFee =  async () => {
-    setLoading(true)
-    await axiosPublic.patch(`/tarabeePaid/${selectedId}`)
-    .then((res) => {
+  const handleTarabeeFee = async () => {
+    setLoading(true);
+    await axiosPublic.patch(`/tarabeePaid/${selectedId}`).then((res) => {
       if (res.data.modifiedCount > 0) {
         reload();
-        refetch()
+        refetch();
         setLoading(false);
         setIsOpen5(false);
         const paymentData = {
           name: data?.data?.NameBn,
           home: data?.data.HomeName,
           fee: data?.data?.Tarabi?.fee,
-          type: 'Tarabi',
+          type: "Tarabi",
           time,
-
-        }
-         axiosPublic.post('/payment', paymentData).then(res=>{
+        };
+        axiosPublic.post("/payment", paymentData).then((res) => {
           console.log(res);
-         })
+        });
       }
     });
   };
@@ -276,7 +283,10 @@ const FeePage = () => {
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
           <div className="navbar-center flex">
-            <select onChange={handleHome} className="p-2 border rounded md:max-w-52 max-w-32">
+            <select
+              onChange={handleHome}
+              className="p-2 border rounded md:max-w-52 max-w-32"
+            >
               <option value="" className="font-bold bg-red-50">
                 বাড়ির নাম
               </option>
@@ -338,7 +348,9 @@ const FeePage = () => {
                   className="btn-ghost"
                   onClick={() => handleUserDetails(user)}
                   key={user._id}
-                > <th>{index + 1}</th>
+                >
+                  {" "}
+                  <th>{index + 1}</th>
                   <td className="text-[12px]">
                     <p className="text-center">
                       {user.NameBn} <br /> {isAdmin && user.Number}
@@ -615,26 +627,21 @@ const FeePage = () => {
                         )}
                       </button>
                     </div>
-                   {
-                    data?.data?.Due > 0 &&
-                    <div className="font-bold text-md">
-                    বকেয়াঃ {""}
-                    <button
-                      onClick={isAdmin && handleDueModal}
-                      className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
-                        data?.data?.Due < 0
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-red-600 hover:bg-red-700"
-                      }`}
-                    >
-                      {data?.data?.Due < 0 ? (
-                        <TiTick />
-                      ) : (
-                        <FaTimes />
-                      )}
-                    </button>
-                  </div>
-                   }
+                    {data?.data?.Due > 0 && (
+                      <div className="font-bold text-md">
+                        বকেয়াঃ {""}
+                        <button
+                          onClick={isAdmin && handleDueModal}
+                          className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                            data?.data?.Due < 0
+                              ? "bg-blue-600 hover:bg-blue-700"
+                              : "bg-red-600 hover:bg-red-700"
+                          }`}
+                        >
+                          {data?.data?.Due < 0 ? <TiTick /> : <FaTimes />}
+                        </button>
+                      </div>
+                    )}
                     {selectedMonths.length > 1 && (
                       <div>
                         <button
@@ -722,7 +729,8 @@ const FeePage = () => {
                       <div className="modal-box">
                         <p className="py-2 text-center">বকেয়ার বিবেরনী</p>
                         <p className="font-semibold text-sm">
-                          তারাবীঃ {TarabiFee}<br />
+                          তারাবীঃ {TarabiFee}
+                          <br />
                           আগের বছরেরঃ {data?.data?.Due} টাকা , <br />
                           এই বছরেরঃ{" "}
                           {data?.data?.PayMonths?.slice(
@@ -784,31 +792,57 @@ const FeePage = () => {
                   )}
                   {isOpen6 && (
                     <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
-                    <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
-                      <button
-                        onClick={() => setIsOpen6(false)}
-                        className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
-                      >
-                        ✕
-                      </button>
-                      <form onSubmit={(e) => handleDue(e, userData._id)}>
+                      <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                        <button
+                          onClick={() => {setIsOpen6(false), setIsModalOpen(false)}}
+                          className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
+                        >
+                          ✕
+                        </button>
+                      {
+                        isModalOpen? 
+                        <div className="">
+                        <p className="py-2 text-center">
+                          বকেয়ার {dueFee} টাকা পরিশোধ করার ব্যাপারটা আপনি কি
+                          নিশ্চিত?
+                        </p>
+                        <div className="flex justify-evenly">
+                          <button
+                            onClick={() =>  setIsModalOpen(false)}
+                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            না
+                          </button>
+                          <button
+                            onClick={handleDue}
+                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                          >
+                            হ্যাঁ{" "}
+                            {loading && (
+                              <span className="loading loading-spinner w-3"></span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                        : 
+                        <form onSubmit={(e) => handleDuePayModal(e)}>
                         <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
                           {/* Due Fee Input */}
                           <div className="relative w-full px-4">
-                          <input
-                          name="Due"
-                          type="text"
-                          value={dueFee}
-                          onChange={(e) => setDueFee(e.target.value)}
-                          className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
-                        />
+                            <input
+                              name="Due"
+                              type="text"
+                              value={dueFee}
+                              onChange={(e) => setDueFee(e.target.value)}
+                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                            />
                             <label
                               htmlFor="Due"
                               className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                             >
                               আগের বকেয়া চাঁদা
                             </label>
-                          </div> 
+                          </div>
 
                           {/* Submit Button */}
                           <input
@@ -818,8 +852,9 @@ const FeePage = () => {
                           />
                         </div>
                       </form>
+                      }
+                      </div>
                     </div>
-                  </div>
                   )}
                 </div>
               </div>

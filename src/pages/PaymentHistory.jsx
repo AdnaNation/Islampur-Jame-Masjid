@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useEffect, useState } from "react";
 import useHomeName from "../hooks/useHomeName";
+import { FiLoader } from "react-icons/fi";
 
 const PaymentHistory = () => {
   const [homeName] = useHomeName();
   const [home, setHome] = useState('home')
   const [name, setName] = useState(' ')
   const axiosPublic = useAxiosPublic();
-  const { data, refetch } = useQuery({
+  const { data, refetch, isPending } = useQuery({
     queryKey: ["paymentHistory", home, name],
     queryFn: async () => await axiosPublic.get(`/paymentHistory?home=${home}&name=${name}`),
   });
@@ -59,6 +60,13 @@ const PaymentHistory = () => {
               ))}
             </select>
        </div>
+
+       {
+        isPending && <div className="flex justify-center mt-40 text-3xl animate-spin"> 
+          <FiLoader />
+
+        </div>
+       }
 <div className="flex justify-center">
       <div className="grid md:grid-cols-3 items-center max-w-5xl gap-2 justify-center bg-orange-50">
         {data?.data
