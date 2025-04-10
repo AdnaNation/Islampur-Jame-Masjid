@@ -31,7 +31,8 @@ const PaymentHistory = () => {
    await reload()
   }
   const handleName = (e)=>{
-    setName(e.target.value)
+    const name = e.target.value
+    setName(name.split(" (")[0])
     reload()
   }
 
@@ -62,6 +63,18 @@ const PaymentHistory = () => {
               ))}
             </select>
        </div>
+
+       {
+      data?.data?.length === 0 &&  <div className="mt-24 mx-auto w-full max-w-72 flex flex-wrap items-center justify-center py-3 pl-4 rounded-lg text-base font-medium [transition:all_0.5s_ease] border-solid border border-[#f85149] text-[#b22b2b] [&_svg]:text-[#b22b2b] group bg-[linear-gradient(#f851491a,#f851491a)]">
+     
+      <p className="flex flex-row items-center mr-auto gap-x-2">
+       
+       <p className="text-xs">
+       {name}'র কোনো পেমেন্ট হিস্টোরি নেই!
+       </p>
+      </p>
+    </div>
+    }
 
        {
         isPending && <div className="flex justify-center mt-40 text-3xl animate-spin"> 
