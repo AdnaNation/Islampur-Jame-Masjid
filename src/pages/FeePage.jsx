@@ -99,7 +99,7 @@ const FeePage = () => {
   };
 
   const handleSeeMore = () => {
-    setSeeMore(true);
+    setSeeMore(!seeMore);
   };
 
   useEffect(() => {
@@ -394,12 +394,12 @@ const FeePage = () => {
               </tbody>
             )}
           </table>
-          {users?.data?.length > 10 && !seeMore && (
+          {users?.data?.length > 10 && (
             <button
               onClick={handleSeeMore}
               className="relative z-10 flex items-center justify-center gap-2 px-4 py-1 mx-auto overflow-hidden border-2 rounded-full shadow-xl text-md bg-gray-50 backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500 hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 group"
             >
-              আরো দেখুন
+              {seeMore ? "ফিরে যান" : "আরো দেখুন"}
               <svg
                 className="justify-end w-8 h-8 p-2 duration-300 ease-linear rotate-45 border border-gray-700 rounded-full group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 group-hover:border-none"
                 viewBox="0 0 16 19"
