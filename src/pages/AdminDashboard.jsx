@@ -1,18 +1,15 @@
-import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
-import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
-import Swal from "sweetalert2";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { useEffect } from "react";
-
-
+import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const AdminDashboard = () => {
   const axiosPublic = useAxiosPublic();
-  const { data: stats, refetch: reload } = useQuery({
-    queryKey: ["tarabi-stats"],
-    queryFn: async () => await axiosPublic.get("/tarabi-stats"),
-  });
+  // const { data: stats, refetch: reload } = useQuery({
+  //   queryKey: ["tarabi-stats"],
+  //   queryFn: async () => await axiosPublic.get("/tarabi-stats"),
+  // });
   const { data: totalPayment, refetch: refresh } = useQuery({
     queryKey: ["total-payment"],
     queryFn: async () => await axiosPublic.get("/total-payment"),
@@ -25,68 +22,112 @@ const AdminDashboard = () => {
     queryKey: ["activeStatus"],
     queryFn: async () => await axiosPublic.get("/activeStatus"),
   });
-  const inTotal =
-    stats?.data?.paidStats?.totalAmount +
-      stats?.data?.unpaidStats?.totalUnpaidAmount || 0;
-  const widthPercentage = (stats?.data?.paidStats?.totalAmount * 100) / inTotal;
+
   const handleTrue = async () => {
     await axiosPublic.patch("/activity").then((res) => {
-     if(res.data.modifiedCount > 0){
-      refetch();
-      Swal.fire({
-        title: `তারাবী হিসাব ${
-          !active?.data ? "সচল করা হয়েছে" : "বন্ধ করা হয়েছে"
-        }`,
-        showConfirmButton: false,
-        timer: 600,
-      });
-     }
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        Swal.fire({
+          title: `তারাবী হিসাব ${
+            !active?.data ? "সচল করা হয়েছে" : "বন্ধ করা হয়েছে"
+          }`,
+          showConfirmButton: false,
+          timer: 600,
+        });
+      }
     });
   };
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-        reload()
-        refetch();
-        refresh() 
-      }, 3000); 
-  
-      return () => clearInterval(interval);
-    }, [refetch, reload, refresh]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+      refresh();
+    }, 3000);
 
-  const totalPaid = stats?.data?.paidStats?.totalAmount;
-  const totalUnpaid = stats?.data?.unpaidStats?.totalUnpaidAmount 
-  
-  // Data for the Pie Chart
-  const pieData = [
-    { name: "পেইড", value: totalPaid, color: "#4CAF50" },
-    { name: "আনপেইড", value: totalUnpaid, color: "#F44336" },
-  ];
-  
+    return () => clearInterval(interval);
+  }, [refetch, refresh]);
+
+  const monthlyTotal =
+    Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0;
+  const tarabiTotal = Math.floor(totalPayment?.data?.Tarabi?.totalAmount) || 0;
+  const dueTotal = Math.floor(totalPayment?.data?.Due?.totalAmount) || 0;
+
+  const total = monthlyTotal + tarabiTotal + dueTotal;
+  console.log(total);
+
   return (
-    <div className="max-w-4xl min-h-screen mx-auto border p-2 bg-orange-50">
-   
-   <div className="flex items-center justify-center flex-col ">
-        <p className="font-semibold">মাসিক চাঁদার হিসাব</p>
-        <div className=" max-w-xs  bg-white shadow-lg rounded-2xl p-4 mx-auto">
-        <div className="flex items-center">
-          <p className="ml-2 text-gray-700 text-md font-semibold">
-            {" "}
-            সর্বমোট চাঁদা কালেকশান{" "}
-          </p>
-        </div>
+    <div className="max-w-4xl min-h-screen p-2 mx-auto border bg-orange-50">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div className="flex flex-col items-center justify-center ">
+          <p className="font-semibold">মাসিক চাঁদার হিসাব</p>
+          <div className="p-4 mx-auto bg-white shadow-lg md:w-full w-72 rounded-2xl">
+            <div className="flex items-center">
+              <p className="ml-2 font-semibold text-gray-700 text-md">
+                {" "}
+                সর্বমোট চাঁদা কালেকশান{" "}
+              </p>
+            </div>
 
-        <div className=" mt-4">
-          <p className="text-gray-900 text-4xl font-bold text-left">
-          {Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0} {" "}
-            <small className="text-xl">টাকা</small>
-          </p>
-         
+            <div className="mt-4 ">
+              <p className="text-4xl font-bold text-left text-gray-900">
+                {monthlyTotal} <small className="text-xl">টাকা</small>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center ">
+          <p className="font-semibold">বকেয়া চাঁদার হিসাব</p>
+          <div className="p-4 mx-auto bg-white shadow-lg md:w-full w-72 rounded-2xl">
+            <div className="flex items-center">
+              <p className="ml-2 font-semibold text-gray-700 text-md">
+                {" "}
+                সর্বমোট বকেয়া কালেকশান{" "}
+              </p>
+            </div>
+
+            <div className="mt-4 ">
+              <p className="text-4xl font-bold text-left text-gray-900">
+                {dueTotal} <small className="text-xl">টাকা</small>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center ">
+          <p className="font-semibold">তারাবী চাঁদার হিসাব</p>
+          <div className="p-4 mx-auto bg-white shadow-lg md:w-full w-72 rounded-2xl">
+            <div className="flex items-center">
+              <p className="ml-2 font-semibold text-gray-700 text-md">
+                {" "}
+                সর্বমোট তারাবী কালেকশান{" "}
+              </p>
+            </div>
+
+            <div className="mt-4 ">
+              <p className="text-4xl font-bold text-left text-gray-900">
+                {tarabiTotal} <small className="text-xl">টাকা</small>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-      </div>
 
-      <div className="flex items-center justify-center flex-col">
+      <div className="mt-4">
+        <div className="p-4 mx-auto bg-white shadow-lg w-72 rounded-2xl">
+          <div className="flex items-center">
+            <p className="ml-2 font-semibold text-gray-700 text-md">
+              {" "}
+              সর্বমোট কালেকশান{" "}
+            </p>
+          </div>
+
+          <div className="flex flex-col justify-center mt-4">
+            <p className="text-4xl font-bold text-left text-gray-900">
+              {total} <small className="text-xl">টাকা</small>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col items-center justify-center mt-4">
         <p className="font-semibold">তারাবীর হিসাব</p>
         <div className="flex items-center gap-1">
           <p
@@ -114,56 +155,6 @@ const AdminDashboard = () => {
           </p>
         </div>
       </div>
-     <div>
-     <div className=" max-w-xs  bg-white shadow-lg rounded-2xl p-4 mx-auto">
-        <div className="flex items-center">
-          <p className="ml-2 text-gray-700 text-md font-semibold">
-            {" "}
-            সর্বমোট তারাবী কালেকশান{" "}
-          </p>
-        </div>
-
-        <div className="flex flex-col justify-center mt-4">
-          <p className="text-gray-900 text-4xl font-bold text-left">
-            {stats?.data?.paidStats?.totalAmount}{" "}
-            <small className="text-xl">টাকা</small>
-          </p>
-          <div className="relative bg-gray-200 w-full h-2 rounded mt-2">
-            <div
-              style={{ width: `${widthPercentage}%` }}
-              className="absolute top-0 left-0 bg-green-500 h-full rounded"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* PieChart */}
-      <div className="w-full h-[300px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart >
-            <Pie 
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              innerRadius={50}
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-     </div>
-     <p>total monthly payment: {Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0}</p>
-     <p>total Tarabi payment: {Math.floor(totalPayment?.data?.Tarabi?.totalAmount) || 0}</p>
-     <p>total Due payment: {Math.floor(totalPayment?.data?.Due?.totalAmount) || 0}</p>
     </div>
   );
 };

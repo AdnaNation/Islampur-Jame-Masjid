@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import useHomeName from "../hooks/useHomeName";
-import { TiTick } from "react-icons/ti";
-import { FaTimes } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-import useAxiosPublic from "../hooks/useAxiosPublic";
-import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-import useAdmin from "../hooks/useAdmin";
+import { useEffect, useState } from "react";
+import { CiEdit } from "react-icons/ci";
+import { FaTimes } from "react-icons/fa";
 import { MdAssistantDirection } from "react-icons/md";
+import { TiTick } from "react-icons/ti";
+import Swal from "sweetalert2";
+import useAdmin from "../hooks/useAdmin";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useHomeName from "../hooks/useHomeName";
 const FeePage = () => {
   const [isAdmin] = useAdmin();
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
@@ -26,7 +26,7 @@ const FeePage = () => {
   const [isOpen4, setIsOpen4] = useState(false);
   const [isOpen5, setIsOpen5] = useState(false);
   const [isOpen6, setIsOpen6] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -220,33 +220,34 @@ const FeePage = () => {
 
   const handleDuePayModal = (e) => {
     e.preventDefault();
-    setIsModalOpen(true)
+    setIsModalOpen(true);
   };
 
-  const handleDue = async ()=>{
+  const handleDue = async () => {
     setLoading(true);
     const payingDue = dueFee;
-    const DueFee = Number(data?.data?.Due) - Number(payingDue)
+    const DueFee = Number(data?.data?.Due) - Number(payingDue);
     const PayingFee = {
-      DueFee
-    }
-    await axiosPublic.patch(`/payDue/${data?.data?._id}`, PayingFee).then(res =>{
-      if(res.data.modifiedCount > 0){
-        reload()
-        const paymentData = {
-          name: data?.data?.NameBn,
-          home: data?.data.HomeName,
-          fee: payingDue,
-          type: 'Due',
-          time,
+      DueFee,
+    };
+    await axiosPublic
+      .patch(`/payDue/${data?.data?._id}`, PayingFee)
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          reload();
+          const paymentData = {
+            name: data?.data?.NameBn,
+            home: data?.data.HomeName,
+            fee: payingDue,
+            type: "Due",
+            time,
+          };
+          axiosPublic.post("/payment", paymentData);
+          setLoading(false);
+          setIsOpen6(false);
         }
-        axiosPublic.post('/payment', paymentData)
-        setLoading(false)
-        setIsOpen6(false)
-
-      }
-    })
-  }
+      });
+  };
 
   const handleDueModal = () => {
     setIsOpen6(true);
@@ -282,7 +283,7 @@ const FeePage = () => {
     <div className="mt-16">
       <div className="flex max-w-xl">
         <div className="navbar bg-base-100">
-          <div className="navbar-center flex">
+          <div className="flex navbar-center">
             <select
               onChange={handleHome}
               className="p-2 border rounded md:max-w-52 max-w-32"
@@ -298,13 +299,13 @@ const FeePage = () => {
               ))}
             </select>
           </div>
-          <div className="border rounded-lg flex-1">
+          <div className="flex-1 border rounded-lg">
             <input
               onChange={handleSearch}
               type="search"
               name="search"
               placeholder="Search"
-              className="p-2 w-full"
+              className="w-full p-2"
               id=""
             />
           </div>
@@ -312,20 +313,20 @@ const FeePage = () => {
         </div>
       </div>
       {isUsersLoading ? (
-        <div className="animate-pulse flex flex-col items-center gap-4 w-full h-full">
+        <div className="flex flex-col items-center w-full h-full gap-4 animate-pulse">
           <div className="space-y-8">
-            <div className="w-48 h-6 bg-slate-400 rounded-md" />
-            <div className="w-28 h-4 bg-slate-400 mx-auto mt-3 rounded-md" />
+            <div className="w-48 h-6 rounded-md bg-slate-400" />
+            <div className="h-4 mx-auto mt-3 rounded-md w-28 bg-slate-400" />
           </div>
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
-          <div className="h-7 bg-slate-400 w-full rounded-md" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
+          <div className="w-full rounded-md h-7 bg-slate-400" />
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -369,14 +370,14 @@ const FeePage = () => {
             <div className="modal-box bg-orange-50">
               {/* ............ */}
 
-              <div className="max-w-2xl mx-auto bg-gray-100 flex flex-col items-center">
-                <div className="w-full bg-white p-2 shadow-md rounded-lg">
-                  <div className="flex justify-between border-b pb-4">
+              <div className="flex flex-col items-center max-w-2xl mx-auto bg-gray-100">
+                <div className="w-full p-2 bg-white rounded-lg shadow-md">
+                  <div className="flex justify-between pb-4 border-b">
                     <div>
-                      <h2 className="md:text-xl text-sm font-bold">
+                      <h2 className="text-sm font-bold md:text-xl">
                         ইসলামপুর জামে মসজিদ
                       </h2>
-                      <p className="text-gray-600 md:text-xl text-sm">
+                      <p className="text-sm text-gray-600 md:text-xl">
                         দক্ষিণ চন্ডিপুর, ইসলামপুর
                       </p>
                     </div>
@@ -385,14 +386,14 @@ const FeePage = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center border-b">
-                    <div className="mt-2 pb-2">
+                  <div className="flex items-center justify-between border-b">
+                    <div className="pb-2 mt-2">
                       <p className="text-sm">{userData.NameBn},</p>
                       <p className="text-sm">{userData.HomeName}</p>
                     </div>
 
-                    <div className="group relative">
-                      <div className="mt-2 pb-2">
+                    <div className="relative group">
+                      <div className="pb-2 mt-2">
                         <p className="text-sm font-semibold">
                           চাঁদার হার: {data?.data?.FeeRate} <small>টাকা</small>
                         </p>
@@ -400,7 +401,7 @@ const FeePage = () => {
                           তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
                           <small>টাকা</small>
                         </p>
-                        <p className="text-sm font-semibold flex flex-row gap-1 items-center">
+                        <p className="flex flex-row items-center gap-1 text-sm font-semibold">
                           বকেয়া চাঁদা: <span>{totalDue}</span>{" "}
                           <small>টাকা</small>
                           <button className="text-lg" onClick={handleViewFee}>
@@ -419,11 +420,11 @@ const FeePage = () => {
                     </div>
                   </div>
                   {isOpen2 && (
-                    <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
-                      <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                    <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 modal modal-open">
+                      <div className="px-4 pt-8 bg-white rounded-lg modal-box w-96">
                         <button
                           onClick={() => setIsOpen2(false)}
-                          className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
+                          className="absolute text-xl btn btn-sm btn-circle btn-ghost right-2 top-1"
                         >
                           ✕
                         </button>
@@ -436,11 +437,11 @@ const FeePage = () => {
                                 type="text"
                                 value={feeRate}
                                 onChange={(e) => setFeeRate(e.target.value)}
-                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
                               />
                               <label
                                 htmlFor="FeeRate"
-                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                               >
                                 চাঁদার হার
                               </label>
@@ -453,11 +454,11 @@ const FeePage = () => {
                                 type="text"
                                 value={tarabiFee}
                                 onChange={(e) => setTarabiFee(e.target.value)}
-                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
                               />
                               <label
                                 htmlFor="Tarabi"
-                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                               >
                                 তারাবীর চাঁদা
                               </label>
@@ -470,11 +471,11 @@ const FeePage = () => {
                                 type="text"
                                 value={dueFee}
                                 onChange={(e) => setDueFee(e.target.value)}
-                                className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
                               />
                               <label
                                 htmlFor="Due"
-                                className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                               >
                                 আগের বকেয়া চাঁদা
                               </label>
@@ -484,7 +485,7 @@ const FeePage = () => {
                             <input
                               type="submit"
                               value="সেইভ"
-                              className="bg-blue-800 rounded-lg btn-outline px-6 mb-1 text-white"
+                              className="px-6 mb-1 text-white bg-blue-800 rounded-lg btn-outline"
                             />
                           </div>
                         </form>
@@ -493,28 +494,28 @@ const FeePage = () => {
                   )}
 
                   <div className="mt-1">
-                    <h1 className="text-center font-bold font-mono text-sm">
+                    <h1 className="font-mono text-sm font-bold text-center">
                       পেমেন্ট ডিটেইলস
                     </h1>
                     {dataLoading && (
-                      <div className="animate-pulse flex flex-col items-center gap-4">
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
-                        <div className="h-7 bg-slate-400 w-full rounded-md" />
+                      <div className="flex flex-col items-center gap-4 animate-pulse">
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
+                        <div className="w-full rounded-md h-7 bg-slate-400" />
                       </div>
                     )}
                     {userData?.PayMonths && (
-                      <div className="grid grid-cols-2  border w-full ">
-                        <div className="border-r-2 p-1">
+                      <div className="grid w-full grid-cols-2 border ">
+                        <div className="p-1 border-r-2">
                           {/* First 6 months */}
                           {data?.data?.PayMonths.slice(0, 6).map(
                             (user, index) => (
                               <div
                                 key={index}
-                                className="border-b py-2 flex justify-between items-center gap-1"
+                                className="flex items-center justify-between gap-1 py-2 border-b"
                               >
                                 {user.status === "unpaid" && isAdmin && (
                                   <input
@@ -558,12 +559,12 @@ const FeePage = () => {
                           )}
                         </div>
 
-                        <div className="border-l-2 p-1">
+                        <div className="p-1 border-l-2">
                           {/* Last 6 months */}
                           {data?.data?.PayMonths.slice(6).map((user, index) => (
                             <div
                               key={index}
-                              className="border-b py-2 flex justify-between items-center"
+                              className="flex items-center justify-between py-2 border-b"
                             >
                               {user.status === "unpaid" && isAdmin && (
                                 <input
@@ -609,7 +610,7 @@ const FeePage = () => {
                     )}
                   </div>
 
-                  <div className="mt-4 text-left flex justify-between">
+                  <div className="flex justify-between mt-4 text-left">
                     <div className="font-bold text-md">
                       তারাবীঃ{" "}
                       <button
@@ -646,7 +647,7 @@ const FeePage = () => {
                       <div>
                         <button
                           onClick={() => setIsOpen3(true)}
-                          className="btn btn-xs bg-red-500 text-white"
+                          className="text-white bg-red-500 btn btn-xs"
                         >
                           সব পেইড?
                         </button>
@@ -655,7 +656,7 @@ const FeePage = () => {
                   </div>
 
                   {/* <div className="mt-6 text-center">
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
+                  <button className="px-6 py-2 text-white bg-blue-600 rounded-md">
                     Download PDF
                   </button>
                 </div> */}
@@ -677,17 +678,17 @@ const FeePage = () => {
                         <div className="flex justify-evenly">
                           <button
                             onClick={() => setIsOpen(false)}
-                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="inline-block px-5 font-semibold leading-6 text-center transition duration-200 bg-red-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             না
                           </button>
                           <button
                             onClick={handleMonthStatus}
-                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="flex items-center px-5 font-semibold leading-6 text-center transition duration-200 bg-green-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             হ্যাঁ{" "}
                             {loading && (
-                              <span className="loading loading-spinner w-3"></span>
+                              <span className="w-3 loading loading-spinner"></span>
                             )}
                           </button>
                         </div>
@@ -706,17 +707,17 @@ const FeePage = () => {
                         <div className="flex justify-evenly">
                           <button
                             onClick={() => setIsOpen3(false)}
-                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="inline-block px-5 font-semibold leading-6 text-center transition duration-200 bg-red-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             না
                           </button>
                           <button
                             onClick={handleMultiMonthsPay}
-                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="flex items-center px-5 font-semibold leading-6 text-center transition duration-200 bg-green-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             হ্যাঁ{" "}
                             {loading && (
-                              <span className="loading loading-spinner w-3"></span>
+                              <span className="w-3 loading loading-spinner"></span>
                             )}
                           </button>
                         </div>
@@ -728,7 +729,7 @@ const FeePage = () => {
                     <div className="modal modal-top modal-open">
                       <div className="modal-box">
                         <p className="py-2 text-center">বকেয়ার বিবেরনী</p>
-                        <p className="font-semibold text-sm">
+                        <p className="text-sm font-semibold">
                           তারাবীঃ {TarabiFee}
                           <br />
                           আগের বছরেরঃ {data?.data?.Due} টাকা , <br />
@@ -744,13 +745,13 @@ const FeePage = () => {
                         <div className="flex justify-evenly">
                           <button
                             onClick={() => setIsOpen4(false)}
-                            className="btn btn-xs px-5"
+                            className="px-5 btn btn-xs"
                           >
                             ✕
                           </button>
                           {isAdmin && (
                             <button
-                              className="btn btn-xs px-5"
+                              className="px-5 btn btn-xs"
                               onClick={() => {
                                 setIsOpen4(false), setIsOpen2(true);
                               }}
@@ -773,17 +774,17 @@ const FeePage = () => {
                         <div className="flex justify-evenly">
                           <button
                             onClick={() => setIsOpen5(false)}
-                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="inline-block px-5 font-semibold leading-6 text-center transition duration-200 bg-red-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             না
                           </button>
                           <button
                             onClick={handleTarabeeFee}
-                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
+                            className="flex items-center px-5 font-semibold leading-6 text-center transition duration-200 bg-green-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
                           >
                             হ্যাঁ{" "}
                             {loading && (
-                              <span className="loading loading-spinner w-3"></span>
+                              <span className="w-3 loading loading-spinner"></span>
                             )}
                           </button>
                         </div>
@@ -791,68 +792,69 @@ const FeePage = () => {
                     </div>
                   )}
                   {isOpen6 && (
-                    <div className="modal modal-open flex items-center justify-center bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full">
-                      <div className="modal-box bg-white pt-8 px-4 w-96 rounded-lg">
+                    <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 modal modal-open">
+                      <div className="px-4 pt-8 bg-white rounded-lg modal-box w-96">
                         <button
-                          onClick={() => {setIsOpen6(false), setIsModalOpen(false)}}
-                          className="btn text-xl btn-sm btn-circle btn-ghost absolute right-2 top-1"
+                          onClick={() => {
+                            setIsOpen6(false), setIsModalOpen(false);
+                          }}
+                          className="absolute text-xl btn btn-sm btn-circle btn-ghost right-2 top-1"
                         >
                           ✕
                         </button>
-                      {
-                        isModalOpen? 
-                        <div className="">
-                        <p className="py-2 text-center">
-                          বকেয়ার {dueFee} টাকা পরিশোধ করার ব্যাপারটা আপনি কি
-                          নিশ্চিত?
-                        </p>
-                        <div className="flex justify-evenly">
-                          <button
-                            onClick={() =>  setIsModalOpen(false)}
-                            className="btn btn-xs px-5 inline-block sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-red-500 hover:bg-green-600 rounded-lg transition duration-200"
-                          >
-                            না
-                          </button>
-                          <button
-                            onClick={handleDue}
-                            className="flex items-center btn btn-xs px-5 sm:w-auto text-center font-semibold leading-6 text-blue-50 bg-green-500 hover:bg-green-600 rounded-lg transition duration-200"
-                          >
-                            হ্যাঁ{" "}
-                            {loading && (
-                              <span className="loading loading-spinner w-3"></span>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                        : 
-                        <form onSubmit={(e) => handleDuePayModal(e)}>
-                        <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
-                          {/* Due Fee Input */}
-                          <div className="relative w-full px-4">
-                            <input
-                              name="Due"
-                              type="text"
-                              value={dueFee}
-                              onChange={(e) => setDueFee(e.target.value)}
-                              className="border-b border-gray-300 py-1 focus:border-b-2 focus:border-blue-700 transition-colors focus:outline-none peer w-full bg-inherit"
-                            />
-                            <label
-                              htmlFor="Due"
-                              className="absolute -top-4 text-xs left-0 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
-                            >
-                              আগের বকেয়া চাঁদা
-                            </label>
+                        {isModalOpen ? (
+                          <div className="">
+                            <p className="py-2 text-center">
+                              বকেয়ার {dueFee} টাকা পরিশোধ করার ব্যাপারটা আপনি কি
+                              নিশ্চিত?
+                            </p>
+                            <div className="flex justify-evenly">
+                              <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="inline-block px-5 font-semibold leading-6 text-center transition duration-200 bg-red-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
+                              >
+                                না
+                              </button>
+                              <button
+                                onClick={handleDue}
+                                className="flex items-center px-5 font-semibold leading-6 text-center transition duration-200 bg-green-500 rounded-lg btn btn-xs sm:w-auto text-blue-50 hover:bg-green-600"
+                              >
+                                হ্যাঁ{" "}
+                                {loading && (
+                                  <span className="w-3 loading loading-spinner"></span>
+                                )}
+                              </button>
+                            </div>
                           </div>
+                        ) : (
+                          <form onSubmit={(e) => handleDuePayModal(e)}>
+                            <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
+                              {/* Due Fee Input */}
+                              <div className="relative w-full px-4">
+                                <input
+                                  name="Due"
+                                  type="text"
+                                  value={dueFee}
+                                  onChange={(e) => setDueFee(e.target.value)}
+                                  className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
+                                />
+                                <label
+                                  htmlFor="Due"
+                                  className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                                >
+                                  আগের বকেয়া চাঁদা
+                                </label>
+                              </div>
 
-                          {/* Submit Button */}
-                          <input
-                            type="submit"
-                            value="পেইড"
-                            className="bg-blue-800 rounded-lg btn-outline px-6 mb-1 text-white"
-                          />
-                        </div>
-                      </form>
-                      }
+                              {/* Submit Button */}
+                              <input
+                                type="submit"
+                                value="পেইড"
+                                className="px-6 mb-1 text-white bg-blue-800 rounded-lg btn-outline"
+                              />
+                            </div>
+                          </form>
+                        )}
                       </div>
                     </div>
                   )}

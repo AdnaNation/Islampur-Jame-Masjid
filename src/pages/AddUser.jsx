@@ -53,60 +53,60 @@ const AddUser = () => {
     const Tarabi = {
       fee: 0,
       status: "unpaid",
-      active: false
-  };
+      active: false,
+    };
     const FeeRate = 0;
     const PayMonths = [
       {
         monthName: "January",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "February",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "March",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "April",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "May",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "June",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "July",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "August",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "September",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "October",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "November",
-        status: "unpaid"
+        status: "unpaid",
       },
       {
         monthName: "December",
-        status: "unpaid"
-      }
+        status: "unpaid",
+      },
     ];
-    
+
     const user = {
       Name,
       NameBn,
@@ -130,23 +130,23 @@ const AddUser = () => {
     } else {
       Swal.fire({
         icon: "error",
-        text:`${user.NameBn} আগে থেকে অ্যাড আছেন`,
+        text: `${user.NameBn} আগে থেকে অ্যাড আছেন`,
         showConfirmButton: false,
-        timer: 800
+        timer: 800,
       });
     }
   };
 
   return (
-    <div className=" mx-auto md:max-w-80 space-y-2 mt-14">
+    <div className="mx-auto space-y-2  md:max-w-80 mt-14">
       <form onSubmit={handleSubmit}>
-        <div className="form-control md:w-96 w-72 px-1 mx-auto space-y-1">
+        <div className="px-1 mx-auto space-y-1 form-control md:w-96 w-72">
           <input
             type="text"
             name="NameEn"
             placeholder="নাম ইংরেজীতে "
             required
-            className="input input-bordered w-full"
+            className="w-full input input-bordered"
           />
 
           <input
@@ -154,13 +154,13 @@ const AddUser = () => {
             name="NameBn"
             placeholder="নাম বাংলায়"
             required
-            className="input input-bordered w-full"
+            className="w-full input input-bordered"
           />
           <input
             type="text"
             name="Number"
             placeholder="নাম্বার 01**"
-            className="input input-bordered w-full"
+            className="w-full input input-bordered"
           />
           <p className="text-right">
             <p onClick={toggleNewHome}>
@@ -176,10 +176,10 @@ const AddUser = () => {
               name="HomeName"
               placeholder="বাড়ির নাম বাংলায়"
               required
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
             />
           ) : (
-            <select className="select select-bordered w-full " name="HomeName">
+            <select className="w-full select select-bordered " name="HomeName">
               <option disabled selected>
                 বাড়ির নাম
               </option>
@@ -189,7 +189,7 @@ const AddUser = () => {
             </select>
           )}
         </div>
-        <div className="text-center md:w-96 mt-2 ">
+        <div className="mt-2 text-center md:w-96 ">
           <input
             type="submit"
             value="অ্যাড করুন"
