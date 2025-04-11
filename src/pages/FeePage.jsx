@@ -12,6 +12,10 @@ const FeePage = () => {
   const [isAdmin] = useAdmin();
   const [selectedId, setSelectedId] = useState("67b579d9992b1fd00b488aef");
   const [userData, setUserData] = useState({});
+  const [name, setName] = useState(userData.Name);
+  const [nameBn, setNameBn] = useState(userData.NameBn);
+  const [HomeName, setHomeName] = useState(userData.HomeName);
+  const [number, setNumber] = useState(userData.Number);
   const [feeRate, setFeeRate] = useState(userData.FeeRate);
   const [dueFee, setDueFee] = useState(userData.Due);
   const [tarabiFee, setTarabiFee] = useState(userData?.Tarabi?.fee);
@@ -26,6 +30,7 @@ const FeePage = () => {
   const [isOpen4, setIsOpen4] = useState(false);
   const [isOpen5, setIsOpen5] = useState(false);
   const [isOpen6, setIsOpen6] = useState(false);
+  const [isOpen7, setIsOpen7] = useState(false);
   const [seeMore, setSeeMore] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -106,10 +111,38 @@ const FeePage = () => {
     setFeeRate(userData.FeeRate);
     setDueFee(userData.Due);
     setTarabiFee(userData?.Tarabi?.fee);
+    setName(userData.Name);
+    setNameBn(userData.NameBn);
+    setHomeName(userData.HomeName);
+    setNumber(userData.Number);
     setSeeMore(false);
     refetch();
     refresh();
   }, [userData, refetch, refresh]);
+
+  const handleUserData = (e, id) => {
+    e.preventDefault();
+    const form = e.target;
+    const Name = form.Name.value;
+    const NameBn = form.NameBn.value;
+    const HomeName = form.HomeName.value;
+    const Number = form.Number.value;
+    const userData = {
+      Name,
+      NameBn,
+      HomeName,
+      Number,
+    };
+
+    axiosPublic.patch(`/editUserData/${id}`, userData).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        console.log(res);
+        refetch();
+        reload();
+        setIsOpen7(false);
+      }
+    });
+  };
 
   const handleFeeRate = (e, id) => {
     e.preventDefault();
@@ -434,9 +467,18 @@ const FeePage = () => {
                   </div>
 
                   <div className="flex items-center justify-between border-b">
-                    <div className="pb-2 mt-2">
-                      <p className="text-sm">{userData.NameBn},</p>
-                      <p className="text-sm">{userData.HomeName}</p>
+                    <div className="relative pb-2 mt-2 group">
+                      <p className="text-sm">{data?.data?.NameBn},</p>
+                      <p className="text-sm">{data?.data?.HomeName}</p>
+
+                      {isAdmin && (
+                        <button
+                          className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
+                          onClick={() => setIsOpen7(true)}
+                        >
+                          <CiEdit />
+                        </button>
+                      )}
                     </div>
 
                     <div className="relative group">
@@ -525,6 +567,91 @@ const FeePage = () => {
                                 className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
                               >
                                 আগের বকেয়া চাঁদা
+                              </label>
+                            </div>
+
+                            {/* Submit Button */}
+                            <input
+                              type="submit"
+                              value="সেইভ"
+                              className="px-6 mb-1 text-white bg-blue-800 rounded-lg btn-outline"
+                            />
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+                  {isOpen7 && (
+                    <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 modal modal-open">
+                      <div className="px-4 pt-8 bg-white rounded-lg modal-box w-96">
+                        <button
+                          onClick={() => setIsOpen7(false)}
+                          className="absolute text-xl btn btn-sm btn-circle btn-ghost right-2 top-1"
+                        >
+                          ✕
+                        </button>
+                        <form onSubmit={(e) => handleUserData(e, userData._id)}>
+                          <div className="flex flex-col items-center justify-center gap-6 pt-8 border">
+                            <div className="relative w-full px-4">
+                              <input
+                                name="NameBn"
+                                type="text"
+                                value={nameBn}
+                                onChange={(e) => setNameBn(e.target.value)}
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
+                              />
+                              <label
+                                htmlFor="NameBn"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                নাম
+                              </label>
+                            </div>
+                            <div className="relative w-full px-4">
+                              <input
+                                name="Name"
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
+                              />
+                              <label
+                                htmlFor="Name"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                নাম ইংরেজি
+                              </label>
+                            </div>
+
+                            <div className="relative w-full px-4">
+                              <input
+                                name="HomeName"
+                                type="text"
+                                value={HomeName}
+                                onChange={(e) => setHomeName(e.target.value)}
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
+                              />
+                              <label
+                                htmlFor="HomeName"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                বাড়ির নাম
+                              </label>
+                            </div>
+
+                            <div className="relative w-full px-4">
+                              <input
+                                name="Number"
+                                type="text"
+                                value={number}
+                                onChange={(e) => setNumber(e.target.value)}
+                                className="w-full py-1 transition-colors border-b border-gray-300 focus:border-b-2 focus:border-blue-700 focus:outline-none peer bg-inherit"
+                              />
+                              <label
+                                htmlFor="Number"
+                                className="absolute left-0 text-xs transition-all -top-4 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-blue-700 peer-placeholder-shown:top-1 peer-placeholder-shown:text-sm"
+                              >
+                                নাম্বার
                               </label>
                             </div>
 
