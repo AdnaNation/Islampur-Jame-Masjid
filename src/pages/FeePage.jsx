@@ -205,6 +205,7 @@ const FeePage = () => {
 
   const handleMonthStatus = async () => {
     const paymentData = {
+      userId: data?.data?._id,
       name: data?.data?.NameBn,
       home: data?.data.HomeName,
       fee: data?.data?.FeeRate,
@@ -228,6 +229,7 @@ const FeePage = () => {
   const handleMultiMonthsPay = async () => {
     const shortMonths = selectedMonths.map((m) => m.slice(0, 3));
     const paymentData = {
+      userId: data?.data?._id,
       name: data?.data?.NameBn,
       home: data?.data.HomeName,
       fee: data?.data?.FeeRate * selectedMonths.length,
@@ -308,6 +310,7 @@ const FeePage = () => {
         setLoading(false);
         setIsOpen5(false);
         const paymentData = {
+          userId: data?.data?._id,
           name: data?.data?.NameBn,
           home: data?.data.HomeName,
           fee: data?.data?.Tarabi?.fee,
