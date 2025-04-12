@@ -136,7 +136,6 @@ const FeePage = () => {
 
     axiosPublic.patch(`/editUserData/${id}`, userData).then((res) => {
       if (res.data.modifiedCount > 0) {
-        console.log(res);
         refetch();
         reload();
         setIsOpen7(false);
