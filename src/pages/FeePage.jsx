@@ -271,15 +271,19 @@ const FeePage = () => {
     await axiosPublic
       .patch(`/payDue/${data?.data?._id}`, PayingFee)
       .then((res) => {
+        console.log(res);
         if (res.data.modifiedCount > 0) {
           reload();
           const paymentData = {
+            userId: data?.data?._id,
             name: data?.data?.NameBn,
             home: data?.data.HomeName,
             fee: payingDue,
             type: "Due",
             time,
           };
+
+          console.log(res, paymentData);
           axiosPublic.post("/payment", paymentData);
           setLoading(false);
           setIsOpen6(false);
