@@ -9,45 +9,64 @@ import AddUser from "../pages/AddUser";
 import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../pages/AdminDashboard";
 import PaymentHistory from "../pages/PaymentHistory";
+import DashBoard from "../Layout/DashBoard";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Main></Main>,
-        children: [
-            {
-                path: '/',
-                element: <Home></Home>
-            },
-            {
-                path: '/fee',
-                element: <FeePage></FeePage>
-            },
-            {
-                path: '/profile',
-                element: <Profile />
-            },
-            {
-                path: '/signin',
-                element: <SignIn />
-            },
-            {
-                path: '/adminSignin',
-                element: <AdminSignIn />
-            },
-            {
-                path: '/payment',
-                element: <PaymentHistory />
-            },
-            {
-                path: '/addUser',
-                element: <AdminRoute><AddUser /> </AdminRoute>
-            },
-            {
-                path: '/adminDashboard',
-                element: <AdminRoute><AdminDashboard /> </AdminRoute>
-            },
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <Main></Main>,
+    children: [
+      {
+        path: "/",
+        element: <Home></Home>,
+      },
+      {
+        path: "/fee",
+        element: <FeePage></FeePage>,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/signin",
+        element: <SignIn />,
+      },
+      {
+        path: "/adminSignin",
+        element: <AdminSignIn />,
+      },
+      {
+        path: "/payment",
+        element: <PaymentHistory />,
+      },
+      {
+        path: "/addUser",
+        element: (
+          <AdminRoute>
+            <AddUser />{" "}
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/adminDashboard",
+        element: (
+          <AdminRoute>
+            <AdminDashboard />{" "}
+          </AdminRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: <DashBoard></DashBoard>,
+    children: [
+      {
+        path: "ad",
+        element: <AdminDashboard></AdminDashboard>,
+      },
+    ],
+  },
+]);
 export default router;
