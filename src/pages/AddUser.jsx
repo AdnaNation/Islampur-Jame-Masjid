@@ -138,7 +138,7 @@ const AddUser = () => {
   };
 
   return (
-    <div className="mx-auto space-y-2  md:max-w-80 mt-14">
+    <div className="min-h-screen mx-auto space-y-2 md:max-w-80 mt-14">
       <form onSubmit={handleSubmit}>
         <div className="px-1 mx-auto space-y-1 form-control md:w-96 w-72">
           <input
