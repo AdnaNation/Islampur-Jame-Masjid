@@ -10,7 +10,7 @@ const Navbar = () => {
   const userNumber = localStorage.getItem("Number");
   const [isAdmin] = useAdmin();
   return (
-    <div className="navbar bg-base-100">
+    <div className="top-0  navbar bg-base-100">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -46,7 +46,7 @@ const Navbar = () => {
               <FaHistory />{" "}
             </NavLink>
             {isAdmin && (
-              <NavLink to="/adminDashboard" className="text-xl md:text-2xl">
+              <NavLink to="/dashboard/home" className="text-xl md:text-2xl">
                 <MdDashboard />{" "}
               </NavLink>
             )}
