@@ -10,6 +10,7 @@ import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../pages/AdminDashboard";
 import PaymentHistory from "../pages/PaymentHistory";
 import DashBoard from "../Layout/DashBoard";
+import ShopRent from "../pages/ShopRent";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AddUser />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "rent",
+        element: (
+          <AdminRoute>
+            <ShopRent />
           </AdminRoute>
         ),
       },

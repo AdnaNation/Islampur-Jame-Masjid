@@ -17,8 +17,9 @@ const DashBoard = () => {
         <div>
           <div className="hidden min-h-screen border-r-2 shadow-sm md:block bg-zinc-100 md:min-w-56">
             <div className="flex flex-col gap-3">
-              <NavLink to="/dashboard/home">Admin Home</NavLink>
-              <NavLink to="/dashboard/addUser">Add User</NavLink>
+              <NavLink to="/dashboard/home">এডমিন হোম</NavLink>
+              <NavLink to="/dashboard/addUser">অ্যাড ইউজার</NavLink>
+              <NavLink to="/dashboard/rent">দোকান ভাড়া</NavLink>
             </div>
           </div>
           <div
@@ -42,10 +43,13 @@ const DashBoard = () => {
             )}
             <div className="flex flex-col gap-3">
               <NavLink onClick={handleToggle} to="/dashboard/home">
-                Admin Home
+                এডমিন হোম
               </NavLink>
               <NavLink onClick={handleToggle} to="/dashboard/addUser">
-                Add User
+                অ্যাড ইউজার
+              </NavLink>
+              <NavLink onClick={handleToggle} to="/dashboard/rent">
+                দোকান ভাড়া
               </NavLink>
             </div>
           </div>
