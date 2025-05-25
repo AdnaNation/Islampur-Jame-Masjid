@@ -115,7 +115,6 @@ const FeePage = () => {
     setNameBn(userData.NameBn);
     setHomeName(userData.HomeName);
     setNumber(userData.Number);
-    setSeeMore(false);
     refetch();
     refresh();
   }, [userData, refetch, refresh]);
@@ -178,6 +177,7 @@ const FeePage = () => {
 
   // calculation.........
   const currentMonthIndex = new Date().getMonth();
+  console.log(data?.data?.PayMonths[currentMonthIndex]?.monthName);
   const userFeeRate = Number(data?.data?.FeeRate);
   const TarabiFee =
     active?.data && data?.data?.Tarabi.status === "unpaid"
@@ -398,7 +398,12 @@ const FeePage = () => {
                     {" "}
                     <th>{index + 1}</th>
                     <td className="text-[12px]">
-                      <p className="text-center">
+                      <p
+                        className={`${
+                          user?.PayMonths[currentMonthIndex]?.status ===
+                            "unpaid" && "text-red-500"
+                        } text-center`}
+                      >
                         {user.NameBn} <br /> {isAdmin && user.Number}
                       </p>
                     </td>
@@ -420,7 +425,12 @@ const FeePage = () => {
                     {" "}
                     <th>{index + 1}</th>
                     <td className="text-[12px]">
-                      <p className="text-center">
+                      <p
+                        className={`${
+                          user?.PayMonths[currentMonthIndex]?.status ===
+                            "unpaid" && "text-red-500"
+                        } text-center`}
+                      >
                         {user.NameBn} <br /> {isAdmin && user.Number}
                       </p>
                     </td>
