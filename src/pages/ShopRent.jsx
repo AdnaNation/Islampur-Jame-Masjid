@@ -1,8 +1,17 @@
 import Swal from "sweetalert2";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const ShopRent = () => {
   const axiosPublic = useAxiosPublic();
+  const {
+    data: shopKeepers = [],
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: ["shopKeeper"],
+    queryFn: async () => await axiosPublic.get(`/shopKeeper`),
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -74,6 +83,7 @@ const ShopRent = () => {
     // send data to the server
     const addUser = await axiosPublic.post("/addShopKeeper", user);
     if (addUser.data.insertedId) {
+      refetch();
       Swal.fire({
         title: "Congrats!",
         text: `${user.NameBn}কে অ্যাড করা হয়েছে!`,
@@ -96,7 +106,34 @@ const ShopRent = () => {
           দোকান ভাড়ার তালিকা
         </h3>
 
-        <form onSubmit={handleSubmit}>
+        <div className="overflow-x-auto">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th></th>
+                <th>নাম ও নাম্বার</th>
+                <th>ভাড়া</th>
+                <th>বকেয়া</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shopKeepers?.data?.map((shopKeeper, index) => (
+                <tr key={shopKeeper._id}>
+                  <th>{index + 1}</th>
+                  <td>{shopKeeper.NameBn}</td>
+                  <td>{shopKeeper.Rent}</td>
+                  <td>{shopKeeper.Due}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <form className="mt-6" onSubmit={handleSubmit}>
+          <h4 className="font-semibold text-center mt-10n">
+            নতুন দোকানদার অ্যাড করুন
+          </h4>
           <div className="px-1 mx-auto space-y-1 form-control md:w-96 w-72">
             <input
               type="text"
