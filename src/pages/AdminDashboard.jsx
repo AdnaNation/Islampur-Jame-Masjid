@@ -53,10 +53,9 @@ const AdminDashboard = () => {
   const dueTotal = Math.floor(totalPayment?.data?.Due?.totalAmount) || 0;
 
   const total = monthlyTotal + tarabiTotal + dueTotal;
-  console.log(total);
 
   return (
-    <div className="min-h-screen p-2 mx-auto border  bg-orange-50">
+    <div className="min-h-screen p-2 mx-auto border bg-orange-50">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="flex flex-col items-center justify-center ">
           <p className="font-semibold">মাসিক চাঁদার হিসাব</p>

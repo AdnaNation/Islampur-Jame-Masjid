@@ -1,9 +1,11 @@
 import Swal from "sweetalert2";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 const ShopRent = () => {
   const axiosPublic = useAxiosPublic();
+  const [id, setId] = useState(null);
   const {
     data: shopKeepers = [],
     isPending,
@@ -11,6 +13,11 @@ const ShopRent = () => {
   } = useQuery({
     queryKey: ["shopKeeper"],
     queryFn: async () => await axiosPublic.get(`/shopKeeper`),
+  });
+  const { data: seller = [] } = useQuery({
+    queryKey: [id],
+    enabled: !!id,
+    queryFn: async () => await axiosPublic.get(`/shopKeeper/${id}`),
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,6 +106,10 @@ const ShopRent = () => {
       });
     }
   };
+
+  const handleClick = (id) => {
+    setId(id);
+  };
   return (
     <div className="min-h-screen">
       <div>
@@ -119,7 +130,10 @@ const ShopRent = () => {
             </thead>
             <tbody>
               {shopKeepers?.data?.map((shopKeeper, index) => (
-                <tr key={shopKeeper._id}>
+                <tr
+                  onClick={() => handleClick(shopKeeper._id)}
+                  key={shopKeeper._id}
+                >
                   <th>{index + 1}</th>
                   <td>{shopKeeper.NameBn}</td>
                   <td>{shopKeeper.Rent}</td>
@@ -127,6 +141,7 @@ const ShopRent = () => {
                 </tr>
               ))}
             </tbody>
+            {isPending && <p>Loading....</p>}
           </table>
         </div>
 
