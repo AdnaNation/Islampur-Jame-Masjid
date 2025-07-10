@@ -168,7 +168,6 @@ const FeePage = () => {
       }
     });
   };
-
   const handleModal = (monthName, id) => {
     setSelectedMonth(monthName);
     setId(id);
@@ -224,7 +223,9 @@ const FeePage = () => {
           setLoading(false);
           setIsOpen(false);
           axiosPublic.post("/payment", paymentData);
-          axiosPublic.post("/sms", { number, message });
+          if (number.length === 11) {
+            axiosPublic.post("/sms", { number, message });
+          }
         }
       });
   };
@@ -260,7 +261,9 @@ const FeePage = () => {
           setLoading(false);
           setIsOpen3(false);
           axiosPublic.post("/payment", paymentData);
-          axiosPublic.post("/sms", { number, message });
+          if (number.length === 11) {
+            axiosPublic.post("/sms", { number, message });
+          }
         }
       });
   };
@@ -303,7 +306,9 @@ const FeePage = () => {
 
           console.log(res, paymentData);
           axiosPublic.post("/payment", paymentData);
-          axiosPublic.post("/sms", { number, message });
+          if (number.length === 11) {
+            axiosPublic.post("/sms", { number, message });
+          }
           setLoading(false);
           setIsOpen6(false);
         }
@@ -340,7 +345,9 @@ const FeePage = () => {
           time,
         };
         axiosPublic.post("/payment", paymentData);
-        axiosPublic.post("/sms", { number, message });
+        if (number.length === 11) {
+          axiosPublic.post("/sms", { number, message });
+        }
       }
     });
   };
