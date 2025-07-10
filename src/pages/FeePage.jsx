@@ -204,35 +204,29 @@ const FeePage = () => {
 
   const handleMonthStatus = async () => {
     const number = data?.data?.Number;
-    const message = `জনাব, ${data?.data?.NameBn},
-আপনি ${selectedMonth}'র মাসিক চাঁদা বাবদ ৳${data?.data?.FeeRate} অনুদান দিয়েছেন।
+    const message = `ইসলামপুর জামে মসজিদের ${selectedMonth}'র মাসিক চাঁদা বাবদ ৳${data?.data?.FeeRate} অনুদান দিয়েছেন।`;
 
--ইসলামপুর জামে মসজিদ`;
-
-    // const paymentData = {
-    //   userId: data?.data?._id,
-    //   name: data?.data?.NameBn,
-    //   home: data?.data.HomeName,
-    //   fee: data?.data?.FeeRate,
-    //   monthName: selectedMonth,
-    //   type: "Monthly",
-    //   time,
-    // };
-    // setLoading(true);
-    // await axiosPublic
-    //   .patch("/monthStatus", { id, selectedMonth })
-    //   .then((res) => {
-    //     if (res.data.modifiedCount > 0) {
-    //       reload();
-    //       setLoading(false);
-    //       setIsOpen(false);
-    //       axiosPublic.post("/payment", paymentData);
-    //     }
-    //   });
-
-    await axiosPublic.post("/sms", { number, message }).then((res) => {
-      console.log(res.data);
-    });
+    const paymentData = {
+      userId: data?.data?._id,
+      name: data?.data?.NameBn,
+      home: data?.data.HomeName,
+      fee: data?.data?.FeeRate,
+      monthName: selectedMonth,
+      type: "Monthly",
+      time,
+    };
+    setLoading(true);
+    await axiosPublic
+      .patch("/monthStatus", { id, selectedMonth })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          reload();
+          setLoading(false);
+          setIsOpen(false);
+          axiosPublic.post("/payment", paymentData);
+          axiosPublic.post("/sms", { number, message });
+        }
+      });
   };
 
   const handleMultiMonthsPay = async () => {
@@ -244,33 +238,31 @@ const FeePage = () => {
     } অনুদান দিয়েছেন।
     
 -ইসলামপুর জামে মসজিদ`;
-    // const paymentData = {
-    //   userId: data?.data?._id,
-    //   name: data?.data?.NameBn,
-    //   home: data?.data.HomeName,
-    //   fee: data?.data?.FeeRate * selectedMonths.length,
-    //   monthName: shortMonths.join(" ,"),
-    //   type: "Monthly",
-    //   time,
-    // };
-    // setLoading(true);
-    // await axiosPublic
-    //   .patch("/multiple-months", {
-    //     id: selectedId,
-    //     months: selectedMonths,
-    //   })
-    //   .then((res) => {
-    //     if (res.data.modifiedCount > 0) {
-    //       reload();
-    //       setSelectedMonths("");
-    //       setLoading(false);
-    //       setIsOpen3(false);
-    //       axiosPublic.post("/payment", paymentData);
-    //     }
-    //   });
-    await axiosPublic.post("/sms", { number, message }).then((res) => {
-      console.log(res.data);
-    });
+    const paymentData = {
+      userId: data?.data?._id,
+      name: data?.data?.NameBn,
+      home: data?.data.HomeName,
+      fee: data?.data?.FeeRate * selectedMonths.length,
+      monthName: shortMonths.join(" ,"),
+      type: "Monthly",
+      time,
+    };
+    setLoading(true);
+    await axiosPublic
+      .patch("/multiple-months", {
+        id: selectedId,
+        months: selectedMonths,
+      })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          reload();
+          setSelectedMonths("");
+          setLoading(false);
+          setIsOpen3(false);
+          axiosPublic.post("/payment", paymentData);
+          axiosPublic.post("/sms", { number, message });
+        }
+      });
   };
 
   const handleViewFee = () => {
@@ -288,36 +280,34 @@ const FeePage = () => {
     const payingDue = dueFee;
     const DueFee = Number(data?.data?.Due) - Number(payingDue);
     const message = `জনাব, ${data?.data?.NameBn},
-আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} অনুদান দিয়েছেন। এবং, বকেয়া বাবদ বাকি আছে ৳${DueFee}।
+আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} অনুদান দিয়েছেন।
 
 -ইসলামপুর জামে মসজিদ`;
     const PayingFee = {
       DueFee,
     };
-    // await axiosPublic
-    //   .patch(`/payDue/${data?.data?._id}`, PayingFee)
-    //   .then((res) => {
-    //     console.log(res);
-    //     if (res.data.modifiedCount > 0) {
-    //       reload();
-    //       const paymentData = {
-    //         userId: data?.data?._id,
-    //         name: data?.data?.NameBn,
-    //         home: data?.data.HomeName,
-    //         fee: payingDue,
-    //         type: "Due",
-    //         time,
-    //       };
+    await axiosPublic
+      .patch(`/payDue/${data?.data?._id}`, PayingFee)
+      .then((res) => {
+        console.log(res);
+        if (res.data.modifiedCount > 0) {
+          reload();
+          const paymentData = {
+            userId: data?.data?._id,
+            name: data?.data?.NameBn,
+            home: data?.data.HomeName,
+            fee: payingDue,
+            type: "Due",
+            time,
+          };
 
-    //       console.log(res, paymentData);
-    //       axiosPublic.post("/payment", paymentData);
-    //       setLoading(false);
-    //       setIsOpen6(false);
-    //     }
-    //   });
-    await axiosPublic.post("/sms", { number, message }).then((res) => {
-      console.log(res.data);
-    });
+          console.log(res, paymentData);
+          axiosPublic.post("/payment", paymentData);
+          axiosPublic.post("/sms", { number, message });
+          setLoading(false);
+          setIsOpen6(false);
+        }
+      });
   };
 
   const handleDueModal = () => {
@@ -335,30 +325,25 @@ const FeePage = () => {
 আপনি তারাবীর চাঁদা বাবদ ৳${data?.data?.Tarabi?.fee} অনুদান দিয়েছেন।
 
 -ইসলামপুর জামে মসজিদ`;
-    // await axiosPublic.patch(`/tarabeePaid/${selectedId}`).then((res) => {
-    //   if (res.data.modifiedCount > 0) {
-    //     reload();
-    //     refetch();
-    //     setLoading(false);
-    //     setIsOpen5(false);
-    //     const paymentData = {
-    //       userId: data?.data?._id,
-    //       name: data?.data?.NameBn,
-    //       home: data?.data.HomeName,
-    //       fee: data?.data?.Tarabi?.fee,
-    //       type: "Tarabi",
-    //       time,
-    //     };
-    //     axiosPublic.post("/payment", paymentData).then((res) => {
-    //       console.log(res);
-    //     });
-    //   }
-    // });
-    await axiosPublic.post("/sms", { number, message }).then((res) => {
-      console.log(res.data);
+    await axiosPublic.patch(`/tarabeePaid/${selectedId}`).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        reload();
+        refetch();
+        setLoading(false);
+        setIsOpen5(false);
+        const paymentData = {
+          userId: data?.data?._id,
+          name: data?.data?.NameBn,
+          home: data?.data.HomeName,
+          fee: data?.data?.Tarabi?.fee,
+          type: "Tarabi",
+          time,
+        };
+        axiosPublic.post("/payment", paymentData);
+        axiosPublic.post("/sms", { number, message });
+      }
     });
   };
-  // const unpaidUsers = users.filter(user => user?.Tarabi?.status === "unpaid")
   return (
     <div className="mt-16">
       <div className="flex max-w-xl">
