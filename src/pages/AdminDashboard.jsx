@@ -3,9 +3,11 @@ import { useEffect } from "react";
 import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import useNumbers from "../hooks/useNumbers";
 
 const AdminDashboard = () => {
   const axiosPublic = useAxiosPublic();
+  const allNumber = useNumbers();
   // const { data: stats, refetch: reload } = useQuery({
   //   queryKey: ["tarabi-stats"],
   //   queryFn: async () => await axiosPublic.get("/tarabi-stats"),
@@ -13,6 +15,10 @@ const AdminDashboard = () => {
   const { data: totalPayment, refetch: refresh } = useQuery({
     queryKey: ["total-payment"],
     queryFn: async () => await axiosPublic.get("/total-payment"),
+  });
+  const { data: smsBalance, refetch: fresh } = useQuery({
+    queryKey: ["check-balance"],
+    queryFn: async () => await axiosPublic.get("/check-balance"),
   });
   const {
     data: active,
@@ -42,10 +48,11 @@ const AdminDashboard = () => {
     const interval = setInterval(() => {
       refetch();
       refresh();
+      fresh();
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [refetch, refresh]);
+  }, [refetch, refresh, fresh]);
 
   const monthlyTotal =
     Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0;
@@ -53,6 +60,35 @@ const AdminDashboard = () => {
   const dueTotal = Math.floor(totalPayment?.data?.Due?.totalAmount) || 0;
 
   const total = monthlyTotal + tarabiTotal + dueTotal;
+
+  const smsHandle = () => {
+    const numbers = allNumber[0].map((n) => n.Number);
+    for (const number of numbers) {
+      if (number.length === 11) {
+        axiosPublic.get(`/userByNumber/${number}`).then((res) => {
+          const user = res.data;
+          const currentMonthIndex = new Date().getMonth();
+          const userFeeRate = Number(user.FeeRate);
+          const TarabiFee =
+            active?.data && user.Tarabi?.status === "unpaid"
+              ? Number(user.Tarabi?.fee)
+              : 0;
+          const totalDue =
+            user.PayMonths?.slice(0, currentMonthIndex + 1).filter(
+              (m) => m.status === "unpaid"
+            ).length *
+              userFeeRate +
+            Number(user.Due) +
+            TarabiFee;
+          const message = `আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
+          if (totalDue > 0) {
+            console.log(user.NameBn, number, message);
+            // axiosPublic.post("/sms", { number, message });
+          }
+        });
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen p-2 mx-auto border bg-orange-50">
@@ -153,6 +189,11 @@ const AdminDashboard = () => {
             সচল
           </p>
         </div>
+      </div>
+      <div className="flex items-center justify-center">
+        <button onClick={smsHandle} className="btn-primary btn">
+          Send SMS {smsBalance?.data?.balance}
+        </button>
       </div>
     </div>
   );

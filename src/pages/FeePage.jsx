@@ -179,7 +179,7 @@ const FeePage = () => {
   // console.log(data?.data?.PayMonths[currentMonthIndex]?.monthName);
   const userFeeRate = Number(data?.data?.FeeRate);
   const TarabiFee =
-    active?.data && data?.data?.Tarabi.status === "unpaid"
+    active?.data && data?.data?.Tarabi?.status === "unpaid"
       ? Number(data?.data?.Tarabi?.fee)
       : 0;
   const totalDue =
@@ -443,7 +443,7 @@ const FeePage = () => {
               </tbody>
             ) : (
               <tbody>
-                {users?.data.slice(0, 10).map((user, index) => (
+                {users?.data?.slice(0, 10).map((user, index) => (
                   <tr
                     className="btn-ghost"
                     onClick={() => handleUserDetails(user)}
@@ -728,7 +728,7 @@ const FeePage = () => {
                       <div className="grid w-full grid-cols-2 border ">
                         <div className="p-1 border-r-2">
                           {/* First 6 months */}
-                          {data?.data?.PayMonths.slice(0, 6).map(
+                          {data?.data?.PayMonths?.slice(0, 6).map(
                             (user, index) => (
                               <div
                                 key={index}
@@ -778,50 +778,52 @@ const FeePage = () => {
 
                         <div className="p-1 border-l-2">
                           {/* Last 6 months */}
-                          {data?.data?.PayMonths.slice(6).map((user, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between py-2 border-b"
-                            >
-                              {user.status === "unpaid" && isAdmin && (
-                                <input
-                                  type="checkbox"
-                                  checked={selectedMonths.includes(
-                                    user.monthName
-                                  )}
-                                  onChange={() =>
-                                    handleCheckboxChange(
-                                      user.monthName,
-                                      selectedId
-                                    )
-                                  }
-                                  className="w-3 h-3"
-                                />
-                              )}
-
-                              <div className="font-bold text-md">
-                                {monthTranslation[user.monthName] ||
-                                  user.monthName}
-                              </div>
-                              <button
-                                onClick={() =>
-                                  isAdmin &&
-                                  handleModal(user.monthName, selectedId)
-                                }
-                                className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
-                                  user.status === "paid"
-                                    ? "bg-blue-600 hover:bg-blue-700"
-                                    : "bg-red-600 hover:bg-red-700"
-                                }`}
+                          {data?.data?.PayMonths?.slice(6).map(
+                            (user, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between py-2 border-b"
                               >
-                                {user.status === "paid" ? (
-                                  <TiTick />
-                                ) : (
-                                  <FaTimes />
+                                {user.status === "unpaid" && isAdmin && (
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMonths.includes(
+                                      user.monthName
+                                    )}
+                                    onChange={() =>
+                                      handleCheckboxChange(
+                                        user.monthName,
+                                        selectedId
+                                      )
+                                    }
+                                    className="w-3 h-3"
+                                  />
                                 )}
-                              </button>
-                            </div>
-                          ))}
+
+                                <div className="font-bold text-md">
+                                  {monthTranslation[user.monthName] ||
+                                    user.monthName}
+                                </div>
+                                <button
+                                  onClick={() =>
+                                    isAdmin &&
+                                    handleModal(user.monthName, selectedId)
+                                  }
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                                    user.status === "paid"
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "bg-red-600 hover:bg-red-700"
+                                  }`}
+                                >
+                                  {user.status === "paid" ? (
+                                    <TiTick />
+                                  ) : (
+                                    <FaTimes />
+                                  )}
+                                </button>
+                              </div>
+                            )
+                          )}
                         </div>
                       </div>
                     )}
