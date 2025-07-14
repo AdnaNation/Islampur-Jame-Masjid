@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useNumbers from "../hooks/useNumbers";
 
 const AdminDashboard = () => {
+  const [loading, setLoading] = useState(false);
   const axiosPublic = useAxiosPublic();
   const allNumber = useNumbers();
+  const monthName = new Date().toLocaleString("en-US", { month: "long" });
   // const { data: stats, refetch: reload } = useQuery({
   //   queryKey: ["tarabi-stats"],
   //   queryFn: async () => await axiosPublic.get("/tarabi-stats"),
@@ -62,6 +64,7 @@ const AdminDashboard = () => {
   const total = monthlyTotal + tarabiTotal + dueTotal;
 
   const smsHandle = () => {
+    setLoading(true);
     const numbers = allNumber[0].map((n) => n.Number);
     for (const number of numbers) {
       if (number.length === 11) {
@@ -82,8 +85,19 @@ const AdminDashboard = () => {
             TarabiFee;
           const message = `আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
           if (totalDue > 0) {
-            console.log(user.NameBn, number, message);
-            // axiosPublic.post("/sms", { number, message });
+            axiosPublic
+              .post("/sms-db", {
+                number,
+                lastSendingMonth: monthName,
+                message,
+              })
+              .then((res) => {
+                if (res?.data.status !== "skipped") {
+                  axiosPublic.post("/sms", { number, message });
+                  setLoading(false);
+                  fresh();
+                }
+              });
           }
         });
       }
@@ -192,7 +206,7 @@ const AdminDashboard = () => {
       </div>
       <div className="flex items-center justify-center">
         <button onClick={smsHandle} className="btn-primary btn">
-          Send SMS {smsBalance?.data?.balance}
+          {loading ? "Sending SMS" : `Send SMS ${smsBalance?.data?.balance}`}
         </button>
       </div>
     </div>
