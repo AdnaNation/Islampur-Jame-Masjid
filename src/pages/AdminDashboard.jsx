@@ -98,6 +98,8 @@ const AdminDashboard = () => {
                   fresh();
                 }
               });
+          } else {
+            setLoading(false);
           }
         });
       }
