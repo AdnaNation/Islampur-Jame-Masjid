@@ -76,7 +76,8 @@ const Footer = () => {
         {/* Copyright Section */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+            &copy; {new Date().getFullYear()} Islampur Jame Masjid. All rights
+            reserved.
           </p>
         </div>
       </div>
