@@ -61,7 +61,7 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <a href="/" className="text-xl">
+        <a href="/" className="text-xl btn">
           Islampur Jame Masjid
         </a>
       </div>
