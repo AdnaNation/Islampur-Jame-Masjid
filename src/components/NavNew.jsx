@@ -61,7 +61,7 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <a href="/profile" className="text-xl btn btn-ghost">
+        <a href="/" className="text-xl">
           Islampur Jame Masjid
         </a>
       </div>
@@ -85,7 +85,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         <a
-          href="/profile"
+          href="/"
           className="flex items-center px-4 py-2 space-x-2 text-white transition duration-300 rounded-md hover:bg-gray-700"
         >
           <img

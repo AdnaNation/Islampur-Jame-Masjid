@@ -1,32 +1,32 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-10">
-      <div className="container mx-auto flex flex-col items-center">
+    <footer className="py-10 text-white bg-gray-900">
+      <div className="container flex flex-col items-center mx-auto">
         {/* Developed By Section */}
         <div className="mb-8 text-center">
-          <p className="text-lg font-semibold text-gray-300">
-            Developed by
-          </p>
+          <p className="text-lg font-semibold text-gray-300">Developed by</p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center md:space-x-10 space-y-8 md:space-y-0">
+        <div className="flex flex-col items-center justify-center space-y-8 md:flex-row md:space-x-10 md:space-y-0">
           {/* First Profile Card */}
-          <div className="flex  items-center bg-gray-800 rounded-lg p-6 shadow-md">
+          <div className="flex items-center p-6 bg-gray-800 rounded-lg shadow-md">
             <img
               src="https://avatars.githubusercontent.com/u/108600250?v=4"
               alt="Profile 1"
-              className="w-24 h-24 rounded-full mb-4"
+              className="w-24 h-24 mb-4 rounded-full"
             />
             <div className="flex flex-col space-x-5">
-              <h3 className="text-lg font-semibold mb-2 ml-5">Muhammed Mehedi Hasan</h3>
-              <div className="flex space-x-4 mb-2">
-                <a href="#" className="text-blue-500 hover:text-blue-400">
+              <h3 className="mb-2 ml-5 text-lg font-semibold">
+                Muhammed Mehedi Hasan
+              </h3>
+              <div className="flex mb-2 space-x-4">
+                <a href="" className="text-blue-500 hover:text-blue-400">
                   <i className="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" className="text-blue-400 hover:text-blue-300">
+                <a href="" className="text-blue-400 hover:text-blue-300">
                   <i className="fab fa-twitter"></i>
                 </a>
-                <a href="#" className="text-pink-500 hover:text-pink-400">
+                <a href="" className="text-pink-500 hover:text-pink-400">
                   <i className="fab fa-instagram"></i>
                 </a>
               </div>
@@ -35,25 +35,36 @@ const Footer = () => {
           </div>
 
           {/* Vertical Line */}
-          <div className="hidden md:block w-px bg-gray-700 h-32"></div>
+          <div className="hidden w-px h-32 bg-gray-700 md:block"></div>
 
           {/* Second Profile Card */}
-          <div className="flex  items-center bg-gray-800 rounded-lg p-6 shadow-md">
+          <div className="flex items-center p-6 bg-gray-800 rounded-lg shadow-md">
             <img
               src="https://avatars.githubusercontent.com/u/145375204?v=4"
               alt="Profile 2"
-              className="w-24 h-24 rounded-full mb-4"
+              className="w-24 h-24 mb-4 rounded-full"
             />
             <div className="flex flex-col space-x-5">
-              <h3 className="text-lg font-semibold mb-2 ml-5">Azizul Islam Adnan</h3>
-              <div className="flex space-x-4 mb-2">
-                <a href="#" className="text-blue-500 hover:text-blue-400">
+              <h3 className="mb-2 ml-5 text-lg font-semibold">
+                Azizul Islam Adnan
+              </h3>
+              <div className="flex mb-2 space-x-4">
+                <a
+                  href="https://www.facebook.com/AdnaNation.Me"
+                  className="text-blue-500 hover:text-blue-400"
+                >
                   <i className="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" className="text-blue-400 hover:text-blue-300">
+                <a
+                  href="https://x.com/AzizuIslamAdnan"
+                  className="text-blue-400 hover:text-blue-300"
+                >
                   <i className="fab fa-twitter"></i>
                 </a>
-                <a href="#" className="text-pink-500 hover:text-pink-400">
+                <a
+                  href="https://www.instagram.com/azizul_islam_adnan"
+                  className="text-pink-500 hover:text-pink-400"
+                >
                   <i className="fab fa-instagram"></i>
                 </a>
               </div>
