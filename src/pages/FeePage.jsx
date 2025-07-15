@@ -233,8 +233,7 @@ const FeePage = () => {
   const handleMultiMonthsPay = async () => {
     const number = data?.data?.Number;
     const shortMonths = selectedMonths.map((m) => m.slice(0, 3));
-    const message = `জনাব, ${data?.data?.NameBn},
-আপনি ${shortMonths}'র মাসিক চাঁদা বাবদ ৳${
+    const message = `আপনি ${shortMonths}'র মাসিক চাঁদা বাবদ ৳${
       data?.data?.FeeRate * selectedMonths.length
     } অনুদান দিয়েছেন।
     
@@ -282,8 +281,7 @@ const FeePage = () => {
     const number = data?.data?.Number;
     const payingDue = dueFee;
     const DueFee = Number(data?.data?.Due) - Number(payingDue);
-    const message = `জনাব, ${data?.data?.NameBn},
-আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} অনুদান দিয়েছেন।
+    const message = `আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} অনুদান দিয়েছেন।
 
 -ইসলামপুর জামে মসজিদ`;
     const PayingFee = {
@@ -326,10 +324,9 @@ const FeePage = () => {
   const handleTarabeeFee = async () => {
     setLoading(true);
     const number = data?.data?.Number;
-    const message = `জনাব, ${data?.data?.NameBn},
-আপনি তারাবীর চাঁদা বাবদ ৳${data?.data?.Tarabi?.fee} অনুদান দিয়েছেন।
-
--ইসলামপুর জামে মসজিদ`;
+    const message = `আপনি তারাবীর চাঁদা বাবদ ৳${data?.data?.Tarabi?.fee} অনুদান দিয়েছেন।
+    
+    -ইসলামপুর জামে মসজিদ`;
     await axiosPublic.patch(`/tarabeePaid/${selectedId}`).then((res) => {
       if (res.data.modifiedCount > 0) {
         reload();
