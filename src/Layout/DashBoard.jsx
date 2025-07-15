@@ -23,7 +23,7 @@ const DashBoard = () => {
             </div>
           </div>
           <div
-            className={`fixed left-0 min-h-screen transition-transform duration-300 ease-in-out transform border-r-2 shadow-sm top-16 md:hidden bg-zinc-100 min-w-48 ${
+            className={`fixed z-10 left-0 min-h-screen transition-transform duration-300 ease-in-out transform border-r-2 shadow-sm top-16 md:hidden bg-zinc-100 min-w-48 ${
               isDashboardOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >

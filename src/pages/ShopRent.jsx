@@ -111,7 +111,7 @@ const ShopRent = () => {
     setId(id);
   };
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       <div>
         <h3 className="my-3 text-xl font-bold text-center">
           দোকান ভাড়ার তালিকা
