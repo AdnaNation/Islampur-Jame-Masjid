@@ -61,9 +61,7 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <a href="/" className="text-xl btn">
-          Islampur Jame Masjid
-        </a>
+        <a className="text-xl btn btn-ghost">Islampur Jame Masjid</a>
       </div>
       <div className="hidden navbar-center lg:flex">
         <ul className="px-1 menu menu-horizontal">
