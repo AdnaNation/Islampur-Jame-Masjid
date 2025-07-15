@@ -93,7 +93,27 @@ const PaymentHistory = () => {
                 className="h-40 mx-2 mt-1 shadow-sm card bg-base-100 md:w-80 md:mx-0 "
               >
                 <div className="p-5">
-                  <h2 className=" text-right text-[12px]">{history.time}</h2>
+                  {/* <h2 className=" text-right text-[12px]">{history.time}</h2> */}
+                  <h2 className="text-right text-[12px]">
+                    {(() => {
+                      const date = new Date(history.time);
+                      const day = String(date.getDate()).padStart(2, "0");
+                      const month = String(date.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      const year = date.getFullYear();
+                      let hours = date.getHours();
+                      const minutes = String(date.getMinutes()).padStart(
+                        2,
+                        "0"
+                      );
+                      const ampm = hours >= 12 ? "PM" : "AM";
+                      hours = hours % 12 || 12;
+                      const formattedTime = `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+                      return formattedTime;
+                    })()}
+                  </h2>
                   <p>
                     {history.name} (
                     <small className="mr-1">{history.home}</small>){" "}
