@@ -96,15 +96,16 @@ const AdminDashboard = () => {
                   axiosPublic.post("/sms", { number, message });
                   setLoading(false);
                   fresh();
+                } else {
+                  Swal.fire({
+                    position: "top-end",
+                    title: "বকেয়া ম্যাসেজ দেয়ার জন্য কোনো নাম্বার নেই",
+                    showConfirmButton: false,
+                    timer: 800,
+                  });
                 }
               });
           } else {
-            Swal.fire({
-              position: "top-end",
-              title: "বকেয়া ম্যাসেজ দেয়ার জন্য কোনো নাম্বার নেই",
-              showConfirmButton: false,
-              timer: 800,
-            });
             setLoading(false);
           }
         });
