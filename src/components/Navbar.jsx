@@ -8,7 +8,7 @@ const Navbar = () => {
     setIsDashboardOpen(!isDashboardOpen);
   };
   return (
-    <div className="text-center flex  items-center bg-blue-100 top-1 h-14 fixed z-20 w-full drop-shadow-lg rounded-full">
+    <div className="fixed z-20 flex items-center w-full text-center bg-blue-100 rounded-full top-1 h-14 drop-shadow-lg">
       <div className="flex items-center ml-4">
         <button
           onClick={toggleDashboard}
@@ -21,7 +21,7 @@ const Navbar = () => {
           )}
         </button>
       </div>
-      <a className=" text-2xl text-black font-bold font-sans flex-1">
+      <a className="flex-1 font-sans text-2xl font-bold text-black ">
         Islampur Jame Masjid
       </a>
 
@@ -33,27 +33,28 @@ inset-shadow-sm z-50 bg-blue-100 text-black max-w-[180px] ease-in-out rounded-3x
         }`}
       >
         <ul className="p-4 space-y-4  max-w-[300px] z-auto  ">
-          <li className="flex justify-between items-center hover:bg-white hover:text-black rounded-md">
+          <li className="flex items-center justify-between rounded-md hover:bg-white hover:text-black">
             <NavLink
               onClick={toggleDashboard}
-              className="border border-black border-1 font-bold w-full px-3 py-1 rounded-md"
+              className="w-full px-3 py-1 font-bold border border-black rounded-md border-1"
               to="/"
             >
               Home
             </NavLink>
           </li>
-          <li className="flex justify-between items-center hover:bg-white hover:text-black rounded-md">
+          <li className="flex items-center justify-between rounded-md hover:bg-white hover:text-black">
             <NavLink
               onClick={toggleDashboard}
-              className="border border-black  border-1 font-bold w-full px-3 py-1 rounded-md"
+              className="w-full px-3 py-1 font-bold border border-black rounded-md border-1"
               to="/"
             >
               Monthly Fee
             </NavLink>
           </li>
-          <li className="flex justify-between items-center hover:bg-white hover:text-black rounded-md">
-            <NavLink onClick={toggleDashboard}
-              className="border border-black  border-1 font-bold w-full px-3 py-1 rounded-md"
+          <li className="flex items-center justify-between rounded-md hover:bg-white hover:text-black">
+            <NavLink
+              onClick={toggleDashboard}
+              className="w-full px-3 py-1 font-bold border border-black rounded-md border-1"
               to="/fee"
             >
               চাঁদা
