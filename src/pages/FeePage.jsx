@@ -534,7 +534,9 @@ const FeePage = () => {
                           বকেয়া চাঁদা: <span>{totalDue}</span>{" "}
                           <small>টাকা</small>
                           <button className="text-lg" onClick={handleViewFee}>
-                            <MdAssistantDirection />
+                            <p className="text-blue-600">
+                              <MdAssistantDirection />
+                            </p>
                           </button>
                         </p>
                       </div>
