@@ -10,6 +10,9 @@ const AdminDashboard = () => {
   const axiosPublic = useAxiosPublic();
   const allNumber = useNumbers();
   const monthName = new Date().toLocaleString("en-US", { month: "long" });
+  // const message = `${monthName}, পর্যন্ত আপনার বকেয়া চাঁদা ৳${30}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
+  // console.log(message);
+
   // const { data: stats, refetch: reload } = useQuery({
   //   queryKey: ["tarabi-stats"],
   //   queryFn: async () => await axiosPublic.get("/tarabi-stats"),
@@ -83,7 +86,7 @@ const AdminDashboard = () => {
               userFeeRate +
             Number(user.Due) +
             TarabiFee;
-          const message = `আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
+          const message = `${monthName} পর্যন্ত আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
           if (totalDue > 0) {
             axiosPublic
               .post("/sms-db", {
@@ -95,7 +98,6 @@ const AdminDashboard = () => {
                 if (res?.data.status !== "skipped") {
                   axiosPublic.post("/sms", { number, message });
                   setLoading(false);
-                  fresh();
                 }
               });
           } else {
