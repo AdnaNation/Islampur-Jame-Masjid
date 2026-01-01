@@ -512,7 +512,10 @@ const FeePage = () => {
                       </p>
                     </div>
                     <div className="flex items-center justify-center text-right">
-                      <p className="text-gray-600"> {date}</p>{" "}
+                      <p className="text-gray-600">
+                        {" "}
+                        {currentYear ? { date } : `${year}- 1`}
+                      </p>{" "}
                       <button onClick={yearHandle}>
                         <p className="text-blue-600">
                           <MdAssistantDirection />
