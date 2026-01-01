@@ -22,6 +22,7 @@ const FeePage = () => {
   const [search, setSearch] = useState("");
   const [banglaText, setBanglaText] = useState(" ");
   const [selectedHome, setSelectedHome] = useState(" ");
+  const [currentYear, setCurrentYear] = useState(true);
   const [homeName] = useHomeName();
   const axiosPublic = useAxiosPublic();
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,7 @@ const FeePage = () => {
     year: "numeric",
   });
   const time = new Date().toLocaleString();
+  const year = new Date().getFullYear();
   const monthTranslation = {
     January: "জানুয়ারি",
     February: "ফেব্রুয়ারি",
@@ -88,6 +90,7 @@ const FeePage = () => {
     reload();
     setUserData(user);
     refetch();
+    setCurrentYear(true);
   };
 
   const handleHome = async (e) => {
@@ -213,6 +216,7 @@ const FeePage = () => {
       monthName: selectedMonth,
       type: "Monthly",
       time,
+      year,
     };
     setLoading(true);
     await axiosPublic
@@ -230,6 +234,9 @@ const FeePage = () => {
       });
   };
 
+  const yearHandle = () => {
+    setCurrentYear(!currentYear);
+  };
   const handleMultiMonthsPay = async () => {
     const number = data?.data?.Number;
     const shortMonths = selectedMonths.map((m) => m.slice(0, 3));
@@ -246,6 +253,7 @@ const FeePage = () => {
       monthName: shortMonths.join(" ,"),
       type: "Monthly",
       time,
+      year,
     };
     setLoading(true);
     await axiosPublic
@@ -300,6 +308,7 @@ const FeePage = () => {
             fee: payingDue,
             type: "Due",
             time,
+            year,
           };
 
           console.log(res, paymentData);
@@ -340,6 +349,7 @@ const FeePage = () => {
           fee: data?.data?.Tarabi?.fee,
           type: "Tarabi",
           time,
+          year,
         };
         axiosPublic.post("/payment", paymentData);
         if (number.length === 11) {
@@ -501,8 +511,13 @@ const FeePage = () => {
                         দক্ষিণ চন্ডিপুর, ইসলামপুর
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-gray-600"> {date}</p>
+                    <div className="flex items-center justify-center text-right">
+                      <p className="text-gray-600"> {date}</p>{" "}
+                      <button onClick={yearHandle}>
+                        <p className="text-blue-600">
+                          <MdAssistantDirection />
+                        </p>
+                      </button>
                     </div>
                   </div>
 
@@ -523,24 +538,47 @@ const FeePage = () => {
 
                     <div className="relative group">
                       <div className="pb-2 mt-2">
-                        <p className="text-sm font-semibold">
-                          চাঁদার হার: {data?.data?.FeeRate} <small>টাকা</small>
-                        </p>
-                        <p className="text-sm font-semibold">
-                          তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
-                          <small>টাকা</small>
-                        </p>
-                        <p className="flex flex-row items-center gap-1 text-sm font-semibold">
-                          বকেয়া চাঁদা: <span>{totalDue}</span>{" "}
-                          <small>টাকা</small>
-                          <button className="text-lg" onClick={handleViewFee}>
-                            <p className="text-blue-600">
-                              <MdAssistantDirection />
-                            </p>
-                          </button>
-                        </p>
+                        {currentYear ? (
+                          <p className="text-sm font-semibold">
+                            চাঁদার হার: {data?.data?.FeeRate}{" "}
+                            <small>টাকা</small>
+                          </p>
+                        ) : (
+                          <p className="text-sm font-semibold">
+                            চাঁদার হার: {data?.data?.prevYear?.FeeRate}{" "}
+                            <small>টাকা</small>
+                          </p>
+                        )}
+                        {currentYear ? (
+                          <p className="text-sm font-semibold">
+                            তারাবীর চাঁদা: {data?.data?.Tarabi?.fee}{" "}
+                            <small>টাকা</small>
+                          </p>
+                        ) : (
+                          <p className="text-sm font-semibold">
+                            তারাবীর চাঁদা: {data?.data?.prevYear?.Tarabi?.fee}{" "}
+                            <small>টাকা</small>
+                          </p>
+                        )}
+                        {currentYear ? (
+                          <p className="flex flex-row items-center gap-1 text-sm font-semibold">
+                            বকেয়া চাঁদা: <span>{totalDue}</span>{" "}
+                            <small>টাকা</small>
+                            <button className="text-lg" onClick={handleViewFee}>
+                              <p className="text-blue-600">
+                                <MdAssistantDirection />
+                              </p>
+                            </button>
+                          </p>
+                        ) : (
+                          <p className="flex flex-row items-center gap-1 text-sm font-semibold">
+                            বকেয়া চাঁদা:{" "}
+                            <span>{data?.data?.prevYear?.Due}</span>{" "}
+                            <small>টাকা</small>
+                          </p>
+                        )}
                       </div>
-                      {isAdmin && (
+                      {currentYear && isAdmin && (
                         <button
                           className=" absolute -top-7 left-[50%] -translate-x-[50%] z-20 origin-left scale-0 px-3 rounded-lg border border-gray-300 bg-white py-2 text-sm font-bold shadow-md transition-all duration-300 ease-in-out group-hover:scale-100"
                           onClick={() => setIsOpen2(true)}
@@ -723,7 +761,7 @@ const FeePage = () => {
                         <div className="w-full rounded-md h-7 bg-slate-400" />
                       </div>
                     )}
-                    {userData?.PayMonths && (
+                    {currentYear && userData?.PayMonths && (
                       <div className="grid w-full grid-cols-2 border ">
                         <div className="p-1 border-r-2">
                           {/* First 6 months */}
@@ -826,25 +864,105 @@ const FeePage = () => {
                         </div>
                       </div>
                     )}
+
+                    {!currentYear && userData?.PayMonths && (
+                      <div className="grid w-full grid-cols-2 border ">
+                        <div className="p-1 border-r-2">
+                          {/* First 6 months */}
+                          {data?.data?.prevYear?.PayMonths?.slice(0, 6).map(
+                            (user, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between gap-1 py-2 border-b"
+                              >
+                                <div className="font-bold text-md">
+                                  {monthTranslation[user.monthName] ||
+                                    user.monthName}
+                                </div>
+                                <button
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                                    user.status === "paid"
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "bg-red-600 hover:bg-red-700"
+                                  }`}
+                                >
+                                  {user.status === "paid" ? (
+                                    <TiTick />
+                                  ) : (
+                                    <FaTimes />
+                                  )}
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+
+                        <div className="p-1 border-l-2">
+                          {/* Last 6 months */}
+                          {data?.data?.prevYear?.PayMonths?.slice(6).map(
+                            (user, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between py-2 border-b"
+                              >
+                                <div className="font-bold text-md">
+                                  {monthTranslation[user.monthName] ||
+                                    user.monthName}
+                                </div>
+                                <button
+                                  className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                                    user.status === "paid"
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "bg-red-600 hover:bg-red-700"
+                                  }`}
+                                >
+                                  {user.status === "paid" ? (
+                                    <TiTick />
+                                  ) : (
+                                    <FaTimes />
+                                  )}
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-between mt-4 text-left">
                     <div className="font-bold text-md">
                       তারাবীঃ{" "}
-                      <button
-                        onClick={isAdmin && handleTarabeeModal}
-                        className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
-                          data?.data?.Tarabi?.status === "paid"
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-red-600 hover:bg-red-700"
-                        }`}
-                      >
-                        {data?.data?.Tarabi?.status === "paid" ? (
-                          <TiTick />
-                        ) : (
-                          <FaTimes />
-                        )}
-                      </button>
+                      {currentYear ? (
+                        <button
+                          onClick={isAdmin && handleTarabeeModal}
+                          className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                            data?.data?.Tarabi?.status === "paid"
+                              ? "bg-blue-600 hover:bg-blue-700"
+                              : "bg-red-600 hover:bg-red-700"
+                          }`}
+                        >
+                          {data?.data?.Tarabi?.status === "paid" ? (
+                            <TiTick />
+                          ) : (
+                            <FaTimes />
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          className={`inline-flex items-center justify-center px-2 py-2 transition ease-in-out delay-75 text-white text-sm font-medium rounded-md ${
+                            data?.data?.prevYear?.Tarabi?.status === "paid"
+                              ? "bg-blue-600 hover:bg-blue-700"
+                              : "bg-red-600 hover:bg-red-700"
+                          }`}
+                        >
+                          {data?.data?.prevYear?.Tarabi?.status === "paid" ? (
+                            <TiTick />
+                          ) : (
+                            <FaTimes />
+                          )}
+                        </button>
+                      )}
                     </div>
                     {data?.data?.Due > 0 && (
                       <div className="font-bold text-md">

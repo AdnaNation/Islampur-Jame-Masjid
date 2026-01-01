@@ -7,16 +7,11 @@ import useNumbers from "../hooks/useNumbers";
 
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const axiosPublic = useAxiosPublic();
   const allNumber = useNumbers();
   const monthName = new Date().toLocaleString("en-US", { month: "long" });
-  // const message = `${monthName}, পর্যন্ত আপনার বকেয়া চাঁদা ৳${30}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
-  // console.log(message);
-
-  // const { data: stats, refetch: reload } = useQuery({
-  //   queryKey: ["tarabi-stats"],
-  //   queryFn: async () => await axiosPublic.get("/tarabi-stats"),
-  // });
+  const currentYear = new Date().getFullYear();
   const { data: totalPayment, refetch: refresh } = useQuery({
     queryKey: ["total-payment"],
     queryFn: async () => await axiosPublic.get("/total-payment"),
@@ -25,6 +20,11 @@ const AdminDashboard = () => {
     queryKey: ["check-balance"],
     queryFn: async () => await axiosPublic.get("/check-balance"),
   });
+  const { data: lastClosingYear, refetch: lastYear } = useQuery({
+    queryKey: ["last-closing-year"],
+    queryFn: async () => await axiosPublic.get("/last-closing-year"),
+  });
+
   const {
     data: active,
     refetch,
@@ -53,11 +53,11 @@ const AdminDashboard = () => {
     const interval = setInterval(() => {
       refetch();
       refresh();
-      fresh();
+      lastYear();
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [refetch, refresh, fresh]);
+  }, [refetch, refresh, lastYear]);
 
   const monthlyTotal =
     Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0;
@@ -97,15 +97,53 @@ const AdminDashboard = () => {
               .then((res) => {
                 if (res?.data.status !== "skipped") {
                   axiosPublic.post("/sms", { number, message });
+                  fresh();
                   setLoading(false);
                 }
               });
           } else {
             setLoading(false);
+            fresh();
           }
         });
       }
     }
+  };
+  const ClosingYear = async () => {
+    setLoading2(true);
+    await axiosPublic.patch("/closing-year").then((res) => {
+      if (res.data.modifiedCount > 0) {
+        const numbers = allNumber[0].map((n) => n.Number);
+        for (const number of numbers) {
+          axiosPublic.get(`/userByNumber/${number}`).then((res) => {
+            axiosPublic
+              .get(
+                `/userPayment/${res.data._id}/${
+                  lastClosingYear?.data?.lastSendingYear + 1
+                }`
+              )
+              .then((res) => {
+                axiosPublic.get(`/userByNumber/${number}`).then((userRes) => {
+                  const message = `${
+                    lastClosingYear?.data?.lastSendingYear + 1
+                  } সাল শেষে মাসিক চাঁদার হিসাবঃ
+                  
+পরিশধিতঃ ${res.data.totalPaid}।
+বকেয়াঃ ${userRes?.data?.Due}।
+
+-ইসলামপুর জামে মসজিদ`;
+                  axiosPublic.post("/sms", { number, message });
+                });
+              });
+          });
+        }
+      }
+    });
+    await axiosPublic.patch("/next-year").then((res) => {
+      if (res.data.modifiedCount > 0) {
+        setLoading2(false);
+      }
+    });
   };
 
   return (
@@ -211,6 +249,19 @@ const AdminDashboard = () => {
       <div className="flex items-center justify-center">
         <button onClick={smsHandle} className="btn-primary btn">
           {loading ? "Sending SMS" : `Send SMS ${smsBalance?.data?.balance}`}
+        </button>
+      </div>
+      <div className="flex items-center justify-center mt-2">
+        <button
+          disabled={lastClosingYear?.data?.lastSendingYear + 1 === currentYear}
+          onClick={ClosingYear}
+          className="btn-primary btn"
+        >
+          {loading2
+            ? "বন্ধ হচ্ছে"
+            : `${
+                lastClosingYear?.data?.lastSendingYear + 1
+              }-এর হিসাব বন্ধ করুন`}
         </button>
       </div>
     </div>
