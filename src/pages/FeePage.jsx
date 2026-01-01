@@ -45,6 +45,7 @@ const FeePage = () => {
   });
   const time = new Date().toLocaleString();
   const year = new Date().getFullYear();
+  const prevYear = year - 1;
   const monthTranslation = {
     January: "জানুয়ারি",
     February: "ফেব্রুয়ারি",
@@ -513,9 +514,8 @@ const FeePage = () => {
                     </div>
                     <div className="flex items-center justify-center text-right">
                       <p className="text-gray-600">
-                        {" "}
-                        {currentYear ? { date } : `${year}- 1`}
-                      </p>{" "}
+                        {currentYear ? { date } : { prevYear }}
+                      </p>
                       <button onClick={yearHandle}>
                         <p className="text-blue-600">
                           <MdAssistantDirection />
