@@ -514,7 +514,7 @@ const FeePage = () => {
                     </div>
                     <div className="flex items-center justify-center text-right">
                       <p className="text-gray-600">
-                        {currentYear ? { date } : { prevYear }}
+                        {currentYear ? date : prevYear}
                       </p>
                       <button onClick={yearHandle}>
                         <p className="text-blue-600">
