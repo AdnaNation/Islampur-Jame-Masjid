@@ -54,10 +54,11 @@ const AdminDashboard = () => {
       refetch();
       refresh();
       lastYear();
+      fresh();
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [refetch, refresh, lastYear]);
+  }, [refetch, refresh, lastYear, fresh]);
 
   const monthlyTotal =
     Math.floor(totalPayment?.data?.Monthly?.totalAmount) || 0;
@@ -145,7 +146,28 @@ const AdminDashboard = () => {
       }
     });
   };
+  const YearClosed = async () => {
+    const numbers = allNumber[0].map((n) => n.Number);
+    for (const number of numbers) {
+      axiosPublic.get(`userByNumber/${number}`).then((userRes) => {
+        axiosPublic
+          .get(
+            `/userPayment/${userRes?.data?._id}/${lastClosingYear?.data?.lastSendingYear}`
+          )
+          .then((res) => {
+            const message = `${lastClosingYear?.data?.lastSendingYear} সাল শেষে মাসিক চাঁদার হিসাবঃ
+                  
+পরিশধিতঃ ${res?.data?.totalPaid}।
+বকেয়াঃ ${userRes?.data?.Due}।
 
+-ইসলামপুর জামে মসজিদ`;
+            axiosPublic.post("/sms", { number, message }).then((res) => {
+              console.log(res);
+            });
+          });
+      });
+    }
+  };
   return (
     <div className="min-h-screen p-2 mx-auto border bg-orange-50">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -264,6 +286,9 @@ const AdminDashboard = () => {
               }-এর হিসাব বন্ধ করুন`}
         </button>
       </div>
+      <button onClick={YearClosed} className="btn">
+        send year msg
+      </button>
     </div>
   );
 };
