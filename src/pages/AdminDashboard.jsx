@@ -286,9 +286,9 @@ const AdminDashboard = () => {
               }-এর হিসাব বন্ধ করুন`}
         </button>
       </div>
-      <button onClick={YearClosed} className="btn">
+      {/* <button onClick={YearClosed} className="btn">
         send year msg
-      </button>
+      </button> */}
     </div>
   );
 };
