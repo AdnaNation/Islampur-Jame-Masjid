@@ -147,6 +147,7 @@ const AdminDashboard = () => {
     });
   };
   const YearClosed = async () => {
+    console.log("click");
     const numbers = allNumber[0].map((n) => n.Number);
     for (const number of numbers) {
       axiosPublic.get(`userByNumber/${number}`).then((userRes) => {
@@ -155,15 +156,19 @@ const AdminDashboard = () => {
             `/userPayment/${userRes?.data?._id}/${lastClosingYear?.data?.lastSendingYear}`
           )
           .then((res) => {
-            const message = `${lastClosingYear?.data?.lastSendingYear} সাল শেষে মাসিক চাঁদার হিসাবঃ
+            if (res?.data?.totalPaid) {
+              const message = `${lastClosingYear?.data?.lastSendingYear} সাল শেষে মাসিক চাঁদার হিসাবঃ
                   
 পরিশধিতঃ ${res?.data?.totalPaid}।
 বকেয়াঃ ${userRes?.data?.Due}।
 
+বিঃদ্রঃ এই ম্যাসেজটি ৩১ ডিসেম্বর, ২০২৫ অনুযায়ী।
+
 -ইসলামপুর জামে মসজিদ`;
-            axiosPublic.post("/sms", { number, message }).then((res) => {
-              console.log(res);
-            });
+              axiosPublic.post("/sms", { number, message }).then((res) => {
+                console.log(res);
+              });
+            }
           });
       });
     }
@@ -286,9 +291,9 @@ const AdminDashboard = () => {
               }-এর হিসাব বন্ধ করুন`}
         </button>
       </div>
-      {/* <button onClick={YearClosed} className="btn">
+      <button onClick={YearClosed} className="btn">
         send year msg
-      </button> */}
+      </button>
     </div>
   );
 };
