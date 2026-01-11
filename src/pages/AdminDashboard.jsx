@@ -116,25 +116,25 @@ const AdminDashboard = () => {
       if (res.data.modifiedCount > 0) {
         const numbers = allNumber[0].map((n) => n.Number);
         for (const number of numbers) {
-          axiosPublic.get(`/userByNumber/${number}`).then((res) => {
+          axiosPublic.get(`userByNumber/${number}`).then((userRes) => {
             axiosPublic
               .get(
-                `/userPayment/${res.data._id}/${
+                `/userPayment/${userRes?.data?._id}/${
                   lastClosingYear?.data?.lastSendingYear + 1
                 }`
               )
               .then((res) => {
-                axiosPublic.get(`/userByNumber/${number}`).then((userRes) => {
+                if (res?.data?.totalPaid) {
                   const message = `${
                     lastClosingYear?.data?.lastSendingYear + 1
                   } সাল শেষে মাসিক চাঁদার হিসাবঃ
                   
-পরিশধিতঃ ${res.data.totalPaid}।
+পরিশধিতঃ ${res?.data?.totalPaid}।
 বকেয়াঃ ${userRes?.data?.Due}।
 
 -ইসলামপুর জামে মসজিদ`;
                   axiosPublic.post("/sms", { number, message });
-                });
+                }
               });
           });
         }
@@ -146,33 +146,30 @@ const AdminDashboard = () => {
       }
     });
   };
-  const YearClosed = async () => {
-    console.log("click");
-    const numbers = allNumber[0].map((n) => n.Number);
-    for (const number of numbers) {
-      axiosPublic.get(`userByNumber/${number}`).then((userRes) => {
-        axiosPublic
-          .get(
-            `/userPayment/${userRes?.data?._id}/${lastClosingYear?.data?.lastSendingYear}`
-          )
-          .then((res) => {
-            if (res?.data?.totalPaid) {
-              const message = `${lastClosingYear?.data?.lastSendingYear} সাল শেষে মাসিক চাঁদার হিসাবঃ
-                  
-পরিশধিতঃ ${res?.data?.totalPaid}।
-বকেয়াঃ ${userRes?.data?.Due}।
+  //   const YearClosed = async () => {
+  //     const numbers = allNumber[0].map((n) => n.Number);
+  //     for (const number of numbers) {
+  //       axiosPublic.get(`userByNumber/${number}`).then((userRes) => {
+  //         axiosPublic
+  //           .get(
+  //             `/userPayment/${userRes?.data?._id}/${lastClosingYear?.data?.lastSendingYear}`
+  //           )
+  //           .then((res) => {
+  //             if (res?.data?.totalPaid) {
+  //               const message = `${lastClosingYear?.data?.lastSendingYear} সাল শেষে মাসিক চাঁদার হিসাবঃ
 
-বিঃদ্রঃ এই ম্যাসেজটি ৩১ ডিসেম্বর, ২০২৫ অনুযায়ী।
+  // পরিশধিতঃ ${res?.data?.totalPaid}।
+  // বকেয়াঃ ${userRes?.data?.Due}।
 
--ইসলামপুর জামে মসজিদ`;
-              axiosPublic.post("/sms", { number, message }).then((res) => {
-                console.log(res);
-              });
-            }
-          });
-      });
-    }
-  };
+  // -ইসলামপুর জামে মসজিদ`;
+  //               axiosPublic.post("/sms", { number, message }).then((res) => {
+  //                 console.log(res);
+  //               });
+  //             }
+  //           });
+  //       });
+  //     }
+  //   };
   return (
     <div className="min-h-screen p-2 mx-auto border bg-orange-50">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
