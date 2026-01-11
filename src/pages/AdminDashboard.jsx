@@ -129,7 +129,7 @@ const AdminDashboard = () => {
                     lastClosingYear?.data?.lastSendingYear + 1
                   } সাল শেষে মাসিক চাঁদার হিসাবঃ
                   
-পরিশধিতঃ ${res?.data?.totalPaid}।
+পরিশোধিতঃ ${res?.data?.totalPaid}।
 বকেয়াঃ ${userRes?.data?.Due}।
 
 -ইসলামপুর জামে মসজিদ`;
