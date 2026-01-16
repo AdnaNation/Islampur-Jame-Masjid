@@ -87,7 +87,7 @@ const AdminDashboard = () => {
               userFeeRate +
             Number(user.Due) +
             TarabiFee;
-          const message = `${monthName} পর্যন্ত আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
+          const message = `${monthName}-${currentYear} পর্যন্ত আপনার বকেয়া চাঁদা ৳${totalDue}। দয়া করে পরিশোধ করুন। -ইসলামপুর জামে মসজিদ`;
           if (totalDue > 0) {
             axiosPublic
               .post("/sms-db", {
