@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { MdOutlineToggleOff, MdOutlineToggleOn } from "react-icons/md";
+import { MdAssistantDirection } from "react-icons/md";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useNumbers from "../hooks/useNumbers";
@@ -12,9 +13,11 @@ const AdminDashboard = () => {
   const allNumber = useNumbers();
   const monthName = new Date().toLocaleString("en-US", { month: "long" });
   const currentYear = new Date().getFullYear();
+  const [paymentYear, setPaymentYear] = useState(currentYear);
   const { data: totalPayment, refetch: refresh } = useQuery({
-    queryKey: ["total-payment"],
-    queryFn: async () => await axiosPublic.get("/total-payment"),
+    queryKey: ["total-payment, paymentYear"],
+    queryFn: async () =>
+      await axiosPublic.get(`/total-payment?year=${paymentYear}`),
   });
   const { data: smsBalance, refetch: fresh } = useQuery({
     queryKey: ["check-balance"],
@@ -24,6 +27,11 @@ const AdminDashboard = () => {
     queryKey: ["last-closing-year"],
     queryFn: async () => await axiosPublic.get("/last-closing-year"),
   });
+
+  const HandlePaymentYear = () => {
+    setPaymentYear(paymentYear === currentYear ? currentYear - 1 : currentYear);
+    refresh();
+  };
 
   const {
     data: active,
@@ -82,7 +90,7 @@ const AdminDashboard = () => {
               : 0;
           const totalDue =
             user.PayMonths?.slice(0, currentMonthIndex + 1).filter(
-              (m) => m.status === "unpaid"
+              (m) => m.status === "unpaid",
             ).length *
               userFeeRate +
             Number(user.Due) +
@@ -121,7 +129,7 @@ const AdminDashboard = () => {
               .get(
                 `/userPayment/${userRes?.data?._id}/${
                   lastClosingYear?.data?.lastSendingYear + 1
-                }`
+                }`,
               )
               .then((res) => {
                 if (res?.data?.totalPaid) {
@@ -172,6 +180,15 @@ const AdminDashboard = () => {
   //   };
   return (
     <div className="min-h-screen p-2 mx-auto border bg-orange-50">
+      <button
+        onClick={HandlePaymentYear}
+        className="flex justify-center gap-1 mb-2 ml-6 text-blue-500 underline"
+      >
+        {paymentYear === currentYear ? currentYear - 1 : currentYear}{" "}
+        <small className="flex items-center justify-center">
+          সালের হিসাব দেখুন <MdAssistantDirection></MdAssistantDirection>{" "}
+        </small>
+      </button>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="flex flex-col items-center justify-center ">
           <p className="font-semibold">মাসিক চাঁদার হিসাব</p>
