@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   const currentYear = new Date().getFullYear();
   const [paymentYear, setPaymentYear] = useState(currentYear);
   const { data: totalPayment, refetch: refresh } = useQuery({
-    queryKey: ["total-payment, paymentYear"],
+    queryKey: ["total-payment", paymentYear],
     queryFn: async () =>
       await axiosPublic.get(`/total-payment?year=${paymentYear}`),
   });
