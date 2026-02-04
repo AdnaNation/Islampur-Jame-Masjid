@@ -104,7 +104,7 @@ const AdminDashboard = () => {
                 message,
               })
               .then((res) => {
-                if (res?.data.status !== "skipped") {
+                if (res?.data?.status !== "skipped") {
                   axiosPublic.post("/sms", { number, message });
                   fresh();
                   setLoading(false);
