@@ -69,7 +69,7 @@ const FeePage = () => {
     queryKey: ["users", selectedHome, search, banglaText],
     queryFn: async () =>
       await axiosPublic.get(
-        `/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`
+        `/users?search=${search}&HomeName=${selectedHome}&searchBn=${banglaText}`,
       ),
   });
   const {
@@ -188,7 +188,7 @@ const FeePage = () => {
       : 0;
   const totalDue =
     data?.data?.PayMonths?.slice(0, currentMonthIndex + 1).filter(
-      (m) => m.status === "unpaid"
+      (m) => m.status === "unpaid",
     ).length *
       userFeeRate +
     Number(data?.data?.Due) +
@@ -200,14 +200,14 @@ const FeePage = () => {
       setSelectedMonths((prevSelected) =>
         prevSelected.includes(monthName)
           ? prevSelected.filter((m) => m !== monthName)
-          : [...prevSelected, monthName]
+          : [...prevSelected, monthName],
       );
     }
   };
 
   const handleMonthStatus = async () => {
     const number = data?.data?.Number;
-    const message = `ইসলামপুর জামে মসজিদের ${selectedMonth}'র মাসিক চাঁদা বাবদ ৳${data?.data?.FeeRate} অনুদান দিয়েছেন।`;
+    const message = `ইসলামপুর জামে মসজিদের ${selectedMonth}'র মাসিক চাঁদা বাবদ ৳${data?.data?.FeeRate} পরিশোধ করেছেন।`;
 
     const paymentData = {
       userId: data?.data?._id,
@@ -243,7 +243,7 @@ const FeePage = () => {
     const shortMonths = selectedMonths.map((m) => m.slice(0, 3));
     const message = `আপনি ${shortMonths}'র মাসিক চাঁদা বাবদ ৳${
       data?.data?.FeeRate * selectedMonths.length
-    } অনুদান দিয়েছেন।
+    } পরিশোধ করেছেন।
     
 -ইসলামপুর জামে মসজিদ`;
     const paymentData = {
@@ -290,7 +290,7 @@ const FeePage = () => {
     const number = data?.data?.Number;
     const payingDue = dueFee;
     const DueFee = Number(data?.data?.Due) - Number(payingDue);
-    const message = `আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} অনুদান দিয়েছেন।
+    const message = `আপনি আগের বছরের বকেয়া চাঁদা বাবদ ৳${payingDue} পরিশোধ করেছেন।
 
 -ইসলামপুর জামে মসজিদ`;
     const PayingFee = {
@@ -334,7 +334,7 @@ const FeePage = () => {
   const handleTarabeeFee = async () => {
     setLoading(true);
     const number = data?.data?.Number;
-    const message = `আপনি তারাবীর চাঁদা বাবদ ৳${data?.data?.Tarabi?.fee} অনুদান দিয়েছেন।
+    const message = `আপনি তারাবীর চাঁদা বাবদ ৳${data?.data?.Tarabi?.fee} পরিশোধ করেছেন।
     
     -ইসলামপুর জামে মসজিদ`;
     await axiosPublic.patch(`/tarabeePaid/${selectedId}`).then((res) => {
@@ -778,12 +778,12 @@ const FeePage = () => {
                                   <input
                                     type="checkbox"
                                     checked={selectedMonths.includes(
-                                      user.monthName
+                                      user.monthName,
                                     )}
                                     onChange={() =>
                                       handleCheckboxChange(
                                         user.monthName,
-                                        selectedId
+                                        selectedId,
                                       )
                                     }
                                     className="w-3 h-3"
@@ -812,7 +812,7 @@ const FeePage = () => {
                                   )}
                                 </button>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
 
@@ -828,12 +828,12 @@ const FeePage = () => {
                                   <input
                                     type="checkbox"
                                     checked={selectedMonths.includes(
-                                      user.monthName
+                                      user.monthName,
                                     )}
                                     onChange={() =>
                                       handleCheckboxChange(
                                         user.monthName,
-                                        selectedId
+                                        selectedId,
                                       )
                                     }
                                     className="w-3 h-3"
@@ -862,7 +862,7 @@ const FeePage = () => {
                                   )}
                                 </button>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
@@ -896,7 +896,7 @@ const FeePage = () => {
                                   )}
                                 </button>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
 
@@ -926,7 +926,7 @@ const FeePage = () => {
                                   )}
                                 </button>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
@@ -1075,7 +1075,7 @@ const FeePage = () => {
                           এই বছরেরঃ{" "}
                           {data?.data?.PayMonths?.slice(
                             0,
-                            currentMonthIndex + 1
+                            currentMonthIndex + 1,
                           ).filter((m) => m.status === "unpaid").length *
                             userFeeRate}{" "}
                           টাকা, <br />
@@ -1092,7 +1092,7 @@ const FeePage = () => {
                             <button
                               className="px-5 btn btn-xs"
                               onClick={() => {
-                                setIsOpen4(false), setIsOpen2(true);
+                                (setIsOpen4(false), setIsOpen2(true));
                               }}
                             >
                               <CiEdit />
@@ -1135,7 +1135,7 @@ const FeePage = () => {
                       <div className="px-4 pt-8 bg-white rounded-lg modal-box w-96">
                         <button
                           onClick={() => {
-                            setIsOpen6(false), setIsModalOpen(false);
+                            (setIsOpen6(false), setIsModalOpen(false));
                           }}
                           className="absolute text-xl btn btn-sm btn-circle btn-ghost right-2 top-1"
                         >
